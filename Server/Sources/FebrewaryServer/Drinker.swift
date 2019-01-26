@@ -11,7 +11,7 @@ import PostgresStORM
 
 class Drinker: PostgresStORM {
     var id: Int = 0
-    var drinkerToken: String = ""
+    var drinkerToken: String = "\(Foundation.UUID())"
 
     override open func table() -> String { return "drinker" }
 
@@ -23,7 +23,7 @@ class Drinker: PostgresStORM {
     func rows() -> [Drinker] {
         let rows = self.results.rows
 
-        guard !rows.isEmpty else { return []}
+        guard !rows.isEmpty else { return [] }
 
         var drinkers = [Drinker]()
 
