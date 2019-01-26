@@ -57,7 +57,6 @@ func getPourerToken(request: HTTPRequest, response: HTTPResponse) {
 
 func getDrinkerToken(request: HTTPRequest, response: HTTPResponse) {
     do {
-
         let drinker = Drinker()
 
         try drinker.save { id in
@@ -78,7 +77,6 @@ func getDrinkerToken(request: HTTPRequest, response: HTTPResponse) {
 
 func getAllDrinkers(request: HTTPRequest, response: HTTPResponse) {
     do {
-
         let objectQuery = Drinker()
         try objectQuery.findAll()
         var responseJson: [[String: Any]] = []
