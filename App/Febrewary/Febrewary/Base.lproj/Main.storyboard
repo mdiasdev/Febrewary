@@ -1,24 +1,81 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13122.16" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13104.12"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
+        <!--Token Select View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="TokenSelectViewController" customModule="Febrewary" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="peQ-Gy-NgM">
+                                <rect key="frame" x="32" y="210.5" width="311" height="50"/>
+                                <color key="backgroundColor" name="Color"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="p5t-HK-O10"/>
+                                </constraints>
+                                <state key="normal" title="I am the Pourer">
+                                    <color key="titleColor" name="Color-2"/>
+                                </state>
+                                <connections>
+                                    <action selector="tappedIsPourer:" destination="BYZ-38-t0r" eventType="touchUpInside" id="fEE-Vg-IoM"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="le8-sQ-yiL">
+                                <rect key="frame" x="32" y="308.5" width="311" height="50"/>
+                                <color key="backgroundColor" name="Color-1"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="NpT-y7-O7V"/>
+                                </constraints>
+                                <state key="normal" title="I am a Drinker">
+                                    <color key="titleColor" name="Color-2"/>
+                                </state>
+                                <connections>
+                                    <action selector="tappedIsDrinker:" destination="BYZ-38-t0r" eventType="touchUpInside" id="skO-Mt-dff"/>
+                                </connections>
+                            </button>
+                        </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="le8-sQ-yiL" firstAttribute="centerX" secondItem="peQ-Gy-NgM" secondAttribute="centerX" id="2qZ-mB-7qK"/>
+                            <constraint firstItem="le8-sQ-yiL" firstAttribute="trailing" secondItem="peQ-Gy-NgM" secondAttribute="trailing" id="3js-M1-mp5"/>
+                            <constraint firstItem="le8-sQ-yiL" firstAttribute="top" secondItem="peQ-Gy-NgM" secondAttribute="bottom" constant="48" id="ECs-lV-qwq"/>
+                            <constraint firstItem="le8-sQ-yiL" firstAttribute="leading" secondItem="peQ-Gy-NgM" secondAttribute="leading" id="R5i-5R-aCq"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="peQ-Gy-NgM" secondAttribute="trailing" constant="32" id="Toh-Fl-FRt"/>
+                            <constraint firstItem="peQ-Gy-NgM" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" constant="-98" id="eAb-AZ-z7n"/>
+                            <constraint firstItem="peQ-Gy-NgM" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="32" id="usS-OG-dvH"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
+                    <connections>
+                        <outlet property="drinkerButton" destination="le8-sQ-yiL" id="orD-ji-9Zc"/>
+                        <outlet property="pourerButton" destination="peQ-Gy-NgM" id="ecr-9e-5QS"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
         </scene>
     </scenes>
+    <resources>
+        <namedColor name="Color">
+            <color red="0.95294117647058818" green="0.97647058823529409" blue="0.57647058823529407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="Color-1">
+            <color red="0.73725490196078436" green="0.40392156862745099" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="Color-2">
+            <color red="0.30588235294117649" green="0.16470588235294117" blue="0.047058823529411764" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
 </document>
