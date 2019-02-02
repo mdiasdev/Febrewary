@@ -18,19 +18,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         window = UIWindow(frame: UIScreen.main.bounds)
         let storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)
+        let today = Date()
 
         // TODO: cleanup stringy things
-        if let token = UserDefaults.standard.string(forKey: "token") {
-            if token.hasPrefix("P-") {
-                let tokenViewController = storyboard.instantiateViewController(withIdentifier: "PourerScreen")
-
-                window?.rootViewController = tokenViewController
-                window?.makeKeyAndVisible()
-            } else if token.hasPrefix("D-") {
-                // Create and show Drinker Screen
-            } else {
+        guard let token = UserDefaults.standard.string(forKey: "token"),
+              let expirationDate = UserDefaults.standard.object(forKey: "tokenExpiration") as? Date,
+              today < expirationDate else {
                 presentTokenScreen(from: storyboard)
-            }
+                return true
+        }
+
+        if token.hasPrefix("P-") {
+            let tokenViewController = storyboard.instantiateViewController(withIdentifier: "PourerScreen")
+
+            window?.rootViewController = tokenViewController
+            window?.makeKeyAndVisible()
+        } else if token.hasPrefix("D-") {
+            // Create and show Drinker Screen
         } else {
             presentTokenScreen(from: storyboard)
         }
