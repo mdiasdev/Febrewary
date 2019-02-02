@@ -77,14 +77,20 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter A Beer Name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Mnl-tP-Ggh">
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter the beer name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Mnl-tP-Ggh">
                                 <rect key="frame" x="32" y="116" width="311" height="30"/>
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter Drinker who brought this beer" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="1KI-x3-4xS">
+                                <rect key="frame" x="32" y="154" width="311" height="30"/>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0X9-n9-luX">
-                                <rect key="frame" x="64" y="170" width="247" height="50"/>
+                                <rect key="frame" x="64" y="216" width="247" height="50"/>
                                 <color key="backgroundColor" name="Color"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="Ekj-oc-bkg"/>
@@ -100,17 +106,21 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstItem="0X9-n9-luX" firstAttribute="top" secondItem="1KI-x3-4xS" secondAttribute="bottom" constant="32" id="6ua-0B-hOX"/>
+                            <constraint firstItem="1KI-x3-4xS" firstAttribute="top" secondItem="Mnl-tP-Ggh" secondAttribute="bottom" constant="8" id="F2w-1F-njO"/>
                             <constraint firstItem="0X9-n9-luX" firstAttribute="leading" secondItem="Mnl-tP-Ggh" secondAttribute="leading" constant="32" id="J6U-40-smu"/>
-                            <constraint firstItem="0X9-n9-luX" firstAttribute="top" secondItem="Mnl-tP-Ggh" secondAttribute="bottom" constant="24" id="KQh-OA-AVL"/>
+                            <constraint firstItem="1KI-x3-4xS" firstAttribute="leading" secondItem="Mnl-tP-Ggh" secondAttribute="leading" id="O2Y-c3-p3P"/>
                             <constraint firstItem="BNH-CW-pEv" firstAttribute="trailing" secondItem="Mnl-tP-Ggh" secondAttribute="trailing" constant="32" id="RZD-jc-FrR"/>
                             <constraint firstItem="Mnl-tP-Ggh" firstAttribute="leading" secondItem="BNH-CW-pEv" secondAttribute="leading" constant="32" id="Z1o-pl-QIc"/>
                             <constraint firstItem="Mnl-tP-Ggh" firstAttribute="top" secondItem="BNH-CW-pEv" secondAttribute="top" constant="96" id="epU-oj-gGb"/>
                             <constraint firstItem="0X9-n9-luX" firstAttribute="trailing" secondItem="Mnl-tP-Ggh" secondAttribute="trailing" constant="-32" id="gx8-0d-1ED"/>
+                            <constraint firstItem="1KI-x3-4xS" firstAttribute="trailing" secondItem="Mnl-tP-Ggh" secondAttribute="trailing" id="yy7-nz-NiA"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="BNH-CW-pEv"/>
                     </view>
                     <connections>
                         <outlet property="beerNameTextField" destination="Mnl-tP-Ggh" id="f6Y-Na-Ium"/>
+                        <outlet property="drinkerNameTextField" destination="1KI-x3-4xS" id="nnV-zy-fYH"/>
                         <outlet property="submitButton" destination="0X9-n9-luX" id="X4h-Wo-jik"/>
                     </connections>
                 </viewController>
