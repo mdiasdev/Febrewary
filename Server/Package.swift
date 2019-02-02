@@ -20,5 +20,5 @@ let package = Package(
         .testTarget(
             name: "FebrewaryServerTests",
             dependencies: ["FebrewaryServer"]),
-    ]
+        ]
 )

@@ -5,6 +5,9 @@ import PerfectHTTPServer
 import StORM
 import PostgresStORM
 
+// FIXME: move all routes to a more appropriate location
+
+// FIXME: move to environment file
 PostgresConnector.host = "localhost"
 PostgresConnector.username = "perfect"
 PostgresConnector.password = "perfect"
@@ -55,9 +58,27 @@ func getPourerToken(request: HTTPRequest, response: HTTPResponse) {
     }
 }
 
+// TODO: move to a Router or Controller base class
+func getDictionary(from params: [(String, String)]) -> [String: String] {
+    var queryParams: [String: String] = [:]
+    for param in params {
+        queryParams[param.0] = param.1
+    }
+
+    return queryParams
+}
+
 func getDrinkerToken(request: HTTPRequest, response: HTTPResponse) {
     do {
+        let queryParams = getDictionary(from: request.queryParams)
+
+        guard let name = queryParams["name"] else {
+            response.appendBody(string: "Missing required name").completed(status: .badRequest)
+            return
+        }
+
         let drinker = Drinker()
+        drinker.name = name
 
         try drinker.save { id in
             drinker.id = id as! Int
@@ -99,7 +120,7 @@ func getAllDrinkers(request: HTTPRequest, response: HTTPResponse) {
 
 routes.add(Route(method: .get, uri: "pourerToken", handler: getPourerToken))
 routes.add(Route(method: .get, uri: "drinkerToken", handler: getDrinkerToken))
-routes.add(Route(method: .get, uri: "drinker", handler: getAllDrinkers))
+routes.add(Route(method: .get, uri: "drinkers", handler: getAllDrinkers))
 
 server.addRoutes(routes)
 
