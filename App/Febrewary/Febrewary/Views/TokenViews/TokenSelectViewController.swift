@@ -27,9 +27,6 @@ class TokenSelectViewController: UIViewController {
     }
 
     @IBAction func tappedIsPourer(_ sender: Any) {
-        // hit backend to get token
-        // save token
-        // save current time
         TokenRequests.getToken(type: .pourer) { (response) in
             guard let token = response["pourerToken"] as? String else { return }
 
@@ -38,14 +35,34 @@ class TokenSelectViewController: UIViewController {
     }
 
     @IBAction func tappedIsDrinker(_ sender: Any) {
-        // hit backend to get token
-        // save token
-        // save current time
-        TokenRequests.getToken(type: .drinker) { (response) in
-            guard let token = response["drinkerToken"] as? String else { return }
+        showDrinkerNameAlert()
+    }
 
-            self.save(token: token)
+    func showDrinkerNameAlert() {
+        let alert = UIAlertController(title: "Please Enter Name",
+                                      message: "So we can appropriately celebrate you and your winning beer, we'd like to know who we're drinking with tonight",
+                                      preferredStyle: .alert)
+        alert.addTextField { (textField) in
+            textField.placeholder = "Enter your name, please"
         }
+
+        let submitAction = UIAlertAction(title: "Submit", style: .default) { _ in
+            guard let drinkerName = alert.textFields?.first?.text, !drinkerName.isEmpty else {
+                // FIXME: error handling?
+                return
+            }
+
+            TokenRequests.getToken(type: .drinker, drinkerName: drinkerName) { (response) in
+                guard let token = response["drinkerToken"] as? String else { return }
+
+                self.save(token: token)
+            }
+        }
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        alert.addAction(submitAction)
+        alert.addAction(cancelAction)
+
+        present(alert, animated: true, completion: nil)
     }
 
     func save(token: String) {
@@ -63,8 +80,10 @@ struct TokenRequests {
     }
 
     // TODO: error handling. Result?
-    static func getToken(type: TokenType, completion: @escaping ([String: Any]) -> ()) {
+    static func getToken(type: TokenType, drinkerName: String? = nil, completion: @escaping ([String: Any]) -> ()) {
         var endpoint = ""
+        var query = ""
+
         switch type {
         case .drinker:
             endpoint = "drinkerToken"
@@ -72,8 +91,12 @@ struct TokenRequests {
             endpoint = "pourerToken"
         }
 
+        if let drinkerName = drinkerName {
+            query = "?name=\(drinkerName)"
+        }
+
         // TODO: abstract baseURL
-        guard let url = URL(string: "http://localhost:8080/\(endpoint)") else {
+        guard let url = URL(string: "http://localhost:8080/\(endpoint)\(query)") else {
             completion([:])
             return
         }
