@@ -15,7 +15,7 @@ class RouterTests: XCTestCase {
     ]
 
     func test_retrieve_queryParameters_whenPresent() {
-        let request = HTTPRequest()
+//        let request = HTTPRequest()
     }
 
 }
