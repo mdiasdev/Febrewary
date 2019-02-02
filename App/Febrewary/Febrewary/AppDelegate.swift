@@ -15,8 +15,34 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+
+        window = UIWindow(frame: UIScreen.main.bounds)
+        let storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)
+
+        // TODO: cleanup stringy things
+        if let token = UserDefaults.standard.string(forKey: "token") {
+            if token.hasPrefix("P-") {
+                let tokenViewController = storyboard.instantiateViewController(withIdentifier: "PourerScreen")
+
+                window?.rootViewController = tokenViewController
+                window?.makeKeyAndVisible()
+            } else if token.hasPrefix("D-") {
+                // Create and show Drinker Screen
+            } else {
+                presentTokenScreen(from: storyboard)
+            }
+        } else {
+            presentTokenScreen(from: storyboard)
+        }
+
         return true
+    }
+
+    func presentTokenScreen(from storyboard: UIStoryboard) {
+        let tokenViewController = storyboard.instantiateViewController(withIdentifier: "TokenScreen")
+
+        window?.rootViewController = tokenViewController
+        window?.makeKeyAndVisible()
     }
 
     func applicationWillResignActive(_ application: UIApplication) {

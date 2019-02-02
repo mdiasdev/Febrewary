@@ -11,13 +11,13 @@ import PostgresStORM
 
 class Drinker: PostgresStORM {
     var id: Int = 0
-    var drinkerToken: String = "\(Foundation.UUID())"
+    var drinkerToken: String = "D-\(Foundation.UUID())"
 
     override open func table() -> String { return "drinker" }
 
     override func to(_ this: StORMRow) {
         id = this.data["id"] as? Int ?? 0
-        drinkerToken = this.data["drinkertoken"] as? String ?? "\(Foundation.UUID())"
+        drinkerToken = this.data["drinkertoken"] as? String ?? "D-\(Foundation.UUID())"
     }
 
     func rows() -> [Drinker] {

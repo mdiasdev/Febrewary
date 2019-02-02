@@ -26,14 +26,6 @@ class TokenSelectViewController: UIViewController {
         drinkerButton.layer.borderColor = UIColor.gray.cgColor
     }
 
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        if let token = UserDefaults.standard.string(forKey: "token") {
-            let alert = UIAlertController(title: "Good Job", message: "you have a token:\n \(token)", preferredStyle: .alert)
-            present(alert, animated: true, completion: nil)
-        }
-    }
-
     @IBAction func tappedIsPourer(_ sender: Any) {
         // hit backend to get token
         // save token

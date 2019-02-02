@@ -17,7 +17,11 @@ class Pourer: PostgresStORM {
 
     override func to(_ this: StORMRow) {
         id = this.data["id"] as? Int ?? 0
-        pourerToken = this.data["pourertoken"] as? String ?? "\(Foundation.UUID())"
+        if let token = this.data["pourertoken"] as? String, !token.isEmpty {
+            pourerToken = token
+        } else {
+            pourerToken = "P-\(Foundation.UUID())"
+        }
     }
 
     func rows() -> [Pourer] {
@@ -33,7 +37,7 @@ class Pourer: PostgresStORM {
     func asDictionary() -> [String: Any] {
         return [
             "id": self.id,
-            "pourerToken": "\(self.pourerToken)",
+            "pourerToken": self.pourerToken,
         ]
     }
 }
