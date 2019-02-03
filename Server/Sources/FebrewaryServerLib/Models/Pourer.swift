@@ -1,10 +1,3 @@
-//
-//  Pourer.swift
-//  COpenSSL
-//
-//  Created by Matthew Dias on 1/26/19.
-//
-
 import Foundation
 import StORM
 import PostgresStORM
