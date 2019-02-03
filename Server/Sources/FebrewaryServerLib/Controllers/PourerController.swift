@@ -18,7 +18,7 @@ public class PourerController: RouteController {
 
             if !responseJson.isEmpty {
                 try response.setBody(json: responseJson)
-                    .completed(status: .ok)
+                            .completed(status: .ok)
             } else {
                 let pourer = Pourer()
 
@@ -27,7 +27,7 @@ public class PourerController: RouteController {
                 }
 
                 try response.setBody(json: pourer.asDictionary())
-                    .completed(status: .ok)
+                            .completed(status: .ok)
             }
 
         } catch let error as StORMError {
