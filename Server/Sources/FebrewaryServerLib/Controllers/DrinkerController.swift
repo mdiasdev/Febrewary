@@ -37,16 +37,25 @@ public class DrinkerController: RouteController {
 
     func getAllDrinkers(request: HTTPRequest, response: HTTPResponse) {
         do {
-            let objectQuery = Drinker()
-            try objectQuery.findAll()
             var responseJson: [[String: Any]] = []
 
-            for row in objectQuery.rows() {
+            let drinkerQuery = Drinker()
+            try drinkerQuery.findAll()
+
+            for row in drinkerQuery.rows() {
+                responseJson.append(row.asDictionary())
+            }
+
+            // TODO: optimize for there only to ever be one pourer per event
+            let pourerQuery = Pourer()
+            try pourerQuery.findAll()
+
+            for row in pourerQuery.rows() {
                 responseJson.append(row.asDictionary())
             }
 
             try response.setBody(json: responseJson)
-                .completed(status: .ok)
+                        .completed(status: .ok)
 
         } catch let error as StORMError {
             response.setBody(string: error.string())

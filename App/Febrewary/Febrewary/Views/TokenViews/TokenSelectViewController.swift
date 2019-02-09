@@ -27,23 +27,19 @@ class TokenSelectViewController: UIViewController {
     }
 
     @IBAction func tappedIsPourer(_ sender: Any) {
-        TokenRequests.getToken(type: .pourer) { (response) in
-            guard let token = response["pourerToken"] as? String else { return }
-
-            self.save(token: token)
-        }
+        showNameAlert(type: .pourer)
     }
 
     @IBAction func tappedIsDrinker(_ sender: Any) {
-        showDrinkerNameAlert()
+        showNameAlert(type: .drinker)
     }
 
-    func showDrinkerNameAlert() {
+    func showNameAlert(type: TokenRequests.TokenType) {
         let alert = UIAlertController(title: "Please Enter Name",
                                       message: "So we can appropriately celebrate you and your winning beer, we'd like to know who we're drinking with tonight",
                                       preferredStyle: .alert)
         alert.addTextField { (textField) in
-            textField.placeholder = "Enter your name, please"
+            textField.placeholder = "Enter your first and last name, please"
         }
 
         let submitAction = UIAlertAction(title: "Submit", style: .default) { _ in
@@ -52,8 +48,9 @@ class TokenSelectViewController: UIViewController {
                 return
             }
 
-            TokenRequests.getToken(type: .drinker, drinkerName: drinkerName) { (response) in
-                guard let token = response["drinkerToken"] as? String else { return }
+            TokenRequests.getToken(type: type, drinkerName: drinkerName) { (response) in
+
+                guard let token = response["token"] as? String else { return }
 
                 self.save(token: token)
             }
@@ -68,7 +65,10 @@ class TokenSelectViewController: UIViewController {
     func save(token: String) {
         // FIXME: abstract keys
         UserDefaults.standard.set(token, forKey: "token")
-        UserDefaults.standard.set(Date().addingTimeInterval(86400), forKey: "tokenExpiration")
+        let expirationDate = Date().addingTimeInterval(86400)
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+        UserDefaults.standard.set(dateFormatter.string(from: expirationDate), forKey: "tokenExpiration")
     }
 }
 
