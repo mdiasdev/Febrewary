@@ -4,13 +4,15 @@ import PostgresStORM
 
 class Pourer: PostgresStORM {
     var id: Int = 0
-    var pourerToken: String = "P-\(Foundation.UUID())"
+    var token: String = "P-\(Foundation.UUID())"
+    var name: String = ""
 
     override open func table() -> String { return "pourer" }
 
     override func to(_ this: StORMRow) {
         id = this.data["id"] as? Int ?? 0
-        pourerToken = this.data["pourertoken"] as? String ?? "P-\(Foundation.UUID())"
+        token = this.data["token"] as? String ?? "P-\(Foundation.UUID())"
+        name = this.data["name"] as? String ?? ""
     }
 
     func rows() -> [Pourer] {
@@ -26,7 +28,8 @@ class Pourer: PostgresStORM {
     func asDictionary() -> [String: Any] {
         return [
             "id": self.id,
-            "pourerToken": self.pourerToken,
+            "token": self.token,
+            "name": self.name,
         ]
     }
 }

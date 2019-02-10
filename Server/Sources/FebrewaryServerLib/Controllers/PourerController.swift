@@ -20,8 +20,16 @@ public class PourerController: RouteController {
                 try response.setBody(json: responseJson)
                             .completed(status: .ok)
             } else {
-                let pourer = Pourer()
+                let queryParams = request.queryParamsAsDictionary()
 
+                guard let name = queryParams["name"] else {
+                    response.appendBody(string: "Missing required name").completed(status: .badRequest)
+                    return
+                }
+
+                let pourer = Pourer()
+                pourer.name = name
+                
                 try pourer.save { id in
                     pourer.id = id as! Int
                 }
