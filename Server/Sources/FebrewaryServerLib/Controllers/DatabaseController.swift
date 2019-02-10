@@ -12,11 +12,15 @@ public struct DatabaseController {
         PostgresConnector.port = 5432
     }
 
+    // TODO: database error if fails to setup
     public static func registerTables() {
         let pourer = Pourer()
         try? pourer.setup()
 
         let drinker = Drinker()
         try? drinker.setup()
+
+        let beer = Beer()
+        try? beer.setup()
     }
 }
