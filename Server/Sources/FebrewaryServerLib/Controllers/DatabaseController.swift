@@ -20,6 +20,9 @@ public struct DatabaseController {
         let drinker = Drinker()
         try? drinker.setup()
 
+        let event = Event()
+        try? event.setup()
+
         let eventBeer = EventBeer()
         try? eventBeer.setup()
 

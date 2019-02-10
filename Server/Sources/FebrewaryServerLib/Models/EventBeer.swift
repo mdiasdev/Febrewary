@@ -36,6 +36,7 @@ class EventBeer: PostgresStORM {
     }
 
     func asDictionary() -> [String: Any] {
+        // TODO: can this be cleaned up with generics?
         let pourer = Pourer()
         try? pourer.get(self.attendeeId)
 
