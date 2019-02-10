@@ -52,7 +52,7 @@ class TokenSelectViewController: UIViewController {
 
                 guard let token = response["token"] as? String else { return }
 
-//                self.save(token: token)
+                self.save(token: token)
                 DispatchQueue.main.async {
                     self.showBeerEntry()
                 }
