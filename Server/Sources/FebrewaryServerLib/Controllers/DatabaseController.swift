@@ -14,13 +14,16 @@ public struct DatabaseController {
 
     // TODO: database error if fails to setup
     public static func registerTables() {
-        let pourer = Pourer()
-        try? pourer.setup()
+        let beer = Beer()
+        try? beer.setup()
 
         let drinker = Drinker()
         try? drinker.setup()
 
-        let beer = Beer()
-        try? beer.setup()
+        let eventBeer = EventBeer()
+        try? eventBeer.setup()
+
+        let pourer = Pourer()
+        try? pourer.setup()
     }
 }
