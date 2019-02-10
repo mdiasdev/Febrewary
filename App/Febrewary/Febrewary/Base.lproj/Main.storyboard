@@ -69,21 +69,21 @@
             </objects>
             <point key="canvasLocation" x="276" y="27"/>
         </scene>
-        <!--Pourer View Controller-->
+        <!--Enter Beer View Controller-->
         <scene sceneID="1Pz-gl-SYv">
             <objects>
-                <viewController storyboardIdentifier="PourerScreen" id="hRA-nX-rpT" customClass="PourerViewController" customModule="Febrewary" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="EnterBeerScreen" id="hRA-nX-rpT" customClass="EnterBeerViewController" customModule="Febrewary" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Xyq-nh-qoO">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter the beer name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Mnl-tP-Ggh">
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter the beer's name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Mnl-tP-Ggh">
                                 <rect key="frame" x="32" y="116" width="311" height="30"/>
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter Drinker who brought this beer" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="1KI-x3-4xS">
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter the brewer's name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="1KI-x3-4xS">
                                 <rect key="frame" x="32" y="154" width="311" height="30"/>
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -120,7 +120,7 @@
                     </view>
                     <connections>
                         <outlet property="beerNameTextField" destination="Mnl-tP-Ggh" id="f6Y-Na-Ium"/>
-                        <outlet property="drinkerNameTextField" destination="1KI-x3-4xS" id="nnV-zy-fYH"/>
+                        <outlet property="brewerNameTextField" destination="1KI-x3-4xS" id="nnV-zy-fYH"/>
                         <outlet property="submitButton" destination="0X9-n9-luX" id="X4h-Wo-jik"/>
                     </connections>
                 </viewController>

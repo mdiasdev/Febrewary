@@ -52,7 +52,10 @@ class TokenSelectViewController: UIViewController {
 
                 guard let token = response["token"] as? String else { return }
 
-                self.save(token: token)
+//                self.save(token: token)
+                DispatchQueue.main.async {
+                    self.showBeerEntry()
+                }
             }
         }
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
@@ -69,6 +72,13 @@ class TokenSelectViewController: UIViewController {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
         UserDefaults.standard.set(dateFormatter.string(from: expirationDate), forKey: "tokenExpiration")
+    }
+
+    func showBeerEntry() {
+        let storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)
+        let enterBeerScreen = storyboard.instantiateViewController(withIdentifier: "EnterBeerScreen")
+
+        self.present(enterBeerScreen, animated: true)
     }
 }
 

@@ -31,13 +31,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 return true
         }
 
-        if token.hasPrefix("P-") {
-            let tokenViewController = storyboard.instantiateViewController(withIdentifier: "PourerScreen")
+        if token.hasPrefix("P-") || token.hasPrefix("D-") {
+            let enterBeerScreen = storyboard.instantiateViewController(withIdentifier: "EnterBeerScreen")
 
-            window?.rootViewController = tokenViewController
+            window?.rootViewController = enterBeerScreen
             window?.makeKeyAndVisible()
-        } else if token.hasPrefix("D-") {
-            // Create and show Drinker Screen
         } else {
             presentTokenScreen(from: storyboard)
         }
