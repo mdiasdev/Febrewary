@@ -37,32 +37,47 @@ public class BeerController: RouteController {
             let objectQuery = Beer()
             try objectQuery.find(["name" : beerName])
 
+            var beer = Beer()
+
             var exists = false
 
-            for beer in objectQuery.rows() {
-                if beer.brewerName == brewerName {
+            for beerRow in objectQuery.rows() {
+                if beerRow.brewerName == brewerName {
+                    beer = beerRow
                     exists = true
                     break
                 }
             }
 
-            if exists {
-                response.completed(status: .created)
+            if !exists {
+                beer.name = beerName
+                beer.brewerName = brewerName
+
+                try beer.save { id in
+                    beer.id = id as! Int
+                }
+            }
+
+            // add to Event as EventBeer
+            guard let attendee = AttendeeController().attendee(from: token) else {
+                response.setBody(string: "Bad Request: could not find attendee")
+                        .completed(status: .badRequest)
                 return
             }
 
-            let beer = Beer()
-            beer.name = beerName
-            beer.brewerName = brewerName
+            EventController().updateEvent(with: beer, broughtBy: attendee) { wasSuccessful in
 
-            try beer.save { id in
-                beer.id = id as! Int
+                guard wasSuccessful else {
+                    response.setBody(string: "Failed to add beer to event.")
+                            .completed(status: .internalServerError)
+                    return
+                }
+
+                response.completed(status: .created)
             }
 
-            response.completed(status: .created)
-
         } catch {
-
+            response.completed(status: .internalServerError)
         }
     }
 

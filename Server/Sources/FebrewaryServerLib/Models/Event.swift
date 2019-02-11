@@ -16,8 +16,16 @@ class Event: PostgresStORM {
     override func to(_ this: StORMRow) {
         id = this.data["id"] as? Int ?? 0
         pourerId = this.data["pourerid"] as? Int ?? 0
-        drinkerIds = this.data["drinkerids"] as? [Int] ?? []
-        eventBeerIds = this.data["eventbeerids"] as? [Int] ?? []
+
+        let drinkerIdString = this.data["drinkerids"] as? String ?? ""
+        drinkerIds = drinkerIdString.dropFirst().dropLast().components(separatedBy: ",").compactMap({ (idString) -> Int? in
+            return Int(idString)
+        })
+
+        let eventBeerString = this.data["eventbeerids"] as? String ?? ""
+        eventBeerIds = eventBeerString.dropFirst().dropLast().components(separatedBy: ",").compactMap({ (idString) -> Int? in
+            return Int(idString)
+        })
     }
 
     func rows() -> [Event] {
@@ -25,15 +33,15 @@ class Event: PostgresStORM {
 
         guard !rows.isEmpty else { return [] }
 
-        var drinkers = [Event]()
+        var events = [Event]()
 
         for row in rows {
-            let drinker = Event()
-            drinker.to(row)
-            drinkers.append(drinker)
+            let event = Event()
+            event.to(row)
+            events.append(event)
         }
 
-        return drinkers
+        return events
     }
 
     func asDictionary() -> [String: Any] {
