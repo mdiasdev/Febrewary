@@ -14,6 +14,7 @@ DatabaseController.registerTables()
 
 server.addRoutes(PourerController().routes)
 server.addRoutes(DrinkerController().routes)
+server.addRoutes(BeerController().routes)
 
 do {
     try server.start()

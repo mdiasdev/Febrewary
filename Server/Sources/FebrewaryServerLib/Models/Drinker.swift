@@ -2,7 +2,7 @@ import Foundation
 import StORM
 import PostgresStORM
 
-class Drinker: PostgresStORM {
+class Drinker: PostgresStORM, Attendee {
     var id: Int = 0
     var token: String = "D-\(Foundation.UUID())"
     var name: String = ""
