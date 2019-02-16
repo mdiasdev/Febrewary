@@ -6,6 +6,7 @@ public class BeerController: RouteController {
     override func initRoutes() {
         routes.add(Route(method: .post, uri: "beer", handler: addBeer))
         routes.add(Route(method: .get, uri: "beer", handler: allBeers))
+        routes.add(Route(method: .post, uri: "beer/pour", handler: pouring))
     }
 
     func addBeer(request: HTTPRequest, response: HTTPResponse) {
@@ -99,6 +100,77 @@ public class BeerController: RouteController {
                     .completed(status: .internalServerError)
         } catch let error {
             response.setBody(string: "\(error)")
+                    .completed(status: .internalServerError)
+        }
+    }
+
+    func pouring(request: HTTPRequest, response: HTTPResponse) {
+        guard let token = request.header(.custom(name: "token")), token.contains("P-") else {
+            response.setBody(string: "Bad Request: Bad or Missing Header")
+                    .completed(status: .badRequest)
+            return
+        }
+
+        guard let json = try? request.postBodyString?.jsonDecode() as? [String: Any] else {
+            response.setBody(string: "Bad Request: malformed json")
+                    .completed(status: .badRequest)
+            return
+        }
+
+        guard let beerId = json?["beerId"] as? Int else {
+            response.setBody(string: "Bad Request: missing beerId")
+                    .completed(status: .badRequest)
+            return
+        }
+
+        guard let attendeeToken = json?["attendeeToken"] as? String else {
+            response.setBody(string: "Bad Request: missing attendeeToken")
+                    .completed(status: .badRequest)
+            return
+        }
+
+
+
+        do {
+            // fetch EventBeer for beerId (matching attendeeToken)
+            // make new round
+            // add the things!
+
+            let eventBeerQuery = EventBeer()
+            try eventBeerQuery.findAll()
+
+            let eventBeerRow = eventBeerQuery.rows().first { (eventBeer) -> Bool in
+                eventBeer.beerId == beerId && eventBeer.attendeeUUId == attendeeToken
+            }
+
+            guard let eventBeer = eventBeerRow else {
+                response.setBody(string: "Bad Request: could not find the beer provided")
+                        .completed(status: .badRequest)
+                return
+            }
+
+            let event = Event()
+            try? event.findOne(orderBy: "id")   // FIXME: in the future we should allow more than one event at a time
+
+            guard event.id > 0 else {
+                response.setBody(string: "No current Event running")
+                        .completed(status: .internalServerError)
+                return
+            }
+
+            let round = Round()
+            round.eventBeerId = eventBeer.id
+            round.eventId = event.id
+
+            try round.save { (id) in
+                round.id = id as! Int
+            }
+
+            response.completed(status: .ok)
+
+        } catch {
+            // FIXME: better error handling
+            response.setBody(string: "Something very bad happened")
                     .completed(status: .internalServerError)
         }
     }

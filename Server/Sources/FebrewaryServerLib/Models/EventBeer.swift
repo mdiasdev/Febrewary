@@ -5,6 +5,7 @@ import PostgresStORM
 class EventBeer: PostgresStORM {
     var id: Int = 0
     var attendeeId: Int = 0
+    var attendeeUUId: String = ""
     var beerId: Int = 0
     var _attendee: Attendee?
     var _beer: Beer?
@@ -16,6 +17,7 @@ class EventBeer: PostgresStORM {
         id = this.data["id"] as? Int ?? 0
         beerId = this.data["beerid"] as? Int ?? 0
         attendeeId = this.data["attendeeid"] as? Int ?? 0
+        attendeeUUId = this.data["attendeeuuid"] as? String ?? ""
         eventScore = this.data["eventscore"] as? Int ?? 0
     }
 
@@ -43,9 +45,9 @@ class EventBeer: PostgresStORM {
         let drinker = Drinker()
         try? drinker.get(self.attendeeId)
 
-        if pourer.id != 0 {
+        if pourer.id != 0 && self.attendeeUUId == pourer.token {
             _attendee = pourer
-        } else if drinker.id != 0 {
+        } else if drinker.id != 0 && self.attendeeUUId == drinker.token {
             _attendee = drinker
         } else {
             return [:]

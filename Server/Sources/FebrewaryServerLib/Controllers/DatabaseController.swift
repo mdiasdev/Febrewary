@@ -28,5 +28,8 @@ public struct DatabaseController {
 
         let pourer = Pourer()
         try? pourer.setup()
+
+        let round = Round()
+        try? round.setup()
     }
 }

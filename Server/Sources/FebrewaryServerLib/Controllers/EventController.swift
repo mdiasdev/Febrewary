@@ -24,6 +24,7 @@ class EventController {
 
             let eventBeer = EventBeer()
             eventBeer.attendeeId = attendee.id
+            eventBeer.attendeeUUId = attendee.token
             eventBeer.beerId = beer.id
 
             if eventBeer.id == 0 {
