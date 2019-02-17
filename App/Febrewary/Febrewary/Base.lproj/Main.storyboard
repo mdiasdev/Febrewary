@@ -128,6 +128,55 @@
             </objects>
             <point key="canvasLocation" x="1082" y="27"/>
         </scene>
+        <!--Pour View Controller-->
+        <scene sceneID="tI0-aM-JlS">
+            <objects>
+                <viewController id="q0f-3a-cl4" customClass="PourViewController" customModule="Febrewary" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="2B8-ME-pVb">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="sjW-pH-Dkq">
+                                <rect key="frame" x="32" y="254.5" width="311" height="30"/>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yzw-xT-1Of">
+                                <rect key="frame" x="64" y="300.5" width="247" height="50"/>
+                                <color key="backgroundColor" name="Color"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="20o-XM-HnJ"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                <state key="normal" title="Pour Beer">
+                                    <color key="titleColor" name="Color-2"/>
+                                </state>
+                                <connections>
+                                    <action selector="submitTapped:" destination="q0f-3a-cl4" eventType="touchUpInside" id="2Cz-Ra-EUC"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="wdu-ji-czI" firstAttribute="trailing" secondItem="sjW-pH-Dkq" secondAttribute="trailing" constant="32" id="0Vb-QC-jw9"/>
+                            <constraint firstItem="sjW-pH-Dkq" firstAttribute="centerY" secondItem="2B8-ME-pVb" secondAttribute="centerY" constant="-64" id="3zL-oG-Wyp"/>
+                            <constraint firstItem="sjW-pH-Dkq" firstAttribute="centerX" secondItem="2B8-ME-pVb" secondAttribute="centerX" id="Zae-1K-gnw"/>
+                            <constraint firstItem="yzw-xT-1Of" firstAttribute="leading" secondItem="sjW-pH-Dkq" secondAttribute="leading" constant="32" id="e9z-mq-8aM"/>
+                            <constraint firstItem="yzw-xT-1Of" firstAttribute="trailing" secondItem="sjW-pH-Dkq" secondAttribute="trailing" constant="-32" id="hJn-dA-ENO"/>
+                            <constraint firstItem="yzw-xT-1Of" firstAttribute="top" secondItem="sjW-pH-Dkq" secondAttribute="bottom" constant="16" id="iOj-Fe-b1C"/>
+                            <constraint firstItem="sjW-pH-Dkq" firstAttribute="leading" secondItem="wdu-ji-czI" secondAttribute="leading" constant="32" id="oRJ-xa-nSg"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="wdu-ji-czI"/>
+                    </view>
+                    <connections>
+                        <outlet property="inputTextField" destination="sjW-pH-Dkq" id="2Z1-gy-cDl"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Ru3-KT-j73" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1849" y="27"/>
+        </scene>
     </scenes>
     <resources>
         <namedColor name="Color">

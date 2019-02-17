@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6D237EA42218C64B00A868A2 /* PourViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D237EA32218C64B00A868A2 /* PourViewController.swift */; };
 		6D902A8A21FA968600A3860B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D902A8921FA968600A3860B /* AppDelegate.swift */; };
 		6D902A8F21FA968600A3860B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6D902A8D21FA968600A3860B /* Main.storyboard */; };
 		6D902A9121FA968800A3860B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6D902A9021FA968800A3860B /* Assets.xcassets */; };
@@ -27,6 +28,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		6D237EA32218C64B00A868A2 /* PourViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PourViewController.swift; sourceTree = "<group>"; };
 		6D902A8621FA968600A3860B /* Febrewary.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Febrewary.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6D902A8921FA968600A3860B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6D902A8E21FA968600A3860B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -58,6 +60,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6D237EA22218C62A00A868A2 /* PourView */ = {
+			isa = PBXGroup;
+			children = (
+				6D237EA32218C64B00A868A2 /* PourViewController.swift */,
+			);
+			path = PourView;
+			sourceTree = "<group>";
+		};
 		6D902A7D21FA968600A3860B = {
 			isa = PBXGroup;
 			children = (
@@ -101,6 +111,7 @@
 		6DC8FF7021FCF955002749A4 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				6D237EA22218C62A00A868A2 /* PourView */,
 				6DC8FF7422061E18002749A4 /* EnterBeerViews */,
 				6DC8FF7121FCF95F002749A4 /* TokenViews */,
 			);
@@ -224,6 +235,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6D237EA42218C64B00A868A2 /* PourViewController.swift in Sources */,
 				6DC8FF7321FCF982002749A4 /* TokenSelectViewController.swift in Sources */,
 				6DC8FF7622061E30002749A4 /* EnterBeerViewController.swift in Sources */,
 				6D902A8A21FA968600A3860B /* AppDelegate.swift in Sources */,
