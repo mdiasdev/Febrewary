@@ -1,0 +1,178 @@
+{
+	"info": {
+		"_postman_id": "d70ff21d-b641-43db-8198-8f5a6b0f379a",
+		"name": "Febrewary2019",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Drinker Token",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:8080/drinkerToken?name=Matt",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"drinkerToken"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "Matt"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Pourer Token",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:8080/pourerToken?name=Greg",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"pourerToken"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "Greg"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "All Drinkers",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:8080/drinkers",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"drinkers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Beer",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "token",
+						"value": "abc123",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\"beerName\": \"Boston Lager\",\n\"brewerName\": \"Boston Brewing\"\n}"
+				},
+				"url": {
+					"raw": "localhost:8080/beer",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"beer"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "All Beers",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:8080/beer",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"beer"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Pour Beer",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "token",
+						"value": "P-4FEE11EE-0ACF-49CC-9708-E5767B346F3B",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"beerId\": 1,\n\t\"attendeeToken\": \"P-58344122-F836-4055-BFE2-DA253977D79D\"\n}"
+				},
+				"url": {
+					"raw": "localhost:8080/beer/pour",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"beer",
+						"pour"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
