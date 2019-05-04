@@ -4,10 +4,9 @@ import PostgresStORM
 
 class EventBeer: PostgresStORM {
     var id: Int = 0
-    var attendeeId: Int = 0
-    var attendeeUUId: String = ""
+    var userId: Int = 0
     var beerId: Int = 0
-    var _attendee: Attendee?
+    var _user: User?
     var _beer: Beer?
     var eventScore: Int = 0
 
@@ -16,8 +15,7 @@ class EventBeer: PostgresStORM {
     override func to(_ this: StORMRow) {
         id = this.data["id"] as? Int ?? 0
         beerId = this.data["beerid"] as? Int ?? 0
-        attendeeId = this.data["attendeeid"] as? Int ?? 0
-        attendeeUUId = this.data["attendeeuuid"] as? String ?? ""
+        userId = this.data["userid"] as? Int ?? 0
         eventScore = this.data["eventscore"] as? Int ?? 0
     }
 
@@ -38,29 +36,21 @@ class EventBeer: PostgresStORM {
     }
 
     func asDictionary() -> [String: Any] {
-        // TODO: can this be cleaned up with generics?
-        let pourer = Pourer()
-        try? pourer.get(self.attendeeId)
 
-        let drinker = Drinker()
-        try? drinker.get(self.attendeeId)
+        let drinker = User()
+        try? drinker.get(self.userId)
 
-        if pourer.id != 0 && self.attendeeUUId == pourer.token {
-            _attendee = pourer
-        } else if drinker.id != 0 && self.attendeeUUId == drinker.token {
-            _attendee = drinker
-        } else {
-            return [:]
-        }
+        _user = drinker
+        
 
         let beer = Beer()
         try? beer.get(self.beerId)
 
-        guard let attendee = _attendee, beer.id > 0 else { return [:] }
+        guard let user = _user, beer.id > 0 else { return [:] }
 
         return [
             "id": self.id,
-            "attendee": attendee.asDictionary(),
+            "attendee": user.asDictionary(),
             "beer": beer.asDictionary(),
             "eventScore": self.eventScore
         ]

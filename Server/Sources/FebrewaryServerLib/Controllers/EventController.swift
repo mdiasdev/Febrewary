@@ -23,7 +23,7 @@ class EventController {
             }
 
             let eventBeer = EventBeer()
-            eventBeer.attendeeId = attendee.id
+            eventBeer.userId = attendee.id
             eventBeer.attendeeUUId = attendee.token
             eventBeer.beerId = beer.id
 
