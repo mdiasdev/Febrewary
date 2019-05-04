@@ -11,39 +11,63 @@ public class BeerController: RouteController {
 
     func addBeer(request: HTTPRequest, response: HTTPResponse) {
         do {
-            guard let token = request.header(.custom(name: "token")) else {
-                response.setBody(string: "Bad Request: Missing Header")
-                        .completed(status: .badRequest)
-                return
-            }
 
             guard let json = try? request.postBodyString?.jsonDecode() as? [String: Any] else {
                 response.setBody(string: "Bad Request: malformed json")
                         .completed(status: .badRequest)
                 return
             }
+            
+            guard let userId = json?["userId"] as? Int else {
+                response.setBody(string: "Bad Request: missing userId")
+                    .completed(status: .badRequest)
+                return
+            }
+            
+            guard let eventId = json?["eventId"] as? Int else {
+                response.setBody(string: "Bad Request: missing eventId")
+                        .completed(status: .badRequest)
+                return
+            }
 
-            guard let beerName = json?["beerName"] as? String else {
+            guard let beerName = json?["name"] as? String else {
                 response.setBody(string: "Bad Request: missing beerName")
                         .completed(status: .badRequest)
                 return
             }
 
-            guard let brewerName = json?["brewerName"] as? String else {
+            guard let brewerName = json?["brewer"] as? String else {
                 response.setBody(string: "Bad Request: missing brewerName")
                         .completed(status: .badRequest)
                 return
             }
+            
+            let user = User()
+            try user.findOne(orderBy: "id")
+            guard user.id != 0 else {
+                response.setBody(string: "Bad Request: could not find attendee")
+                    .completed(status: .badRequest)
+                return
+            }
+            
+            let event = Event()
+            try event.find(["id": eventId])
+            
+            guard event.id > 0 else {
+                response.setBody(string: "Bad Request: could not find event with Id: \(eventId)")
+                        .completed(status: .badRequest)
+                return
+            }
 
-            let objectQuery = Beer()
-            try objectQuery.find(["name" : beerName])
+            let beerQuery = Beer()
+            try beerQuery.find(["name": beerName])
 
             var beer = Beer()
 
             var exists = false
 
-            for beerRow in objectQuery.rows() {
-                if beerRow.brewerName == brewerName {
+            for beerRow in beerQuery.rows() {
+                if beerRow.brewer == brewerName {
                     beer = beerRow
                     exists = true
                     break
@@ -52,21 +76,14 @@ public class BeerController: RouteController {
 
             if !exists {
                 beer.name = beerName
-                beer.brewerName = brewerName
+                beer.brewer = brewerName
 
                 try beer.save { id in
                     beer.id = id as! Int
                 }
             }
 
-            // add to Event as EventBeer
-            guard let attendee = AttendeeController().attendee(from: token) else {
-                response.setBody(string: "Bad Request: could not find attendee")
-                        .completed(status: .badRequest)
-                return
-            }
-
-            EventController().updateEvent(with: beer, broughtBy: attendee) { wasSuccessful in
+            EventController().update(event: event.id, with: beer, broughtBy: user, isPourer: userId == event.pourerId) { wasSuccessful in
 
                 guard wasSuccessful else {
                     response.setBody(string: "Failed to add beer to event.")
@@ -104,6 +121,7 @@ public class BeerController: RouteController {
         }
     }
 
+    // FIXME: revist this entirely
     func pouring(request: HTTPRequest, response: HTTPResponse) {
         guard let token = request.header(.custom(name: "token")), token.contains("P-") else {
             response.setBody(string: "Bad Request: Bad or Missing Header")
@@ -123,13 +141,11 @@ public class BeerController: RouteController {
             return
         }
 
-        guard let attendeeToken = json?["attendeeToken"] as? String else {
+        guard let userId = json?["userId"] as? Int else {
             response.setBody(string: "Bad Request: missing attendeeToken")
                     .completed(status: .badRequest)
             return
         }
-
-
 
         do {
             // fetch EventBeer for beerId (matching attendeeToken)
@@ -140,7 +156,7 @@ public class BeerController: RouteController {
             try eventBeerQuery.findAll()
 
             let eventBeerRow = eventBeerQuery.rows().first { (eventBeer) -> Bool in
-                eventBeer.beerId == beerId && eventBeer.attendeeUUId == attendeeToken
+                eventBeer.beerId == beerId && eventBeer.userId == userId
             }
 
             guard let eventBeer = eventBeerRow else {

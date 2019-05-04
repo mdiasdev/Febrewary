@@ -12,7 +12,6 @@ server.serverPort = 8080
 
 DatabaseController.registerTables()
 
-server.addRoutes(PourerController().routes)
 server.addRoutes(DrinkerController().routes)
 server.addRoutes(BeerController().routes)
 

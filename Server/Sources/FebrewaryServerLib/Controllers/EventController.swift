@@ -1,11 +1,15 @@
 import Foundation
 
-class EventController {
-    func updateEvent(with beer: Beer, broughtBy attendee: Attendee, completion: @escaping (Bool) -> Void) {
+class EventController: RouteController {
+    override func initRoutes() {
+    }
+    
+    // MARK: internal functions
+    func update(event eventId: Int, with beer: Beer, broughtBy attendee: User, isPourer: Bool, completion: @escaping (Bool) -> Void) {
 
         do {
             let event = Event()
-            try? event.findOne(orderBy: "id")   // FIXME: in the future we should allow more than one event at a time
+            try? event.find(["id": eventId])
 
             if event.id == 0 {
                 try event.save { id in
@@ -13,18 +17,14 @@ class EventController {
                 }
             }
 
-            if attendee.token.hasPrefix("P-") {
+            if isPourer {
                 event.pourerId = attendee.id
-            } else if attendee.token.hasPrefix("D-") {
-                event.drinkerIds.append(attendee.id)
             } else {
-                completion(false)
-                return
+                event.drinkerIds.append(attendee.id)
             }
 
             let eventBeer = EventBeer()
             eventBeer.userId = attendee.id
-            eventBeer.attendeeUUId = attendee.token
             eventBeer.beerId = beer.id
 
             if eventBeer.id == 0 {

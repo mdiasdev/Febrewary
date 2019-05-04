@@ -17,19 +17,16 @@ public struct DatabaseController {
         let beer = Beer()
         try? beer.setup()
 
-        let drinker = Drinker()
-        try? drinker.setup()
-
         let event = Event()
         try? event.setup()
 
         let eventBeer = EventBeer()
         try? eventBeer.setup()
 
-        let pourer = Pourer()
-        try? pourer.setup()
-
         let round = Round()
         try? round.setup()
+        
+        let user = User()
+        try? user.setup()
     }
 }
