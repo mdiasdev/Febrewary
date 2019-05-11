@@ -3,7 +3,9 @@ import StORM
 
 public class EventController: RouteController {
     override func initRoutes() {
-        routes.add(Route(method: .post, uri: "events", handler: createEvent))
+        routes.add(Route(method: .post, uri: "event", handler: createEvent))
+        routes.add(method: .get, uri: "/event/{id}", handler: getEvent)
+        routes.add(method: .get, uri: "/event", handler: getEventForUser)
     }
     
     func createEvent(request: HTTPRequest, response: HTTPResponse) {
@@ -54,6 +56,59 @@ public class EventController: RouteController {
             response.setBody(string: "Internal Server Error: Could not save Event")
                     .completed(status: .internalServerError)
         }
+    }
+    
+    func getEvent(request: HTTPRequest, response: HTTPResponse) {
+        guard let id = Int(request.urlVariables["id"] ?? "0"), id > 0 else {
+            response.completed(status: .badRequest)
+            return
+        }
+        
+        // FIXME: implement?
+        response.completed(status: .notFound)
+    }
+    
+    func getEventForUser(request: HTTPRequest, response: HTTPResponse) {
+        guard let postBody = try? request.postBodyString?.jsonDecode() as? [String: Any], let json = postBody else {
+            response.setBody(string: "Bad Request: malformed json")
+                    .completed(status: .badRequest)
+            return
+        }
+        
+        guard let userId = json["userId"] as? Int else {
+            response.setBody(string: "Bad Request: missing User Id")
+                    .completed(status: .badRequest)
+            return
+        }
+        do {
+        
+            let user = User()
+            try user.find(["id": userId])
+
+            guard user.id != 0 else {
+                response.setBody(string: "Bad Request: could not find User with id: \(userId)")
+                        .completed(status: .badRequest)
+                return
+            }
+            
+            let allEvents = Event()
+            try allEvents.findAll() // TODO: performance?
+            
+            let userEvents = allEvents.rows().filter { $0.drinkerIds.contains(userId) }
+            var responseJson = [[String: Any]]()
+            
+            for event in userEvents {
+                responseJson.append(event.asDictionary())
+            }
+            
+            try response.setBody(json: responseJson)
+                        .completed(status: .ok)
+            
+        } catch {
+            response.completed(status: .internalServerError)
+        }
+        
+        response.completed(status: .internalServerError)
     }
     
     // MARK: internal functions

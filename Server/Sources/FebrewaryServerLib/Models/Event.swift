@@ -78,7 +78,8 @@ class Event: PostgresStORM {
 //
 //            self._drinkers.append(drinker.asDictionary())
 //        }
-//        json["drinkers"] = self._drinkers
+//        json["attendees"] = self._drinkers
+        json["attendees"] = []
 
         for id in eventBeerIds {
             guard id != 0 else { continue }
