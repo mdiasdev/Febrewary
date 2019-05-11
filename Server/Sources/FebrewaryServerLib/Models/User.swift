@@ -17,7 +17,7 @@ class User: PostgresStORM {
     var beers: [Int] = []
     var events: [Int] = []
     
-    override open func table() -> String { return "user" }
+    override open func table() -> String { return "users" }
     
     override func to(_ this: StORMRow) {
         id = this.data["id"] as? Int ?? 0
@@ -31,9 +31,6 @@ class User: PostgresStORM {
     func rows() -> [User] {
         
         let rows = self.results.rows
-        
-        guard !rows.isEmpty else { return [] }
-        
         var users = [User]()
         
         for row in rows {
