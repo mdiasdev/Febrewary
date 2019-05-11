@@ -1,7 +1,51 @@
-import Foundation
+import PerfectHTTP
+import StORM
 
-class EventController: RouteController {
+public class EventController: RouteController {
     override func initRoutes() {
+        routes.add(Route(method: .post, uri: "events", handler: createEvent))
+    }
+    
+    func createEvent(request: HTTPRequest, response: HTTPResponse) {
+        guard let postBody = try? request.postBodyString?.jsonDecode() as? [String: Any], let json = postBody else {
+            response.setBody(string: "Bad Request: malformed json")
+                    .completed(status: .badRequest)
+            return
+        }
+
+        guard let name = json["name"] as? String,
+              let date = json["date"] as? String,
+              let address = json["address"] as? String,
+              let pourerId = json["pourerId"] as? Int,
+              var attendees = json["attendees"] as? [Int] else {
+                response.setBody(string: "Bad Request: missing required property")
+                        .completed(status: .badRequest)
+                return
+        }
+        
+        if !attendees.contains(pourerId) {
+            attendees.append(pourerId)
+        }
+        
+        do {
+            let event = Event()
+            
+            event.name = name
+            event.date = date
+            event.address = address
+            event.pourerId = pourerId
+            event.drinkerIds = attendees
+            
+            try event.save { id in
+                event.id = id as! Int
+            }
+            
+            try response.setBody(json: event.asDictionary())
+                        .completed(status: .created)
+        } catch {
+            response.setBody(string: "Internal Server Error: Could not save Event")
+                    .completed(status: .internalServerError)
+        }
     }
     
     // MARK: internal functions
