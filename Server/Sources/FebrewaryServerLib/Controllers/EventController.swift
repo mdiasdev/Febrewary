@@ -40,7 +40,15 @@ public class EventController: RouteController {
                 event.id = id as! Int
             }
             
-            try response.setBody(json: event.asDictionary())
+            let responseJson = event.asDictionary()
+            
+            guard !responseJson.isEmpty else {
+                response.setBody(string: "Internal Server Error: Could not save Event")
+                        .completed(status: .internalServerError)
+                return
+            }
+            
+            try response.setBody(json: responseJson)
                         .completed(status: .created)
         } catch {
             response.setBody(string: "Internal Server Error: Could not save Event")
