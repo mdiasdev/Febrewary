@@ -60,16 +60,25 @@ class Event: PostgresStORM {
     }
 
     func asDictionary() -> [String: Any] {
+        
+        var json: [String: Any] = [
+            "id": self.id,
+            "name": self.name,
+            "address": self.address,
+            "date": self.date,
+        ]
+        
         // FIXME: make more performant (don't access DB so many times)
-        for id in drinkerIds {
-            guard id != 0 else { continue }
-
-            let drinker = User()
-            try? drinker.get(id)
-            guard drinker.id > 0 else { return [:] }
-
-            self._drinkers.append(drinker.asDictionary())
-        }
+//        for id in drinkerIds {
+//            guard id != 0 else { continue }
+//
+//            let drinker = User()
+//            try? drinker.get(id)
+//            guard drinker.id > 0 else { return [:] }
+//
+//            self._drinkers.append(drinker.asDictionary())
+//        }
+//        json["drinkers"] = self._drinkers
 
         for id in eventBeerIds {
             guard id != 0 else { continue }
@@ -80,21 +89,13 @@ class Event: PostgresStORM {
 
             self._eventBeers.append(eventBeer.asDictionary())
         }
+        json["eventBeers"] = self._eventBeers
 
-        let pourer = User()
-        try? pourer.get(self.pourerId)
-
-        guard pourer.id > 0 else { return [:] }
-
-        let json: [String: Any] = [
-            "id": self.id,
-            "name": self.name,
-            "address": self.address,
-            "date": self.date,
-            "pourer": pourer.asDictionary(),
-            "drinkers": self._drinkers,
-            "eventBeers": self._eventBeers,
-        ]
+//        let pourer = User()
+//        try? pourer.get(self.pourerId)
+//    
+//        guard pourer.id > 0 else { return [:] }
+//        json["pourer"] = pourer.asDictionary()
 
         return json
     }
