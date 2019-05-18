@@ -6,8 +6,8 @@
         "repositoryURL": "https://github.com/PerfectlySoft/Perfect-COpenSSL.git",
         "state": {
           "branch": null,
-          "revision": "6976c2cdb7b74ec4d4f12f15db8a2655e38866e6",
-          "version": "3.2.1"
+          "revision": "4669765f9c301a91cf76ad0ddeece27367017acc",
+          "version": "4.0.1"
         }
       },
       {
@@ -24,8 +24,8 @@
         "repositoryURL": "https://github.com/PerfectlySoft/Perfect-Crypto.git",
         "state": {
           "branch": null,
-          "revision": "54e0f7c2a9d7355fca3c23e0f88096ac3765e08b",
-          "version": "3.1.2"
+          "revision": "9a6fd2a63bf4f7f0b9a5eb90afa50eff66b7542d",
+          "version": "3.2.0"
         }
       },
       {
@@ -87,8 +87,8 @@
         "repositoryURL": "https://github.com/PerfectlySoft/Perfect-Logger.git",
         "state": {
           "branch": null,
-          "revision": "eae78221d856ca017ece2bfcbc0499a282a1e7c5",
-          "version": "3.2.1"
+          "revision": "78f47107c9f7563cf94e3b5d141ca8bf0cc2f995",
+          "version": "3.3.0"
         }
       },
       {
@@ -96,8 +96,8 @@
         "repositoryURL": "https://github.com/PerfectlySoft/Perfect-Net.git",
         "state": {
           "branch": null,
-          "revision": "ff9d3bed8d8ea936968ace4c38dd77825123c0d0",
-          "version": "3.2.2"
+          "revision": "d00b2b9f4cccb4c398e1bcf18f767d6b8add6af7",
+          "version": "3.3.0"
         }
       },
       {
@@ -132,8 +132,8 @@
         "repositoryURL": "https://github.com/SwiftORM/Postgres-StORM.git",
         "state": {
           "branch": null,
-          "revision": "620fcbe2de8205d5a3042e816d5bfd3a1ce87d1b",
-          "version": "3.2.0"
+          "revision": "63a1fd68e4aa4d961b92e1b9b21fd17d4ee6f5af",
+          "version": "3.2.1"
         }
       },
       {
