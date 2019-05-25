@@ -69,6 +69,50 @@
             </objects>
             <point key="canvasLocation" x="276" y="27"/>
         </scene>
+        <!--Account-->
+        <scene sceneID="gnm-MM-vri">
+            <objects>
+                <viewController id="LBc-1d-qov" customClass="AccountViewController" customModule="Febrewary" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="XsA-V2-3ll">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" verticalCompressionResistancePriority="1000" placeholderIntrinsicWidth="375" placeholderIntrinsicHeight="380" translatesAutoresizingMaskIntoConstraints="NO" id="5Iz-u6-UNU">
+                                <rect key="frame" x="0.0" y="64" width="375" height="380"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
+                            <view alpha="0.80000000000000004" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rQe-6Z-PvX">
+                                <rect key="frame" x="0.0" y="444" width="375" height="223"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="rQe-6Z-PvX" firstAttribute="bottom" secondItem="91S-Bw-glo" secondAttribute="bottom" id="Fjh-lH-XZy"/>
+                            <constraint firstItem="5Iz-u6-UNU" firstAttribute="leading" secondItem="91S-Bw-glo" secondAttribute="leading" id="Mvc-fm-bNn"/>
+                            <constraint firstItem="rQe-6Z-PvX" firstAttribute="top" secondItem="5Iz-u6-UNU" secondAttribute="bottom" id="QQm-6I-k4W"/>
+                            <constraint firstItem="rQe-6Z-PvX" firstAttribute="trailing" secondItem="91S-Bw-glo" secondAttribute="trailing" id="Vs5-D7-K63"/>
+                            <constraint firstItem="rQe-6Z-PvX" firstAttribute="leading" secondItem="91S-Bw-glo" secondAttribute="leading" id="YaM-hT-hPi"/>
+                            <constraint firstItem="5Iz-u6-UNU" firstAttribute="trailing" secondItem="91S-Bw-glo" secondAttribute="trailing" id="boc-n7-HLq"/>
+                            <constraint firstItem="5Iz-u6-UNU" firstAttribute="top" secondItem="91S-Bw-glo" secondAttribute="top" id="gkn-5U-xn7"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="91S-Bw-glo"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Account" id="czc-LY-9Zg">
+                        <barButtonItem key="leftBarButtonItem" image="X_ico" id="3rk-nh-ckW">
+                            <connections>
+                                <action selector="close:" destination="LBc-1d-qov" id="JtS-W7-khh"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="containerView" destination="5Iz-u6-UNU" id="gyF-1B-G4h"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="qRx-vx-6t0" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="792.79999999999995" y="-3029.2353823088456"/>
+        </scene>
         <!--Events-->
         <scene sceneID="2N9-N8-uys">
             <objects>
@@ -84,7 +128,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bXC-gz-aBB" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1473" y="-2488"/>
+            <point key="canvasLocation" x="2412" y="-2488.6056971514245"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="QcA-HG-yib">
@@ -164,21 +208,27 @@
             </objects>
             <point key="canvasLocation" x="1082" y="27"/>
         </scene>
-        <!--View Controller-->
+        <!--Events View Controller-->
         <scene sceneID="7Rk-06-kd5">
             <objects>
-                <viewController id="nWy-F2-Tfq" sceneMemberID="viewController">
+                <viewController id="nWy-F2-Tfq" customClass="EventsViewController" customModule="Febrewary" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="oQw-rO-DnB">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="Bxh-iG-249"/>
                     </view>
-                    <navigationItem key="navigationItem" id="AQ0-IN-mDH"/>
+                    <navigationItem key="navigationItem" id="AQ0-IN-mDH">
+                        <barButtonItem key="leftBarButtonItem" image="Account_ico" id="tiz-bz-F05" userLabel="Account Bar Button Item">
+                            <connections>
+                                <action selector="showAccount:" destination="nWy-F2-Tfq" id="ubA-kz-Elc"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LdX-9e-Isi" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2233" y="-2488"/>
+            <point key="canvasLocation" x="3172" y="-2488.6056971514245"/>
         </scene>
         <!--Beers-->
         <scene sceneID="FAL-XF-oJV">
@@ -259,8 +309,28 @@
             </objects>
             <point key="canvasLocation" x="1473" y="-1114"/>
         </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="a9f-wg-YMw">
+            <objects>
+                <navigationController storyboardIdentifier="Account" automaticallyAdjustsScrollViewInsets="NO" id="2Na-aR-lwn" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="2v3-KG-dXs">
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="LBc-1d-qov" kind="relationship" relationship="rootViewController" id="GoH-uI-w3K"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="BKf-Gf-sqh" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-68" y="-3029"/>
+        </scene>
     </scenes>
     <resources>
+        <image name="Account_ico" width="25" height="25"/>
+        <image name="X_ico" width="25" height="25"/>
         <namedColor name="Color">
             <color red="0.95294117647058818" green="0.97647058823529409" blue="0.57647058823529407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
