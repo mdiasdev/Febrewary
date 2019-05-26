@@ -19,6 +19,7 @@ class AccountViewController: UIViewController {
         let signInVC = SignInCreateAccountViewController()
         signInVC.view.translatesAutoresizingMaskIntoConstraints = false
         containerView.addSubview(signInVC.view)
+        addChild(signInVC)
         NSLayoutConstraint.activate([
             signInVC.view.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
             signInVC.view.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),

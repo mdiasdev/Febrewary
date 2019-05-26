@@ -20,41 +20,74 @@ class SignInCreateAccountViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+//        segmentControl.addTarget(self, action: #selector(didChangeSegment), for: .allTouchEvents)
 
         setupAccessibility()
     }
+    
+    @IBAction func didChangeSegment() {
 
-    @IBAction func didChangeSegment(_ sender: UISegmentedControl) {
-        
         switch segmentControl.selectedSegmentIndex
         {
-        case 0:
-            firstNameTextField.isHidden = true
-            lastNameTextField.isHidden = true
-        case 1:
-            firstNameTextField.isHidden = false
-            lastNameTextField.isHidden = false
-        default:
-            break
-        }
-    }
-    
-    
-    @IBAction func valueChanged(_ sender: Any) {
-        switch segmentControl.selectedSegmentIndex
-        {
-        case 0:
-            firstNameTextField.isHidden = true
-            lastNameTextField.isHidden = true
-        case 1:
-            firstNameTextField.isHidden = false
-            lastNameTextField.isHidden = false
-        default:
-            break
+            case 0:
+                firstNameTextField.isHidden = true
+                lastNameTextField.isHidden = true
+            case 1:
+                firstNameTextField.isHidden = false
+                lastNameTextField.isHidden = false
+            default:
+                assertionFailure("unimplemented segment")
         }
     }
     
     @IBAction func submit(_ sender: Any) {
+        guard let firstName = firstNameTextField.text, !firstName.isEmpty else {
+            showFormValidationFailure(for: "First Name")
+            return
+        }
+        
+        guard let lastName = lastNameTextField.text, !lastName.isEmpty else {
+            showFormValidationFailure(for: "Last Name")
+            return
+        }
+        
+        guard let email = emailTextField.text, !email.isEmpty else {
+            showFormValidationFailure(for: "Email")
+            return
+        }
+        
+        guard let password = passwordTextField.text, !password.isEmpty else {
+            showFormValidationFailure(for: "Password")
+            return
+        }
+        
+        attemptRegister(firstName: firstName, lastName: lastName, email: email, password: password)
+    }
+    
+    func showFormValidationFailure(for formElement: String) {
+        
+    }
+    
+    func attemptRegister(firstName: String, lastName: String, email: String, password: String) {
+        // FIXME: abstract URL
+        var request = URLRequest(url: URL(string: "http://localhost:8080/register")!)
+        let payload = [
+            "firstName": firstName,
+            "lastName": lastName,
+            "email": email,
+            "password": password
+        ]
+        request.httpMethod = "POST"
+        
+        do {
+            request.httpBody = try JSONSerialization.data(withJSONObject: payload, options: .prettyPrinted)
+        } catch let error {
+            print(error.localizedDescription)
+        }
+        
+        URLSession.shared.dataTask(with: request) { (data, response, error) in
+            print("yay")
+        }.resume()
     }
     
     func setupAccessibility() {
