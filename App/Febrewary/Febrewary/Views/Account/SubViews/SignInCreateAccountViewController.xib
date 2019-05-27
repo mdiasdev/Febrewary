@@ -33,7 +33,7 @@
                         <segment title="Create Account"/>
                     </segments>
                     <connections>
-                        <action selector="didChangeSegment" destination="-1" eventType="valueChanged" id="ijA-nB-5mz"/>
+                        <action selector="didChange:" destination="-1" eventType="valueChanged" id="IHQ-5O-8YQ"/>
                     </connections>
                 </segmentedControl>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jeb-ud-s2p">

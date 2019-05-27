@@ -9,6 +9,12 @@
 import UIKit
 
 class SignInCreateAccountViewController: UIViewController {
+    
+    enum Segment: Int {
+        case signIn = 0
+        case createAccount = 1
+    }
+    typealias FormFields = (firstName: String, lastName: String, email: String, password: String)
 
     @IBOutlet weak var segmentControl: UISegmentedControl!
     @IBOutlet weak var formStackView: UIStackView!
@@ -22,6 +28,7 @@ class SignInCreateAccountViewController: UIViewController {
         super.viewDidLoad()
 
         setupAccessibility()
+        updateForm(for: .signIn)
     }
     
     func setupAccessibility() {
@@ -36,53 +43,99 @@ class SignInCreateAccountViewController: UIViewController {
         passwordTextField.accessibilityIdentifier = "password text field"
     }
     
-    // MARK: - Actions
-    @IBAction func didChangeSegment() {
-
-        switch segmentControl.selectedSegmentIndex
+    func updateForm(for segment: Segment) {
+        switch segment
         {
-            case 0:
-                firstNameTextField.isHidden = true
-                lastNameTextField.isHidden = true
-            case 1:
-                firstNameTextField.isHidden = false
-                lastNameTextField.isHidden = false
-            default:
-                assertionFailure("unimplemented segment")
+        case .signIn:
+            firstNameTextField.isHidden = true
+            lastNameTextField.isHidden = true
+        case .createAccount:
+            firstNameTextField.isHidden = false
+            lastNameTextField.isHidden = false
         }
+    }
+    
+    // MARK: - Actions
+    @IBAction func didChange(_ sender: UISegmentedControl) {
+        guard let segment = Segment(rawValue: sender.selectedSegmentIndex) else {
+            assertionFailure("unsupported segment")
+            return
+        }
+        
+        updateForm(for: segment)
     }
     
     @IBAction func submit(_ sender: Any) {
-        guard let firstName = firstNameTextField.text, !firstName.isEmpty else {
-            showFormValidationFailure(for: "First Name")
-            return
-        }
         
-        guard let lastName = lastNameTextField.text, !lastName.isEmpty else {
-            showFormValidationFailure(for: "Last Name")
-            return
-        }
+        guard let segment = Segment(rawValue: segmentControl.selectedSegmentIndex) else { return }
         
-        guard let email = emailTextField.text, !email.isEmpty else {
-            showFormValidationFailure(for: "Email")
-            return
+        switch segment {
+        case .signIn:
+            let formValidation = isFormValid(for: .signIn)
+            
+            guard formValidation.isValid, let formFields = formValidation.fields else { return }
+            
+            signIn(email: formFields.email, password: formFields.password)
+        case .createAccount:
+            let formValidation = isFormValid(for: .createAccount)
+            
+            guard formValidation.isValid, let formFields = formValidation.fields else { return }
+            
+            register(firstName: formFields.firstName,
+                     lastName: formFields.lastName,
+                     email: formFields.email,
+                     password: formFields.password)
         }
-        
-        guard let password = passwordTextField.text, !password.isEmpty else {
-            showFormValidationFailure(for: "Password")
-            return
-        }
-        
-        attemptRegister(firstName: firstName, lastName: lastName, email: email, password: password)
     }
     
-    // MARK: Error Handling
+    // MARK: - Error Handling
+    func isFormValid(for segment: Segment) -> (isValid: Bool, fields: FormFields?) {
+        switch segment {
+        case .signIn:
+            guard let email = emailTextField.text, !email.isEmpty else {
+                showFormValidationFailure(for: "Email")
+                return (false, nil)
+            }
+            
+            guard let password = passwordTextField.text, !password.isEmpty else {
+                showFormValidationFailure(for: "Password")
+                return (false, nil)
+            }
+            return (true, ("", "", email, password))
+        case .createAccount:
+            guard let firstName = firstNameTextField.text, !firstName.isEmpty else {
+                showFormValidationFailure(for: "First Name")
+                return (false, nil)
+            }
+            
+            guard let lastName = lastNameTextField.text, !lastName.isEmpty else {
+                showFormValidationFailure(for: "Last Name")
+                return (false, nil)
+            }
+            
+            guard let email = emailTextField.text, !email.isEmpty else {
+                showFormValidationFailure(for: "Email")
+                return (false, nil)
+            }
+            
+            guard let password = passwordTextField.text, !password.isEmpty else {
+                showFormValidationFailure(for: "Password")
+                return (false, nil)
+            }
+            
+            return (true, (firstName, lastName, email, password))
+        }
+    }
+    
     func showFormValidationFailure(for formElement: String) {
+        let alert = UIAlertController(title: "Missing Information!", message: "\(formElement) must have a value", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         
+        present(alert, animated: true, completion: nil)
     }
     
-    // MARK: Netowrking
-    func attemptRegister(firstName: String, lastName: String, email: String, password: String) {
+    // MARK: - Networking
+    func register(firstName: String, lastName: String, email: String, password: String) {
         let url = URLBuilder(endpoint: .register).buildUrl()
         let payload = [
             "firstName": firstName,
@@ -92,7 +145,11 @@ class SignInCreateAccountViewController: UIViewController {
         ]
         
         ServiceClient().post(url: url, payload: payload) { result in
-            
+            // TODO: save token and user
         }
+    }
+    
+    func signIn(email: String, password: String) {
+        
     }
 }
