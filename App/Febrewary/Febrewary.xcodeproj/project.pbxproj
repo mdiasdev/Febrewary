@@ -20,6 +20,9 @@
 		6DBF8253229C27D400E334B9 /* ServiceClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DBF8252229C27D400E334B9 /* ServiceClient.swift */; };
 		6DBF8255229C288400E334B9 /* URLBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DBF8254229C288400E334B9 /* URLBuilder.swift */; };
 		6DBF8257229C2F2D00E334B9 /* NetworkErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DBF8256229C2F2D00E334B9 /* NetworkErrors.swift */; };
+		6DBF825A229C341100E334B9 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DBF8259229C341100E334B9 /* User.swift */; };
+		6DBF825C229C34EA00E334B9 /* Beer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DBF825B229C34EA00E334B9 /* Beer.swift */; };
+		6DBF825E229C34F200E334B9 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DBF825D229C34F200E334B9 /* Event.swift */; };
 		6DC8FF7622061E30002749A4 /* EnterBeerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DC8FF7522061E30002749A4 /* EnterBeerViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -51,6 +54,9 @@
 		6DBF8252229C27D400E334B9 /* ServiceClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceClient.swift; sourceTree = "<group>"; };
 		6DBF8254229C288400E334B9 /* URLBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLBuilder.swift; sourceTree = "<group>"; };
 		6DBF8256229C2F2D00E334B9 /* NetworkErrors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkErrors.swift; sourceTree = "<group>"; };
+		6DBF8259229C341100E334B9 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		6DBF825B229C34EA00E334B9 /* Beer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Beer.swift; sourceTree = "<group>"; };
+		6DBF825D229C34F200E334B9 /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
 		6DC8FF7522061E30002749A4 /* EnterBeerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnterBeerViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -119,6 +125,7 @@
 		6D902A8821FA968600A3860B /* Febrewary */ = {
 			isa = PBXGroup;
 			children = (
+				6DBF8258229C340400E334B9 /* Models */,
 				6DBF8251229C278A00E334B9 /* Networking */,
 				6DC8FF7021FCF955002749A4 /* Views */,
 				6D902A8921FA968600A3860B /* AppDelegate.swift */,
@@ -148,6 +155,16 @@
 				6DBF8256229C2F2D00E334B9 /* NetworkErrors.swift */,
 			);
 			path = Networking;
+			sourceTree = "<group>";
+		};
+		6DBF8258229C340400E334B9 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				6DBF825B229C34EA00E334B9 /* Beer.swift */,
+				6DBF825D229C34F200E334B9 /* Event.swift */,
+				6DBF8259229C341100E334B9 /* User.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 		6DC8FF7021FCF955002749A4 /* Views */ = {
@@ -274,8 +291,11 @@
 				6D63F6E12290965300ABF4AB /* AccountViewController.swift in Sources */,
 				6DBF8255229C288400E334B9 /* URLBuilder.swift in Sources */,
 				6D63F6DE2290960C00ABF4AB /* EventsViewController.swift in Sources */,
+				6DBF825C229C34EA00E334B9 /* Beer.swift in Sources */,
+				6DBF825E229C34F200E334B9 /* Event.swift in Sources */,
 				6DC8FF7622061E30002749A4 /* EnterBeerViewController.swift in Sources */,
 				6D902A8A21FA968600A3860B /* AppDelegate.swift in Sources */,
+				6DBF825A229C341100E334B9 /* User.swift in Sources */,
 				6D63F6EB2299B74300ABF4AB /* TopDownAnimator.swift in Sources */,
 				6DBF8257229C2F2D00E334B9 /* NetworkErrors.swift in Sources */,
 				6DBF8253229C27D400E334B9 /* ServiceClient.swift in Sources */,
