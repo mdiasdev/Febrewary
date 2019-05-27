@@ -18,6 +18,7 @@
                 <outlet property="lastNameTextField" destination="5Ea-b8-6Br" id="rWT-jQ-Imc"/>
                 <outlet property="passwordTextField" destination="iVl-gN-bmg" id="uVq-mz-OS5"/>
                 <outlet property="segmentControl" destination="boA-qd-UY0" id="8tl-1Q-P8W"/>
+                <outlet property="submitButton" destination="jeb-ud-s2p" id="wqj-Zq-eLR"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>

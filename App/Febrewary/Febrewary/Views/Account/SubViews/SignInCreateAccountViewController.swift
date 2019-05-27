@@ -18,6 +18,7 @@ class SignInCreateAccountViewController: UIViewController {
 
     @IBOutlet weak var segmentControl: UISegmentedControl!
     @IBOutlet weak var formStackView: UIStackView!
+    @IBOutlet weak var submitButton: UIButton!
     
     @IBOutlet weak var firstNameTextField: UITextField!
     @IBOutlet weak var lastNameTextField: UITextField!
@@ -27,6 +28,10 @@ class SignInCreateAccountViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        view.layer.cornerRadius = 22
+        view.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
+        submitButton.layer.cornerRadius = 8
+        
         setupAccessibility()
         updateForm(for: .signIn)
     }
@@ -44,14 +49,16 @@ class SignInCreateAccountViewController: UIViewController {
     }
     
     func updateForm(for segment: Segment) {
-        switch segment
-        {
-        case .signIn:
-            firstNameTextField.isHidden = true
-            lastNameTextField.isHidden = true
-        case .createAccount:
-            firstNameTextField.isHidden = false
-            lastNameTextField.isHidden = false
+        UIView.animate(withDuration: 0.2) { [weak self] in
+            switch segment
+            {
+            case .signIn:
+                self?.firstNameTextField.isHidden = true
+                self?.lastNameTextField.isHidden = true
+            case .createAccount:
+                self?.firstNameTextField.isHidden = false
+                self?.lastNameTextField.isHidden = false
+            }
         }
     }
     
