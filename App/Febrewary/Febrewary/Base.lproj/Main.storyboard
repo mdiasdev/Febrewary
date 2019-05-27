@@ -14,26 +14,18 @@
         <scene sceneID="gnm-MM-vri">
             <objects>
                 <viewController id="LBc-1d-qov" customClass="AccountViewController" customModule="Febrewary" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="XsA-V2-3ll">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                    <view key="view" alpha="0.80000000000000004" contentMode="scaleToFill" id="XsA-V2-3ll">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" verticalCompressionResistancePriority="1000" placeholderIntrinsicWidth="375" placeholderIntrinsicHeight="380" translatesAutoresizingMaskIntoConstraints="NO" id="5Iz-u6-UNU">
-                                <rect key="frame" x="0.0" y="64" width="375" height="380"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            </view>
-                            <view alpha="0.80000000000000004" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rQe-6Z-PvX">
-                                <rect key="frame" x="0.0" y="444" width="375" height="223"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="380"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="rQe-6Z-PvX" firstAttribute="bottom" secondItem="91S-Bw-glo" secondAttribute="bottom" id="Fjh-lH-XZy"/>
                             <constraint firstItem="5Iz-u6-UNU" firstAttribute="leading" secondItem="91S-Bw-glo" secondAttribute="leading" id="Mvc-fm-bNn"/>
-                            <constraint firstItem="rQe-6Z-PvX" firstAttribute="top" secondItem="5Iz-u6-UNU" secondAttribute="bottom" id="QQm-6I-k4W"/>
-                            <constraint firstItem="rQe-6Z-PvX" firstAttribute="trailing" secondItem="91S-Bw-glo" secondAttribute="trailing" id="Vs5-D7-K63"/>
-                            <constraint firstItem="rQe-6Z-PvX" firstAttribute="leading" secondItem="91S-Bw-glo" secondAttribute="leading" id="YaM-hT-hPi"/>
                             <constraint firstItem="5Iz-u6-UNU" firstAttribute="trailing" secondItem="91S-Bw-glo" secondAttribute="trailing" id="boc-n7-HLq"/>
                             <constraint firstItem="5Iz-u6-UNU" firstAttribute="top" secondItem="91S-Bw-glo" secondAttribute="top" id="gkn-5U-xn7"/>
                         </constraints>
@@ -194,9 +186,9 @@
         <!--Navigation Controller-->
         <scene sceneID="a9f-wg-YMw">
             <objects>
-                <navigationController storyboardIdentifier="Account" automaticallyAdjustsScrollViewInsets="NO" id="2Na-aR-lwn" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="Account" automaticallyAdjustsScrollViewInsets="NO" modalPresentationStyle="overFullScreen" id="2Na-aR-lwn" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="2v3-KG-dXs">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translucent="NO" id="2v3-KG-dXs">
                         <rect key="frame" x="0.0" y="20" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
