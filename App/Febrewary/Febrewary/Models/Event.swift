@@ -11,3 +11,5 @@ import Foundation
 struct Event {
     // TODO: Make this
 }
+
+extension Event: Codable { }

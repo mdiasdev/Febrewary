@@ -11,3 +11,5 @@ import Foundation
 struct Beer {
     // TODO: Make this
 }
+
+extension Beer: Codable { }

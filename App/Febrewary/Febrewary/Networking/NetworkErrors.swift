@@ -8,7 +8,12 @@
 
 import Foundation
 
-public struct JSONError: Error {
-    let title = "Bad Response"
-    let message = "Could not parse response from server."
+protocol LocalError {
+    var title: String { get }
+    var message: String { get }
+}
+
+public struct JSONError: Error, LocalError {
+    var title: String { return "Bad Response" }
+    var message: String { return "Could not parse response from server." }
 }
