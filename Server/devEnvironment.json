@@ -1,0 +1,12 @@
+{
+  "database": {
+    "host": "localhost",
+    "username": "perfect",
+    "password": "perfect",
+    "dbName": "febrewary",
+    "port": 5432
+  },
+  "security": {
+    "salt": "beers"
+  }
+}
