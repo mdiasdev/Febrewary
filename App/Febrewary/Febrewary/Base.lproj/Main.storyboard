@@ -6,68 +6,45 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
-        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Token Select View Controller-->
-        <scene sceneID="tne-QT-ifu">
+        <!--Account-->
+        <scene sceneID="gnm-MM-vri">
             <objects>
-                <viewController storyboardIdentifier="TokenScreen" id="BYZ-38-t0r" customClass="TokenSelectViewController" customModule="Febrewary" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                <viewController id="LBc-1d-qov" customClass="AccountViewController" customModule="Febrewary" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" alpha="0.80000000000000004" contentMode="scaleToFill" id="XsA-V2-3ll">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="peQ-Gy-NgM">
-                                <rect key="frame" x="32" y="210.5" width="311" height="50"/>
-                                <color key="backgroundColor" name="Color"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="50" id="p5t-HK-O10"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                <state key="normal" title="I am the Pourer">
-                                    <color key="titleColor" name="Color-2"/>
-                                </state>
-                                <connections>
-                                    <action selector="tappedIsPourer:" destination="BYZ-38-t0r" eventType="touchUpInside" id="fEE-Vg-IoM"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="le8-sQ-yiL">
-                                <rect key="frame" x="32" y="308.5" width="311" height="50"/>
-                                <color key="backgroundColor" name="Color-1"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="50" id="NpT-y7-O7V"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                <state key="normal" title="I am a Drinker">
-                                    <color key="titleColor" name="Color-2"/>
-                                </state>
-                                <connections>
-                                    <action selector="tappedIsDrinker:" destination="BYZ-38-t0r" eventType="touchUpInside" id="skO-Mt-dff"/>
-                                </connections>
-                            </button>
+                            <view contentMode="scaleToFill" verticalCompressionResistancePriority="1000" placeholderIntrinsicWidth="375" placeholderIntrinsicHeight="380" translatesAutoresizingMaskIntoConstraints="NO" id="5Iz-u6-UNU">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="380"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
                         </subviews>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="le8-sQ-yiL" firstAttribute="centerX" secondItem="peQ-Gy-NgM" secondAttribute="centerX" id="2qZ-mB-7qK"/>
-                            <constraint firstItem="le8-sQ-yiL" firstAttribute="trailing" secondItem="peQ-Gy-NgM" secondAttribute="trailing" id="3js-M1-mp5"/>
-                            <constraint firstItem="le8-sQ-yiL" firstAttribute="top" secondItem="peQ-Gy-NgM" secondAttribute="bottom" constant="48" id="ECs-lV-qwq"/>
-                            <constraint firstItem="le8-sQ-yiL" firstAttribute="leading" secondItem="peQ-Gy-NgM" secondAttribute="leading" id="R5i-5R-aCq"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="peQ-Gy-NgM" secondAttribute="trailing" constant="32" id="Toh-Fl-FRt"/>
-                            <constraint firstItem="peQ-Gy-NgM" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" constant="-98" id="eAb-AZ-z7n"/>
-                            <constraint firstItem="peQ-Gy-NgM" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="32" id="usS-OG-dvH"/>
+                            <constraint firstItem="5Iz-u6-UNU" firstAttribute="leading" secondItem="91S-Bw-glo" secondAttribute="leading" id="Mvc-fm-bNn"/>
+                            <constraint firstItem="5Iz-u6-UNU" firstAttribute="trailing" secondItem="91S-Bw-glo" secondAttribute="trailing" id="boc-n7-HLq"/>
+                            <constraint firstItem="5Iz-u6-UNU" firstAttribute="top" secondItem="91S-Bw-glo" secondAttribute="top" id="gkn-5U-xn7"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                        <viewLayoutGuide key="safeArea" id="91S-Bw-glo"/>
                     </view>
+                    <navigationItem key="navigationItem" title="Account" id="czc-LY-9Zg">
+                        <barButtonItem key="leftBarButtonItem" image="X_ico" id="3rk-nh-ckW">
+                            <connections>
+                                <action selector="close:" destination="LBc-1d-qov" id="JtS-W7-khh"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
-                        <outlet property="drinkerButton" destination="le8-sQ-yiL" id="orD-ji-9Zc"/>
-                        <outlet property="pourerButton" destination="peQ-Gy-NgM" id="ecr-9e-5QS"/>
+                        <outlet property="containerView" destination="5Iz-u6-UNU" id="gyF-1B-G4h"/>
                     </connections>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="qRx-vx-6t0" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="276" y="27"/>
+            <point key="canvasLocation" x="792.79999999999995" y="-3029.2353823088456"/>
         </scene>
         <!--Events-->
         <scene sceneID="2N9-N8-uys">
@@ -84,7 +61,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bXC-gz-aBB" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1473" y="-2488"/>
+            <point key="canvasLocation" x="2412" y="-2488.6056971514245"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="QcA-HG-yib">
@@ -105,80 +82,27 @@
             </objects>
             <point key="canvasLocation" x="-68" y="-1811"/>
         </scene>
-        <!--Enter Beer View Controller-->
-        <scene sceneID="1Pz-gl-SYv">
-            <objects>
-                <viewController storyboardIdentifier="EnterBeerScreen" id="hRA-nX-rpT" customClass="EnterBeerViewController" customModule="Febrewary" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="Xyq-nh-qoO">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter the beer's name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Mnl-tP-Ggh">
-                                <rect key="frame" x="32" y="116" width="311" height="30"/>
-                                <nil key="textColor"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
-                            </textField>
-                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter the brewer's name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="1KI-x3-4xS">
-                                <rect key="frame" x="32" y="154" width="311" height="30"/>
-                                <nil key="textColor"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
-                            </textField>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0X9-n9-luX">
-                                <rect key="frame" x="64" y="216" width="247" height="50"/>
-                                <color key="backgroundColor" name="Color"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="50" id="Ekj-oc-bkg"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                <state key="normal" title="Submit">
-                                    <color key="titleColor" name="Color-2"/>
-                                </state>
-                                <connections>
-                                    <action selector="submitTapped:" destination="hRA-nX-rpT" eventType="touchUpInside" id="cov-9A-Chv"/>
-                                </connections>
-                            </button>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <constraints>
-                            <constraint firstItem="0X9-n9-luX" firstAttribute="top" secondItem="1KI-x3-4xS" secondAttribute="bottom" constant="32" id="6ua-0B-hOX"/>
-                            <constraint firstItem="1KI-x3-4xS" firstAttribute="top" secondItem="Mnl-tP-Ggh" secondAttribute="bottom" constant="8" id="F2w-1F-njO"/>
-                            <constraint firstItem="0X9-n9-luX" firstAttribute="leading" secondItem="Mnl-tP-Ggh" secondAttribute="leading" constant="32" id="J6U-40-smu"/>
-                            <constraint firstItem="1KI-x3-4xS" firstAttribute="leading" secondItem="Mnl-tP-Ggh" secondAttribute="leading" id="O2Y-c3-p3P"/>
-                            <constraint firstItem="BNH-CW-pEv" firstAttribute="trailing" secondItem="Mnl-tP-Ggh" secondAttribute="trailing" constant="32" id="RZD-jc-FrR"/>
-                            <constraint firstItem="Mnl-tP-Ggh" firstAttribute="leading" secondItem="BNH-CW-pEv" secondAttribute="leading" constant="32" id="Z1o-pl-QIc"/>
-                            <constraint firstItem="Mnl-tP-Ggh" firstAttribute="top" secondItem="BNH-CW-pEv" secondAttribute="top" constant="96" id="epU-oj-gGb"/>
-                            <constraint firstItem="0X9-n9-luX" firstAttribute="trailing" secondItem="Mnl-tP-Ggh" secondAttribute="trailing" constant="-32" id="gx8-0d-1ED"/>
-                            <constraint firstItem="1KI-x3-4xS" firstAttribute="trailing" secondItem="Mnl-tP-Ggh" secondAttribute="trailing" id="yy7-nz-NiA"/>
-                        </constraints>
-                        <viewLayoutGuide key="safeArea" id="BNH-CW-pEv"/>
-                    </view>
-                    <connections>
-                        <outlet property="beerNameTextField" destination="Mnl-tP-Ggh" id="f6Y-Na-Ium"/>
-                        <outlet property="brewerNameTextField" destination="1KI-x3-4xS" id="nnV-zy-fYH"/>
-                        <outlet property="submitButton" destination="0X9-n9-luX" id="X4h-Wo-jik"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="ZJJ-bk-88b" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1082" y="27"/>
-        </scene>
-        <!--View Controller-->
+        <!--Events View Controller-->
         <scene sceneID="7Rk-06-kd5">
             <objects>
-                <viewController id="nWy-F2-Tfq" sceneMemberID="viewController">
+                <viewController id="nWy-F2-Tfq" customClass="EventsViewController" customModule="Febrewary" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="oQw-rO-DnB">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="Bxh-iG-249"/>
                     </view>
-                    <navigationItem key="navigationItem" id="AQ0-IN-mDH"/>
+                    <navigationItem key="navigationItem" id="AQ0-IN-mDH">
+                        <barButtonItem key="leftBarButtonItem" image="Account_ico" id="tiz-bz-F05" userLabel="Account Bar Button Item">
+                            <connections>
+                                <action selector="showAccount:" destination="nWy-F2-Tfq" id="ubA-kz-Elc"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LdX-9e-Isi" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2233" y="-2488"/>
+            <point key="canvasLocation" x="3172" y="-2488.6056971514245"/>
         </scene>
         <!--Beers-->
         <scene sceneID="FAL-XF-oJV">
@@ -259,16 +183,27 @@
             </objects>
             <point key="canvasLocation" x="1473" y="-1114"/>
         </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="a9f-wg-YMw">
+            <objects>
+                <navigationController storyboardIdentifier="Account" automaticallyAdjustsScrollViewInsets="NO" modalPresentationStyle="overFullScreen" id="2Na-aR-lwn" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translucent="NO" id="2v3-KG-dXs">
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="LBc-1d-qov" kind="relationship" relationship="rootViewController" id="GoH-uI-w3K"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="BKf-Gf-sqh" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-68" y="-3029"/>
+        </scene>
     </scenes>
     <resources>
-        <namedColor name="Color">
-            <color red="0.95294117647058818" green="0.97647058823529409" blue="0.57647058823529407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
-        <namedColor name="Color-1">
-            <color red="0.73725490196078436" green="0.40392156862745099" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
-        <namedColor name="Color-2">
-            <color red="0.30588235294117649" green="0.16470588235294117" blue="0.047058823529411764" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
+        <image name="Account_ico" width="25" height="25"/>
+        <image name="X_ico" width="25" height="25"/>
     </resources>
 </document>

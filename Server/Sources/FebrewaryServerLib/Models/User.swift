@@ -14,6 +14,8 @@ class User: PostgresStORM {
     var firstName: String = ""
     var lastName: String = ""
     var email: String = ""
+    var password: String = ""
+    var salt: String = ""
     var beers: [Int] = []
     var events: [Int] = []
     
@@ -24,6 +26,8 @@ class User: PostgresStORM {
         firstName = this.data["firstname"] as? String ?? ""
         lastName = this.data["lastname"] as? String ?? ""
         email = this.data["email"] as? String ?? ""
+        password = this.data["password"] as? String ?? ""
+        salt = this.data["salt"] as? String ?? ""
         beers = this.data["beers"] as? [Int] ?? []
         events = this.data["events"] as? [Int] ?? []
     }
@@ -46,6 +50,10 @@ class User: PostgresStORM {
         return [
             "id": self.id,
             "firstName": self.firstName,
+            "lastName": self.lastName,
+            "email": self.email,
+            "events": self.events,
+            "beers": self.beers,
         ]
     }
 }
