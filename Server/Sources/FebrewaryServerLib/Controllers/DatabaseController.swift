@@ -4,12 +4,11 @@ import PostgresStORM
 
 public struct DatabaseController {
     public static func setupDatabase() {
-        // FIXME: move to environment file
-        PostgresConnector.host = "localhost"
-        PostgresConnector.username = "perfect"
-        PostgresConnector.password = "perfect"
-        PostgresConnector.database = "febrewary"
-        PostgresConnector.port = 5432
+        PostgresConnector.host = Configuration.dbHost
+        PostgresConnector.username = Configuration.dbUser
+        PostgresConnector.password = Configuration.dbPassword
+        PostgresConnector.database = Configuration.dbName
+        PostgresConnector.port = Configuration.dbPort
     }
 
     // TODO: database error if fails to setup
