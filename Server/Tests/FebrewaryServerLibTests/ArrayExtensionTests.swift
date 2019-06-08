@@ -9,6 +9,9 @@ import XCTest
 @testable import FebrewaryServerLib
 
 class ArrayExtensionTests: XCTestCase {
+    static var allTests = [
+        ("test_createsCommaSeparatedString", test_createsCommaSeparatedString),
+    ]
 
     func test_createsCommaSeparatedString() {
         let sut = [1, 2, 3, 4, 5]

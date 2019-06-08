@@ -10,6 +10,13 @@ import XCTest
 @testable import FebrewaryServerLib
 
 class StringExtensionTests: XCTestCase {
+    
+    static var allTests = [
+        ("test_canConvertString_ofObjectIds_toArray", test_canConvertString_ofObjectIds_toArray),
+        ("test_canConvertString_ofObjectIds_toArray_whenWhiteSpacePresent", test_canConvertString_ofObjectIds_toArray_whenWhiteSpacePresent),
+        ("test_random_providesRandomString", test_random_providesRandomString),
+        ("test_generateHash_makesDifferentString", test_generateHash_makesDifferentString),
+    ]
 
     func test_canConvertString_ofObjectIds_toArray() {
         let sut = "1,2,3,4,5"

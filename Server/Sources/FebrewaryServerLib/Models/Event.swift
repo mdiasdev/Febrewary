@@ -68,6 +68,7 @@ class Event: PostgresStORM {
             "date": self.date,
         ]
         
+        // FIXME: make more performant (don't access DB so many times)
         for id in drinkerIds {
             guard id != 0 else { continue }
 
@@ -80,6 +81,7 @@ class Event: PostgresStORM {
         
         json["attendees"] = self._drinkers
 
+        // FIXME: make more performant (don't access DB so many times)
         for id in eventBeerIds {
             guard id != 0 else { continue }
 
