@@ -50,7 +50,7 @@
         <scene sceneID="2N9-N8-uys">
             <objects>
                 <navigationController id="Niu-OA-nxc" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Events" id="J9v-hM-gWn"/>
+                    <tabBarItem key="tabBarItem" title="Events" image="Calendar_ico" id="J9v-hM-gWn"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="d5X-lz-q7B">
                         <rect key="frame" x="0.0" y="20" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -108,7 +108,7 @@
         <scene sceneID="FAL-XF-oJV">
             <objects>
                 <navigationController id="fLd-HN-Rrd" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Beers" id="xbb-as-09b"/>
+                    <tabBarItem key="tabBarItem" title="Beers" image="Beer_ico" id="xbb-as-09b"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="iuB-iU-8jy">
                         <rect key="frame" x="0.0" y="20" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -170,7 +170,7 @@
         <scene sceneID="1Ng-ng-HHp">
             <objects>
                 <navigationController id="OpU-Bn-eZT" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Friends" id="jgR-Cl-KEO"/>
+                    <tabBarItem key="tabBarItem" title="Friends" image="Friends_ico" id="jgR-Cl-KEO"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="ntG-i5-blZ">
                         <rect key="frame" x="0.0" y="20" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -204,6 +204,9 @@
     </scenes>
     <resources>
         <image name="Account_ico" width="25" height="25"/>
+        <image name="Beer_ico" width="25" height="27"/>
+        <image name="Calendar_ico" width="25" height="25"/>
+        <image name="Friends_ico" width="25" height="25"/>
         <image name="X_ico" width="25" height="25"/>
     </resources>
 </document>
