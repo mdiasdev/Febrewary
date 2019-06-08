@@ -50,5 +50,34 @@ public class UserController: RouteController {
     }
     
     func getUserById(request: HTTPRequest, response: HTTPResponse) {
+        guard request.hasValidToken() else {
+            response.setBody(string: "Unauthenicated user. Please login and try again.")
+                    .completed(status: .unauthorized)
+            return
+        }
+        
+        guard let idString = request.pathComponents.last, let id = Int(idString) else {
+            response.setBody(string: "Missing User Id")
+                    .completed(status: .badRequest)
+            return
+        }
+        
+        do {
+            let user = User()
+            try user.get(id)
+            
+            guard user.id > 0 else {
+                response.setBody(string: "User not found!")
+                        .completed(status: .notFound)
+                return
+            }
+            
+            try response.setBody(json: user.asDictionary())
+                    .completed(status: .ok)
+            
+        } catch {
+            response.setBody(string: "Database Error")
+                    .completed(status: .internalServerError)
+        }
     }
 }
