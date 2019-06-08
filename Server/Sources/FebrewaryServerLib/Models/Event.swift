@@ -68,18 +68,16 @@ class Event: PostgresStORM {
             "date": self.date,
         ]
         
-        // FIXME: make more performant (don't access DB so many times)
-//        for id in drinkerIds {
-//            guard id != 0 else { continue }
-//
-//            let drinker = User()
-//            try? drinker.get(id)
-//            guard drinker.id > 0 else { return [:] }
-//
-//            self._drinkers.append(drinker.asDictionary())
-//        }
-//        json["attendees"] = self._drinkers
-        json["attendees"] = []
+        for id in drinkerIds {
+            guard id != 0 else { continue }
+
+            let drinker = User()
+            try? drinker.get(id)
+            guard drinker.id > 0 else { return [:] }
+
+            self._drinkers.append(drinker.asDictionary())
+        }
+        json["attendees"] = self._drinkers
 
         for id in eventBeerIds {
             guard id != 0 else { continue }

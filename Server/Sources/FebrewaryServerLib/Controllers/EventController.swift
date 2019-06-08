@@ -3,12 +3,24 @@ import StORM
 
 public class EventController: RouteController {
     override func initRoutes() {
-        routes.add(Route(method: .post, uri: "event", handler: createEvent))
+        routes.add(method: .post, uri: "/event", handler: createEvent)
         routes.add(method: .get, uri: "/event/{id}", handler: getEvent)
         routes.add(method: .get, uri: "/event", handler: getEventForUser)
     }
     
     func createEvent(request: HTTPRequest, response: HTTPResponse) {
+        guard request.hasValidToken() else {
+            response.setBody(string: "Unauthorized")
+                    .completed(status: .unauthorized)
+            return
+        }
+        
+        guard let email = request.emailFromAuthToken() else {
+            response.setBody(string: "Bad Request")
+                    .completed(status: .badRequest)
+            return
+        }
+        
         guard let postBody = try? request.postBodyString?.jsonDecode() as? [String: Any], let json = postBody else {
             response.setBody(string: "Bad Request: malformed json")
                     .completed(status: .badRequest)
@@ -30,13 +42,27 @@ public class EventController: RouteController {
         }
         
         do {
+            
+            let user = User()
+            try user.find(["email": email])
+            
+            guard user.id > 0 else {
+                response.setBody(string: "Could not find current User")
+                        .completed(status: .internalServerError)
+                return
+            }
+            
+            if !attendees.contains(user.id){
+                attendees.append(user.id)
+            }
+            
             let event = Event()
             
             event.name = name
             event.date = date
             event.address = address
             event.pourerId = pourerId
-            event.drinkerIds = attendees
+            event.drinkerIds = Array(attendees)
             
             try event.save { id in
                 event.id = id as! Int
@@ -69,24 +95,24 @@ public class EventController: RouteController {
     }
     
     func getEventForUser(request: HTTPRequest, response: HTTPResponse) {
-        guard let postBody = try? request.postBodyString?.jsonDecode() as? [String: Any], let json = postBody else {
-            response.setBody(string: "Bad Request: malformed json")
+        guard request.hasValidToken() else {
+            response.setBody(string: "Unauthorized")
+                    .completed(status: .unauthorized)
+            return
+        }
+        
+        guard let email = request.emailFromAuthToken() else {
+            response.setBody(string: "Bad Request")
                     .completed(status: .badRequest)
             return
         }
         
-        guard let userId = json["userId"] as? Int else {
-            response.setBody(string: "Bad Request: missing User Id")
-                    .completed(status: .badRequest)
-            return
-        }
         do {
-        
             let user = User()
-            try user.find(["id": userId])
+            try user.find(["email": email])
 
             guard user.id != 0 else {
-                response.setBody(string: "Bad Request: could not find User with id: \(userId)")
+                response.setBody(string: "Bad Request: could not find User")
                         .completed(status: .badRequest)
                 return
             }
@@ -94,7 +120,7 @@ public class EventController: RouteController {
             let allEvents = Event()
             try allEvents.findAll() // TODO: performance?
             
-            let userEvents = allEvents.rows().filter { $0.drinkerIds.contains(userId) }
+            let userEvents = allEvents.rows().filter { $0.drinkerIds.contains(user.id) }
             var responseJson = [[String: Any]]()
             
             for event in userEvents {
