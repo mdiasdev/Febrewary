@@ -26,4 +26,18 @@ extension String {
         let letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
         return String((0..<length).map{ _ in letters.randomElement()! })
     }
+    
+    func toIdArray() -> [Int] {
+        var output = [Int]()
+        let trimmed = self.replacingOccurrences(of: " ", with: "")
+        let items = trimmed.split(separator: ",")
+        
+        for item in items {
+            if let id = Int(item) {
+                output.append(id)
+            }
+        }
+        
+        return output
+    }
 }

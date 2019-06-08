@@ -3,10 +3,24 @@ import StORM
 
 public class EventController: RouteController {
     override func initRoutes() {
-        routes.add(Route(method: .post, uri: "events", handler: createEvent))
+        routes.add(method: .post, uri: "/event", handler: createEvent)
+        routes.add(method: .get, uri: "/event/{id}", handler: getEvent)
+        routes.add(method: .get, uri: "/event", handler: getEventForUser)
     }
     
     func createEvent(request: HTTPRequest, response: HTTPResponse) {
+        guard request.hasValidToken() else {
+            response.setBody(string: "Unauthorized")
+                    .completed(status: .unauthorized)
+            return
+        }
+        
+        guard let email = request.emailFromAuthToken() else {
+            response.setBody(string: "Bad Request")
+                    .completed(status: .badRequest)
+            return
+        }
+        
         guard let postBody = try? request.postBodyString?.jsonDecode() as? [String: Any], let json = postBody else {
             response.setBody(string: "Bad Request: malformed json")
                     .completed(status: .badRequest)
@@ -28,13 +42,27 @@ public class EventController: RouteController {
         }
         
         do {
+            
+            let user = User()
+            try user.find(["email": email])
+            
+            guard user.id > 0 else {
+                response.setBody(string: "Could not find current User")
+                        .completed(status: .internalServerError)
+                return
+            }
+            
+            if !attendees.contains(user.id){
+                attendees.append(user.id)
+            }
+            
             let event = Event()
             
             event.name = name
             event.date = date
             event.address = address
             event.pourerId = pourerId
-            event.drinkerIds = attendees
+            event.drinkerIds = Array(attendees)
             
             try event.save { id in
                 event.id = id as! Int
@@ -54,6 +82,59 @@ public class EventController: RouteController {
             response.setBody(string: "Internal Server Error: Could not save Event")
                     .completed(status: .internalServerError)
         }
+    }
+    
+    func getEvent(request: HTTPRequest, response: HTTPResponse) {
+        guard let id = Int(request.urlVariables["id"] ?? "0"), id > 0 else {
+            response.completed(status: .badRequest)
+            return
+        }
+        
+        // FIXME: implement?
+        response.completed(status: .notFound)
+    }
+    
+    func getEventForUser(request: HTTPRequest, response: HTTPResponse) {
+        guard request.hasValidToken() else {
+            response.setBody(string: "Unauthorized")
+                    .completed(status: .unauthorized)
+            return
+        }
+        
+        guard let email = request.emailFromAuthToken() else {
+            response.setBody(string: "Bad Request")
+                    .completed(status: .badRequest)
+            return
+        }
+        
+        do {
+            let user = User()
+            try user.find(["email": email])
+
+            guard user.id != 0 else {
+                response.setBody(string: "Bad Request: could not find User")
+                        .completed(status: .badRequest)
+                return
+            }
+            
+            let allEvents = Event()
+            try allEvents.findAll() // TODO: performance?
+            
+            let userEvents = allEvents.rows().filter { $0.drinkerIds.contains(user.id) }
+            var responseJson = [[String: Any]]()
+            
+            for event in userEvents {
+                responseJson.append(event.asDictionary())
+            }
+            
+            try response.setBody(json: responseJson)
+                        .completed(status: .ok)
+            
+        } catch {
+            response.completed(status: .internalServerError)
+        }
+        
+        response.completed(status: .internalServerError)
     }
     
     // MARK: internal functions

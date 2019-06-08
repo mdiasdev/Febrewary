@@ -28,19 +28,19 @@ class Event: PostgresStORM {
         pourerId = this.data["pourerid"] as? Int ?? 0
 
         let drinkerIdString = this.data["drinkerids"] as? String ?? ""
-        drinkerIds = drinkerIdString.dropFirst().dropLast().components(separatedBy: ",").compactMap({ (idString) -> Int? in
-            return Int(idString)
-        })
+        drinkerIds = drinkerIdString.replacingOccurrences(of: "[", with: "")
+                                    .replacingOccurrences(of: "]", with: "")
+                                    .toIdArray()
 
         let eventBeerString = this.data["eventbeerids"] as? String ?? ""
-        eventBeerIds = eventBeerString.dropFirst().dropLast().components(separatedBy: ",").compactMap({ (idString) -> Int? in
-            return Int(idString)
-        })
+        eventBeerIds = eventBeerString.replacingOccurrences(of: "[", with: "")
+                                      .replacingOccurrences(of: "]", with: "")
+                                      .toIdArray()
         
         let roundIdString = this.data["roundids"] as? String ?? ""
-        roundIds = roundIdString.dropFirst().dropLast().components(separatedBy: ",").compactMap({ (idString) -> Int? in
-            return Int(idString)
-        })
+        roundIds = roundIdString.replacingOccurrences(of: "[", with: "")
+                                .replacingOccurrences(of: "]", with: "")
+                                .toIdArray()
     }
 
     func rows() -> [Event] {
@@ -69,17 +69,19 @@ class Event: PostgresStORM {
         ]
         
         // FIXME: make more performant (don't access DB so many times)
-//        for id in drinkerIds {
-//            guard id != 0 else { continue }
-//
-//            let drinker = User()
-//            try? drinker.get(id)
-//            guard drinker.id > 0 else { return [:] }
-//
-//            self._drinkers.append(drinker.asDictionary())
-//        }
-//        json["drinkers"] = self._drinkers
+        for id in drinkerIds {
+            guard id != 0 else { continue }
 
+            let drinker = User()
+            try? drinker.get(id)
+            guard drinker.id > 0 else { return [:] }
+
+            self._drinkers.append(drinker.asSimpleDictionary())
+        }
+        
+        json["attendees"] = self._drinkers
+
+        // FIXME: make more performant (don't access DB so many times)
         for id in eventBeerIds {
             guard id != 0 else { continue }
 
@@ -89,13 +91,8 @@ class Event: PostgresStORM {
 
             self._eventBeers.append(eventBeer.asDictionary())
         }
+        
         json["eventBeers"] = self._eventBeers
-
-//        let pourer = User()
-//        try? pourer.get(self.pourerId)
-//    
-//        guard pourer.id > 0 else { return [:] }
-//        json["pourer"] = pourer.asDictionary()
 
         return json
     }

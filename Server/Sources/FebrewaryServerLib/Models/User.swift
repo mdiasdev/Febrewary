@@ -56,4 +56,13 @@ class User: PostgresStORM {
             "beers": self.beers,
         ]
     }
+    
+    func asSimpleDictionary() -> [String: Any] {
+        return [
+            "id": self.id,
+            "firstName": self.firstName,
+            "lastName": self.lastName,
+            "email": self.email,
+        ]
+    }
 }
