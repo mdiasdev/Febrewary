@@ -153,7 +153,7 @@ public class AuthController: RouteController {
             throw PrepareTokenError()
         }
         
-        let token = try jwt.sign(alg: .hs256, key: "beers") // TODO: make real secret key and add it to an environment handler
+        let token = try jwt.sign(alg: .hs256, key: Configuration.salt)
         
         return token
     }

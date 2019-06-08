@@ -6,7 +6,6 @@ import FebrewaryServerLib
 
 DatabaseController.setupDatabase()
 
-// FIXME: move to environment file
 let server = HTTPServer()
 server.serverPort = 8080
 
