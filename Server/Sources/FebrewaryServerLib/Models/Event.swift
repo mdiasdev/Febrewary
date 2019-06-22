@@ -66,6 +66,7 @@ class Event: PostgresStORM {
             "name": self.name,
             "address": self.address,
             "date": self.date,
+            "pourerId": self.pourerId,
         ]
         
         // FIXME: make more performant (don't access DB so many times)

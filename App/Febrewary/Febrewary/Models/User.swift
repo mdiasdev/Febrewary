@@ -13,20 +13,20 @@ final class User {
     let firstName: String
     let lastName: String
     let email: String
-    let beers: [Beer]
-    let events: [Event]
+//    let beers: [Beer]
+//    let events: [Event]
     
-    init(id: Int, firstName: String, lastName: String, email: String, beers: [Beer], events: [Event]) {
+    init(id: Int, firstName: String, lastName: String, email: String) { //, beers: [Beer], events: [Event]) {
         self.id = id
         self.firstName = firstName
         self.lastName = lastName
         self.email = email
-        self.beers = beers
-        self.events = events
+//        self.beers = beers
+//        self.events = events
     }
     
     convenience init() {
-        self.init(id: -1, firstName: "", lastName: "", email: "", beers: [], events: [])
+        self.init(id: -1, firstName: "", lastName: "", email: "")//, beers: [], events: [])
     }
 }
 
