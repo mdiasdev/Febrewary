@@ -10,13 +10,19 @@ import UIKit
 
 class CreateEventViewController: UIViewController {
 
+    @IBOutlet weak var nameTextField: UITextField!
+    @IBOutlet weak var dateTextField: UITextField!
+    @IBOutlet weak var addressTextField: UITextField!
+    @IBOutlet weak var pourerTRextField: UITextField!
+    @IBOutlet weak var attendeesTextField: UITextField!
+    
+    @IBOutlet weak var submitButton: UIButton!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+        submitButton.layer.cornerRadius = 8
     }
-    
-
 
     @IBAction func didTapClose(_ sender: Any) {
         self.dismiss(animated: true, completion: nil)
