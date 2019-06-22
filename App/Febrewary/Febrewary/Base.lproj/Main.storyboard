@@ -215,7 +215,7 @@
                         <outlet property="attendeesTextField" destination="ygv-HP-Z8o" id="1BQ-ZH-S93"/>
                         <outlet property="dateTextField" destination="Q8A-d0-jai" id="B0T-Tz-Qjz"/>
                         <outlet property="nameTextField" destination="lif-zk-d8H" id="DZc-f8-eGF"/>
-                        <outlet property="pourerTRextField" destination="X26-qq-hR9" id="piQ-3A-CN7"/>
+                        <outlet property="pourerTextField" destination="X26-qq-hR9" id="piQ-3A-CN7"/>
                         <outlet property="submitButton" destination="yFa-vn-KzD" id="s34-ni-2W4"/>
                     </connections>
                 </viewController>
