@@ -19,7 +19,9 @@ class CreateEventViewController: UIViewController {
     @IBOutlet weak var submitButton: UIButton!
     
     var allTextFields = [UITextField]()
+    let datePicker = UIDatePicker()
     
+    // MARK: - View Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -27,19 +29,78 @@ class CreateEventViewController: UIViewController {
         
         nameTextField.delegate = self
         dateTextField.delegate = self
+        dateTextField.inputView = datePicker
+        dateTextField.inputAccessoryView = UIToolbar().pickerAccessory(action: #selector(setDate))
         addressTextField.delegate = self
         pourerTextField.delegate = self
         attendeesTextField.delegate = self
 
         submitButton.layer.cornerRadius = 8
     }
+    
+    // MARK: - Form
+    func isValidateForm() -> Bool {
+        return nameTextField.text != nil && nameTextField.text?.isEmpty == false &&
+               dateTextField.text != nil && dateTextField.text?.isEmpty == false &&
+               addressTextField.text != nil && addressTextField.text?.isEmpty == false &&
+               pourerTextField.text != nil && pourerTextField.text?.isEmpty == false &&
+               attendeesTextField.text != nil && attendeesTextField.text?.isEmpty == false
+    }
+    
+    func showFormError() {
+        let alert = UIAlertController(title: "Error", message: "All form fields are required.", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        
+        present(alert, animated: true, completion: nil)
+    }
+    
+    @objc func setDate() {
+        dateTextField.text = datePicker.date.shortMonthDayYearWithTime
+        _ = textFieldShouldReturn(dateTextField)
+    }
+    
+    // MARK: - Networking
+    func createEvent() {
+        guard let name = nameTextField.text,
+              let address = addressTextField.text,
+              let date = dateTextField.text?.toDate() else { return }
+        
+        let url = URLBuilder(endpoint: .eventsForCurrentUser).buildUrl() // FIXME: change url when networking re-thought out
+        let payload: JSON = [
+            "name": name,
+            "date": date.iso8601,
+            "address": address,
+            "pourerId": Int(pourerTextField.text!)!, // FIXME: update after #61 and #62
+            "attendees": [1,2] // FIXME: update after #61 and #62
+        ]
+        
+        ServiceClient().post(url: url, payload: payload) { result in
+            switch result {
+            case .success(let event):
+                print("yay")
+                // success -> dismiss
+            case .failure(let error):
+                // fail -> show error
+                print("boo")
+            }
+        }
+    }
 
+    // MARK: - Actions
     @IBAction func didTapClose(_ sender: Any) {
         self.dismiss(animated: true, completion: nil)
     }
     
+    @IBAction func didTapSubmit(_ sender: Any) {
+        if isValidateForm() {
+            createEvent()
+        } else {
+            showFormError()
+        }
+    }
 }
 
+// MARK: - UITextFieldDelegate
 extension CreateEventViewController: UITextFieldDelegate {
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
