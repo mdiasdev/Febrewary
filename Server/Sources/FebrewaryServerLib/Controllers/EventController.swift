@@ -61,6 +61,7 @@ public class EventController: RouteController {
             event.name = name
             event.date = date
             event.address = address
+            event.createdBy = user.id
             event.pourerId = pourerId
             event.drinkerIds = Array(attendees)
             
