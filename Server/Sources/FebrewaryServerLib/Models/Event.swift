@@ -3,21 +3,34 @@ import StORM
 import PostgresStORM
 
 class Event: PostgresStORM {
+    // MARK: - Properties: basic properties
     var id: Int = 0
     var name: String = ""
     var address: String = ""
     var date: String = ""
+    
+    // MARK: - Properties: used to allow only the creator to edit an event
+    var createdBy: Int = 0
+    
+    // MARK: - Properties: used to allow one user to know what beer is assigned to a round
     var pourerId: Int = 0
     var _pourer: User = User()
+    
+    // MARK: - Properties: all users planned in attendance
     var drinkerIds: [Int] = []
     var _drinkers: [[String: Any]] = []
+    
+    // MARK: all beers brought by attendees
     var eventBeerIds: [Int] = []
     var _eventBeers: [[String: Any]] = []
+    
+    // MARK: - Properties: voting tracking
     var roundIds: [Int] = []
     var _rounds: [Round] = []
     var currentRound: Int = -1
     
-
+    // MARK: -
+    // MARK: - StORM functions
     override open func table() -> String { return "event" }
 
     override func to(_ this: StORMRow) {
@@ -26,6 +39,7 @@ class Event: PostgresStORM {
         address = this.data["address"] as? String ?? ""
         date = this.data["date"] as? String ?? ""
         pourerId = this.data["pourerid"] as? Int ?? 0
+        createdBy = this.data["createdby"] as? Int ?? 0
 
         let drinkerIdString = this.data["drinkerids"] as? String ?? ""
         drinkerIds = drinkerIdString.replacingOccurrences(of: "[", with: "")
@@ -59,6 +73,8 @@ class Event: PostgresStORM {
         return events
     }
 
+    // MARK: -
+    // MARK: - Helper functions
     func asDictionary() -> [String: Any] {
         
         var json: [String: Any] = [
@@ -67,6 +83,7 @@ class Event: PostgresStORM {
             "address": self.address,
             "date": self.date,
             "pourerId": self.pourerId,
+            "createdBy": self.createdBy,
         ]
         
         // FIXME: make more performant (don't access DB so many times)
