@@ -123,6 +123,11 @@
                                 <action selector="showAccount:" destination="nWy-F2-Tfq" id="ubA-kz-Elc"/>
                             </connections>
                         </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" title="Create Event" image="Plus_ico" id="eJf-Ub-ogm">
+                            <connections>
+                                <segue destination="F9M-H3-lWI" kind="presentation" id="wPc-R7-ZGl"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="containerView" destination="MGk-HO-J6p" id="Mwi-kL-qH6"/>
@@ -132,6 +137,28 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LdX-9e-Isi" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2231" y="-2499"/>
+        </scene>
+        <!--Create Event-->
+        <scene sceneID="UjW-1Y-iYF">
+            <objects>
+                <viewController id="5SO-ND-g7u" customClass="CreateEventViewController" customModule="Febrewary" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="2gB-f2-g3q">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="H8x-Jn-OVB"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Create Event" id="DFt-ry-5wY">
+                        <barButtonItem key="leftBarButtonItem" title="Close" image="X_ico" id="B57-jN-rhb">
+                            <connections>
+                                <action selector="didTapClose:" destination="5SO-ND-g7u" id="M7t-KY-few"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="s5w-zN-gBK" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3778" y="-2499"/>
         </scene>
         <!--Beers-->
         <scene sceneID="FAL-XF-oJV">
@@ -230,12 +257,31 @@
             </objects>
             <point key="canvasLocation" x="-430" y="-3054"/>
         </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="9JV-Pe-kSM">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="F9M-H3-lWI" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="AGm-Dt-2z4">
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="5SO-ND-g7u" kind="relationship" relationship="rootViewController" id="CAp-94-0HY"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="3w8-8t-Ini" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2968.8000000000002" y="-2499.400299850075"/>
+        </scene>
     </scenes>
     <resources>
         <image name="Account_ico" width="25" height="25"/>
         <image name="Beer_ico" width="25" height="27"/>
         <image name="Calendar_ico" width="25" height="25"/>
         <image name="Friends_ico" width="25" height="25"/>
+        <image name="Plus_ico" width="25" height="25"/>
         <image name="X_ico" width="25" height="25"/>
     </resources>
 </document>
