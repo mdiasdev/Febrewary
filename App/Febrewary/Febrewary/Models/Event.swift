@@ -9,7 +9,13 @@
 import Foundation
 
 struct Event {
-    // TODO: Make this
+    let id: Int
+    let name: String
+    let address: String
+    let date: Date
+    let pourerId: Int
+    let attendees: [User]
+    let eventBeers: [Beer] // FIXME: EventBeer when it exists
 }
 
 extension Event: Codable { }
