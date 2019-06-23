@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6D06DA2222BEA7B100EE9DA9 /* CreateEventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D06DA2122BEA7B100EE9DA9 /* CreateEventViewController.swift */; };
+		6D4900D822BEB9160071E3D3 /* UIToolbarExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D4900D722BEB9160071E3D3 /* UIToolbarExtension.swift */; };
 		6D63F6DE2290960C00ABF4AB /* EventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D63F6DD2290960C00ABF4AB /* EventsViewController.swift */; };
 		6D63F6E12290965300ABF4AB /* AccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D63F6E02290965300ABF4AB /* AccountViewController.swift */; };
 		6D63F6E822909B8B00ABF4AB /* SignInCreateAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D63F6E622909B8B00ABF4AB /* SignInCreateAccountViewController.swift */; };
@@ -48,6 +50,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		6D06DA2122BEA7B100EE9DA9 /* CreateEventViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateEventViewController.swift; sourceTree = "<group>"; };
+		6D4900D722BEB9160071E3D3 /* UIToolbarExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIToolbarExtension.swift; sourceTree = "<group>"; };
 		6D63F6DD2290960C00ABF4AB /* EventsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsViewController.swift; sourceTree = "<group>"; };
 		6D63F6E02290965300ABF4AB /* AccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountViewController.swift; sourceTree = "<group>"; };
 		6D63F6E622909B8B00ABF4AB /* SignInCreateAccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInCreateAccountViewController.swift; sourceTree = "<group>"; };
@@ -100,9 +104,25 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6D06DA2022BEA79A00EE9DA9 /* Create Event */ = {
+			isa = PBXGroup;
+			children = (
+				6D06DA2122BEA7B100EE9DA9 /* CreateEventViewController.swift */,
+			);
+			path = "Create Event";
+			sourceTree = "<group>";
+		};
+		6D4900D622BEB6D50071E3D3 /* Date Picker */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "Date Picker";
+			sourceTree = "<group>";
+		};
 		6D63F6DC229095EC00ABF4AB /* Events */ = {
 			isa = PBXGroup;
 			children = (
+				6D06DA2022BEA79A00EE9DA9 /* Create Event */,
 				6D750FE822AC4A31004BA26F /* Subviews */,
 				6D63F6DD2290960C00ABF4AB /* EventsViewController.swift */,
 			);
@@ -144,6 +164,7 @@
 			children = (
 				6D750FF222B6BF3B004BA26F /* DateExtensions.swift */,
 				6D750FF422B6C18F004BA26F /* OptionalExtension.swift */,
+				6D4900D722BEB9160071E3D3 /* UIToolbarExtension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -151,6 +172,7 @@
 		6D750FF822B6CBA7004BA26F /* Reusable */ = {
 			isa = PBXGroup;
 			children = (
+				6D4900D622BEB6D50071E3D3 /* Date Picker */,
 				6D750FF922B6CBBB004BA26F /* SubtitleTableCell.swift */,
 			);
 			path = Reusable;
@@ -370,6 +392,7 @@
 				6DBF8255229C288400E334B9 /* URLBuilder.swift in Sources */,
 				6D63F6DE2290960C00ABF4AB /* EventsViewController.swift in Sources */,
 				6D750FF322B6BF3B004BA26F /* DateExtensions.swift in Sources */,
+				6D06DA2222BEA7B100EE9DA9 /* CreateEventViewController.swift in Sources */,
 				6DBF825C229C34EA00E334B9 /* Beer.swift in Sources */,
 				6DBF825E229C34F200E334B9 /* Event.swift in Sources */,
 				6D750FF522B6C18F004BA26F /* OptionalExtension.swift in Sources */,
@@ -377,6 +400,7 @@
 				6D902A8A21FA968600A3860B /* AppDelegate.swift in Sources */,
 				6DBF825A229C341100E334B9 /* User.swift in Sources */,
 				6D63F6EB2299B74300ABF4AB /* TopDownAnimator.swift in Sources */,
+				6D4900D822BEB9160071E3D3 /* UIToolbarExtension.swift in Sources */,
 				6D750FF022B6B4CE004BA26F /* NoEventsView.swift in Sources */,
 				6DBF8257229C2F2D00E334B9 /* NetworkErrors.swift in Sources */,
 				6DBF8253229C27D400E334B9 /* ServiceClient.swift in Sources */,

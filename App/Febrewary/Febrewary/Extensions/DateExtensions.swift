@@ -9,6 +9,7 @@
 import Foundation
 
 private let formatter = DateFormatter()
+private let iso8601Formatter = ISO8601DateFormatter()
 
 extension Date {
     
@@ -16,6 +17,16 @@ extension Date {
         formatter.dateFormat = "MMM. d, yyyy"
         
         return formatter.string(from: self)
+    }
+    
+    var shortMonthDayYearWithTime: String {
+        formatter.dateFormat = "MMM. d, yyyy 'at' h:mm a"
+        
+        return formatter.string(from: self)
+    }
+    
+    var iso8601: String {
+        return iso8601Formatter.string(from: self)
     }
     
     func isTodayOrFuture() -> Bool {
@@ -28,5 +39,11 @@ extension Date {
         guard todayComponents.day >= components.day else { return true }
         
         return false
+    }
+}
+
+extension String {
+    func toDate() -> Date? {
+        return formatter.date(from: self)
     }
 }

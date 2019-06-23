@@ -16,6 +16,10 @@ struct ServiceClient {
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         
+        if let token = Defaults().getToken() {
+            request.setValue(token, forHTTPHeaderField: "Authorization")
+        }
+        
         if let payload = payload {
             request.httpBody = try? JSONSerialization.data(withJSONObject: payload,
                                                            options: .prettyPrinted)
