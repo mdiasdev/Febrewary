@@ -16,8 +16,16 @@ class EventsViewController: UIViewController {
     let noEventsView = Bundle.main.loadNibNamed("NoEventsView", owner: self, options: nil)?.first as! NoEventsView // FIXME: no force unwrapping
     let eventsTable = EventsTableViewController()
     
-    private var upcommingEvents = [Event]()
-    private var pastEvents = [Event]()
+    private var upcommingEvents = [Event]() {
+        didSet {
+            eventsTable.upcommingEvents = upcommingEvents
+        }
+    }
+    private var pastEvents = [Event]() {
+        didSet {
+            eventsTable.pastEvents = pastEvents
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -77,6 +85,17 @@ class EventsViewController: UIViewController {
         }
     }
     
+    @IBAction func unwindFromCreateEvent(segue: UIStoryboardSegue) {
+        if let createEventVC = segue.source as? CreateEventViewController, let event = createEventVC.event {
+            upcommingEvents.append(event)
+        }
+        
+        DispatchQueue.main.async {
+            self.segmentChanged(self)
+            self.eventsTable.tableView.reloadData()
+        }
+    }
+    
     func getEvents() {
         let url = URLBuilder(endpoint: .eventsForCurrentUser).buildUrl()
         
@@ -108,12 +127,9 @@ class EventsViewController: UIViewController {
             }
         }
         
-        eventsTable.upcommingEvents = upcommingEvents
-        eventsTable.pastEvents = pastEvents
-        
         DispatchQueue.main.async {
             self.eventsTable.tableView.reloadData()
-            self.segmentChanged(self.segmentControl)
+            self.segmentChanged(self)
         }
     }
 }

@@ -20,6 +20,7 @@ class CreateEventViewController: UIViewController {
     
     var allTextFields = [UITextField]()
     let datePicker = UIDatePicker()
+    private(set) var event: Event?
     
     // MARK: - View Lifecycle
     override func viewDidLoad() {
@@ -76,9 +77,19 @@ class CreateEventViewController: UIViewController {
         
         ServiceClient().post(url: url, payload: payload) { result in
             switch result {
-            case .success(let event):
-                print("yay")
-                // success -> dismiss
+            case .success(let eventJson):
+                let decoder = JSONDecoder()
+                decoder.dateDecodingStrategy = .iso8601
+                guard let data = try? JSONSerialization.data(withJSONObject: eventJson, options: .prettyPrinted),
+                      let event = try? decoder.decode(Event.self, from: data) else {
+                        print("bad data")
+                        return
+                }
+                self.event = event
+                
+                DispatchQueue.main.async {
+                    self.performSegue(withIdentifier: "unwindToEventsList", sender: self)
+                }
             case .failure(let error):
                 // fail -> show error
                 print("boo")

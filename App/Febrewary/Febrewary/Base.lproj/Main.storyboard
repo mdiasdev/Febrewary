@@ -191,7 +191,7 @@
                                     <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                                 <connections>
-                                    <action selector="didTapSubmit:" destination="5SO-ND-g7u" eventType="touchUpInside" id="yt6-Oc-sIn"/>
+                                    <action selector="didTapSubmit:" destination="5SO-ND-g7u" eventType="touchUpInside" id="T3s-jh-KF3"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -220,11 +220,13 @@
                         <outlet property="nameTextField" destination="lif-zk-d8H" id="DZc-f8-eGF"/>
                         <outlet property="pourerTextField" destination="X26-qq-hR9" id="piQ-3A-CN7"/>
                         <outlet property="submitButton" destination="yFa-vn-KzD" id="s34-ni-2W4"/>
+                        <segue destination="IIi-JY-ncv" kind="unwind" identifier="unwindToEventsList" unwindAction="unwindFromCreateEventWithSegue:" id="O1S-aW-45s"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="s5w-zN-gBK" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="IIi-JY-ncv" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="3778" y="-2499"/>
+            <point key="canvasLocation" x="3775" y="-2499"/>
         </scene>
         <!--Beers-->
         <scene sceneID="FAL-XF-oJV">
