@@ -160,41 +160,23 @@ class SignInCreateAccountViewController: UIViewController {
     }
     
     func signIn(email: String, password: String) {
-        let url = URLBuilder(endpoint: .signIn).buildUrl()
-        let payload = [
-            "email": email,
-            "password": password
-        ]
+        AuthService().signIn(email: email, password: password) { [weak self] result in
+            switch result {
+            case .success:
+                DispatchQueue.main.async {
+                    self?.accountDelegate?.didLogin()
+                }
+            case .failure(let error):
+                guard let localError = error as? LocalError else { return }
+                
+                let alert = UIAlertController(title: localError.title, message: localError.message, preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                
+                DispatchQueue.main.async {
+                    self?.present(alert, animated: true, completion: nil)
+                }
+            }
+        }
         
-        ServiceClient().post(url: url, payload: payload) { [weak self] result in
-            self?.handle(result: result)
-        }
-    }
-    
-    func handle(result: Result<JSON, Error>) {
-        switch result {
-        case .success(let response):
-            guard let userJson = response["user"] as? JSON,
-                let data = try? JSONSerialization.data(withJSONObject: userJson, options: .prettyPrinted),
-                let user = try? JSONDecoder().decode(User.self, from: data),
-                let token = response["token"] as? String else {
-                    handle(result: Result<JSON, Error>.failure(JSONError()))
-                    return
-            }
-            
-            user.save()
-            Defaults().save(token: token)
-            DispatchQueue.main.async { [weak self] in
-                self?.accountDelegate?.didLogin()
-            }
-            
-        case .failure(let error):
-            guard let localError = error as? LocalError else { return }
-            
-            let alert = UIAlertController(title: localError.title, message: localError.message, preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-            
-            present(alert, animated: true, completion: nil)
-        }
     }
 }
