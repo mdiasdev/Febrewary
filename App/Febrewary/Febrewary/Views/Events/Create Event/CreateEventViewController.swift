@@ -64,27 +64,17 @@ class CreateEventViewController: UIViewController {
     func createEvent() {
         guard let name = nameTextField.text,
               let address = addressTextField.text,
-              let date = dateTextField.text?.toDate() else { return }
+              let date = dateTextField.text?.toDate(),
+              let pourerString = pourerTextField.text,
+              let pourerId = Int(pourerString) else { return } // FIXME: update after #61 and #62
         
-        let url = URLBuilder(endpoint: .eventsForCurrentUser).buildUrl() // FIXME: change url when networking re-thought out
-        let payload: JSON = [
-            "name": name,
-            "date": date.iso8601,
-            "address": address,
-            "pourerId": Int(pourerTextField.text!)!, // FIXME: update after #61 and #62
-            "attendees": [1,2] // FIXME: update after #61 and #62
-        ]
-        
-        ServiceClient().post(url: url, payload: payload) { result in
+        EventsService().createEvent(named: name,
+                                    on: date,
+                                    at: address,
+                                    withPourer: pourerId,
+                                    andAttendees: [1,2]) { (result) in // FIXME: update after #61 and #62
             switch result {
-            case .success(let eventJson):
-                let decoder = JSONDecoder()
-                decoder.dateDecodingStrategy = .iso8601
-                guard let data = try? JSONSerialization.data(withJSONObject: eventJson, options: .prettyPrinted),
-                      let event = try? decoder.decode(Event.self, from: data) else {
-                        print("bad data")
-                        return
-                }
+            case .success(let event):
                 self.event = event
                 
                 DispatchQueue.main.async {
@@ -92,7 +82,7 @@ class CreateEventViewController: UIViewController {
                 }
             case .failure(let error):
                 // fail -> show error
-                print("boo")
+                print(error)
             }
         }
     }

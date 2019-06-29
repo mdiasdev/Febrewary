@@ -8,11 +8,11 @@
 
 import Foundation
 
-// FIXME: rethink
+
 enum Endpoint: String {
     case register = "register"
     case signIn = "login"
-    case eventsForCurrentUser = "event"
+    case event = "event"
 }
 
 struct URLBuilder {
@@ -24,7 +24,7 @@ struct URLBuilder {
     
     func buildUrl() -> URL {
         switch endpoint {
-            case .register, .signIn, .eventsForCurrentUser:
+            case .register, .signIn, .event:
                 return URL(string: "\(baseUrl)/\(endpoint.rawValue)")!
         }
     }

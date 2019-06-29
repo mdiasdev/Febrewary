@@ -10,7 +10,7 @@ import Foundation
 
 typealias JSON = [String: Any]
 
-struct ServiceClient {
+class ServiceClient {
     
     func post(url: URL, payload: JSON?, completionHandler: @escaping (Result<JSON, Error>) -> Void) {
         var request = URLRequest(url: url)

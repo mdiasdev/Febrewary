@@ -145,56 +145,33 @@ class SignInCreateAccountViewController: UIViewController {
     
     // MARK: - Networking
     func register(firstName: String, lastName: String, email: String, password: String) {
-        let url = URLBuilder(endpoint: .register).buildUrl()
-        let payload = [
-            "firstName": firstName,
-            "lastName": lastName,
-            "email": email,
-            "password": password
-        ]
-        
-        ServiceClient().post(url: url, payload: payload) { [weak self] result in
+        AuthService().createAccount(firstName: firstName, lastName: lastName, email: email, password: password) { [weak self] result in
             self?.handle(result: result)
-            
         }
     }
     
     func signIn(email: String, password: String) {
-        let url = URLBuilder(endpoint: .signIn).buildUrl()
-        let payload = [
-            "email": email,
-            "password": password
-        ]
-        
-        ServiceClient().post(url: url, payload: payload) { [weak self] result in
+        AuthService().signIn(email: email, password: password) { [weak self] result in
             self?.handle(result: result)
         }
+        
     }
     
-    func handle(result: Result<JSON, Error>) {
+    func handle(result: Result<Bool, Error>) {
         switch result {
-        case .success(let response):
-            guard let userJson = response["user"] as? JSON,
-                let data = try? JSONSerialization.data(withJSONObject: userJson, options: .prettyPrinted),
-                let user = try? JSONDecoder().decode(User.self, from: data),
-                let token = response["token"] as? String else {
-                    handle(result: Result<JSON, Error>.failure(JSONError()))
-                    return
+        case .success:
+            DispatchQueue.main.async {
+                self.accountDelegate?.didLogin()
             }
-            
-            user.save()
-            Defaults().save(token: token)
-            DispatchQueue.main.async { [weak self] in
-                self?.accountDelegate?.didLogin()
-            }
-            
         case .failure(let error):
             guard let localError = error as? LocalError else { return }
             
             let alert = UIAlertController(title: localError.title, message: localError.message, preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
             
-            present(alert, animated: true, completion: nil)
+            DispatchQueue.main.async {
+                self.present(alert, animated: true, completion: nil)
+            }
         }
     }
 }
