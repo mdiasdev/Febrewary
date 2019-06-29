@@ -24,7 +24,7 @@
                     </constraints>
                 </imageView>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VCS-Kc-4Xs">
-                    <rect key="frame" x="0.0" y="91" width="336" height="30"/>
+                    <rect key="frame" x="0.0" y="91" width="336" height="64"/>
                     <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
                     <color key="textColor" red="0.2627450980392157" green="0.2627450980392157" blue="0.2627450980392157" alpha="1" colorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
@@ -32,10 +32,10 @@
             </subviews>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
-                <constraint firstItem="VCS-Kc-4Xs" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="DZr-8J-8fH"/>
+                <constraint firstItem="VCS-Kc-4Xs" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="DZr-8J-8fH"/>
                 <constraint firstItem="GLw-1x-zv3" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="HS7-Ua-eYF"/>
-                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="VCS-Kc-4Xs" secondAttribute="trailing" id="QuK-2b-TKA"/>
-                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="VCS-Kc-4Xs" secondAttribute="bottom" id="YGc-WV-rXY"/>
+                <constraint firstAttribute="trailing" secondItem="VCS-Kc-4Xs" secondAttribute="trailing" id="QuK-2b-TKA"/>
+                <constraint firstAttribute="bottom" secondItem="VCS-Kc-4Xs" secondAttribute="bottom" id="YGc-WV-rXY"/>
                 <constraint firstItem="GLw-1x-zv3" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="kZT-qh-IfW"/>
                 <constraint firstItem="VCS-Kc-4Xs" firstAttribute="top" secondItem="GLw-1x-zv3" secondAttribute="bottom" constant="16" id="rht-i7-kID"/>
             </constraints>

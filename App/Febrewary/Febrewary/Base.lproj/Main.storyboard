@@ -101,7 +101,7 @@
                                 </connections>
                             </segmentedControl>
                             <view contentMode="scaleToFill" placeholderIntrinsicWidth="375" placeholderIntrinsicHeight="398" translatesAutoresizingMaskIntoConstraints="NO" id="MGk-HO-J6p">
-                                <rect key="frame" x="0.0" y="164" width="375" height="398"/>
+                                <rect key="frame" x="0.0" y="164" width="375" height="454"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
                         </subviews>
@@ -110,7 +110,7 @@
                             <constraint firstItem="Bxh-iG-249" firstAttribute="trailing" secondItem="MGk-HO-J6p" secondAttribute="trailing" id="EEz-hX-F3Z"/>
                             <constraint firstItem="oCe-4T-kT6" firstAttribute="top" secondItem="Bxh-iG-249" secondAttribute="top" constant="16" id="GHS-4f-0FI"/>
                             <constraint firstItem="Bxh-iG-249" firstAttribute="trailing" secondItem="oCe-4T-kT6" secondAttribute="trailing" constant="32" id="Kg9-Gw-UFM"/>
-                            <constraint firstItem="Bxh-iG-249" firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="MGk-HO-J6p" secondAttribute="bottom" constant="56" id="RHB-3B-FOk"/>
+                            <constraint firstItem="Bxh-iG-249" firstAttribute="bottom" secondItem="MGk-HO-J6p" secondAttribute="bottom" id="RHB-3B-FOk"/>
                             <constraint firstItem="MGk-HO-J6p" firstAttribute="top" secondItem="oCe-4T-kT6" secondAttribute="bottom" constant="56" id="fcr-Pm-aHa"/>
                             <constraint firstItem="oCe-4T-kT6" firstAttribute="leading" secondItem="Bxh-iG-249" secondAttribute="leading" constant="32" id="fhy-fR-7Od"/>
                             <constraint firstItem="MGk-HO-J6p" firstAttribute="leading" secondItem="Bxh-iG-249" secondAttribute="leading" id="qDF-6O-GVY"/>
