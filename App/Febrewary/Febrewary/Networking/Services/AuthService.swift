@@ -10,9 +10,11 @@ import Foundation
 
 struct AuthService {
     var client: ServiceClient
+    var userDefaults: Defaults
     
-    init(client: ServiceClient = ServiceClient()) {
+    init(client: ServiceClient = ServiceClient(), defaults: Defaults = Defaults()) {
         self.client = client
+        self.userDefaults = defaults
     }
     
     func signIn(email: String, password: String, completionHandler: @escaping (Result<Bool, Error>) -> Void) {
@@ -23,7 +25,7 @@ struct AuthService {
             "password": password
         ]
         
-        ServiceClient().post(url: url, payload: payload) { result in
+        client.post(url: url, payload: payload) { result in
             switch result {
             case .success:
                 self.handle(result: result) { error in
@@ -79,7 +81,7 @@ struct AuthService {
             }
             
             user.save()
-            Defaults().save(token: token)
+            userDefaults.save(token: token)
             completion(nil)
         case .failure:
             return

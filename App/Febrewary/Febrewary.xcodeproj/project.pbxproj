@@ -15,6 +15,9 @@
 		6D4900E322C7EC1F0071E3D3 /* FakeServiceClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D4900E222C7EC1F0071E3D3 /* FakeServiceClient.swift */; };
 		6D4900E722C7EE6F0071E3D3 /* EventList.json in Resources */ = {isa = PBXBuildFile; fileRef = 6D4900E622C7EE6F0071E3D3 /* EventList.json */; };
 		6D4900E922C7F36B0071E3D3 /* CreateEvent.json in Resources */ = {isa = PBXBuildFile; fileRef = 6D4900E822C7F36B0071E3D3 /* CreateEvent.json */; };
+		6D4900EB22C7F4BE0071E3D3 /* AuthServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D4900EA22C7F4BE0071E3D3 /* AuthServiceTests.swift */; };
+		6D4900ED22C7F6980071E3D3 /* FakeUserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D4900EC22C7F6980071E3D3 /* FakeUserDefaults.swift */; };
+		6D4900F022C7F75E0071E3D3 /* Auth.json in Resources */ = {isa = PBXBuildFile; fileRef = 6D4900EF22C7F75E0071E3D3 /* Auth.json */; };
 		6D63F6DE2290960C00ABF4AB /* EventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D63F6DD2290960C00ABF4AB /* EventsViewController.swift */; };
 		6D63F6E12290965300ABF4AB /* AccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D63F6E02290965300ABF4AB /* AccountViewController.swift */; };
 		6D63F6E822909B8B00ABF4AB /* SignInCreateAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D63F6E622909B8B00ABF4AB /* SignInCreateAccountViewController.swift */; };
@@ -63,6 +66,9 @@
 		6D4900E222C7EC1F0071E3D3 /* FakeServiceClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeServiceClient.swift; sourceTree = "<group>"; };
 		6D4900E622C7EE6F0071E3D3 /* EventList.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = EventList.json; sourceTree = "<group>"; };
 		6D4900E822C7F36B0071E3D3 /* CreateEvent.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = CreateEvent.json; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.json; };
+		6D4900EA22C7F4BE0071E3D3 /* AuthServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthServiceTests.swift; sourceTree = "<group>"; };
+		6D4900EC22C7F6980071E3D3 /* FakeUserDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeUserDefaults.swift; sourceTree = "<group>"; };
+		6D4900EF22C7F75E0071E3D3 /* Auth.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Auth.json; sourceTree = "<group>"; };
 		6D63F6DD2290960C00ABF4AB /* EventsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsViewController.swift; sourceTree = "<group>"; };
 		6D63F6E02290965300ABF4AB /* AccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountViewController.swift; sourceTree = "<group>"; };
 		6D63F6E622909B8B00ABF4AB /* SignInCreateAccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInCreateAccountViewController.swift; sourceTree = "<group>"; };
@@ -143,6 +149,7 @@
 			children = (
 				6D4900E122C7EBE40071E3D3 /* Test Doubles */,
 				6D4900DF22C7EB980071E3D3 /* EventsServiceTests.swift */,
+				6D4900EA22C7F4BE0071E3D3 /* AuthServiceTests.swift */,
 			);
 			path = "Services Tests";
 			sourceTree = "<group>";
@@ -151,6 +158,7 @@
 			isa = PBXGroup;
 			children = (
 				6D4900E222C7EC1F0071E3D3 /* FakeServiceClient.swift */,
+				6D4900EC22C7F6980071E3D3 /* FakeUserDefaults.swift */,
 			);
 			path = "Test Doubles";
 			sourceTree = "<group>";
@@ -158,6 +166,7 @@
 		6D4900E422C7EE530071E3D3 /* Fixtures */ = {
 			isa = PBXGroup;
 			children = (
+				6D4900EE22C7F7460071E3D3 /* Auth */,
 				6D4900E522C7EE5B0071E3D3 /* Events */,
 			);
 			path = Fixtures;
@@ -170,6 +179,14 @@
 				6D4900E822C7F36B0071E3D3 /* CreateEvent.json */,
 			);
 			path = Events;
+			sourceTree = "<group>";
+		};
+		6D4900EE22C7F7460071E3D3 /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				6D4900EF22C7F75E0071E3D3 /* Auth.json */,
+			);
+			path = Auth;
 			sourceTree = "<group>";
 		};
 		6D63F6DC229095EC00ABF4AB /* Events */ = {
@@ -433,6 +450,7 @@
 			files = (
 				6D4900E722C7EE6F0071E3D3 /* EventList.json in Resources */,
 				6D4900E922C7F36B0071E3D3 /* CreateEvent.json in Resources */,
+				6D4900F022C7F75E0071E3D3 /* Auth.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -477,6 +495,8 @@
 			files = (
 				6D4900E022C7EB980071E3D3 /* EventsServiceTests.swift in Sources */,
 				6D4900E322C7EC1F0071E3D3 /* FakeServiceClient.swift in Sources */,
+				6D4900EB22C7F4BE0071E3D3 /* AuthServiceTests.swift in Sources */,
+				6D4900ED22C7F6980071E3D3 /* FakeUserDefaults.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
