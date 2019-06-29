@@ -40,6 +40,33 @@ struct AuthService {
         }
     }
     
+    func createAccount(firstName: String, lastName: String, email: String, password: String, completionHandler: @escaping (Result<Bool, Error>) -> Void) {
+        let url = URLBuilder(endpoint: .register).buildUrl()
+        let payload = [
+            "firstName": firstName,
+            "lastName": lastName,
+            "email": email,
+            "password": password
+        ]
+        
+        client.post(url: url, payload: payload) { result in
+            switch result {
+            case .success:
+                self.handle(result: result) { error in
+                    guard let error = error else {
+                        completionHandler(.success(true))
+                        return
+                    }
+                    
+                    completionHandler(.failure(error))
+                }
+            case .failure(let error):
+                completionHandler(.failure(error))
+            }
+            
+        }
+    }
+    
     private func handle(result: Result<JSON, Error>, completion: @escaping (Error?) -> Void) {
         switch result {
         case .success(let response):

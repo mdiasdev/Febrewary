@@ -145,38 +145,33 @@ class SignInCreateAccountViewController: UIViewController {
     
     // MARK: - Networking
     func register(firstName: String, lastName: String, email: String, password: String) {
-        let url = URLBuilder(endpoint: .register).buildUrl()
-        let payload = [
-            "firstName": firstName,
-            "lastName": lastName,
-            "email": email,
-            "password": password
-        ]
-        
-        ServiceClient().post(url: url, payload: payload) { [weak self] result in
+        AuthService().createAccount(firstName: firstName, lastName: lastName, email: email, password: password) { [weak self] result in
             self?.handle(result: result)
-            
         }
     }
     
     func signIn(email: String, password: String) {
         AuthService().signIn(email: email, password: password) { [weak self] result in
-            switch result {
-            case .success:
-                DispatchQueue.main.async {
-                    self?.accountDelegate?.didLogin()
-                }
-            case .failure(let error):
-                guard let localError = error as? LocalError else { return }
-                
-                let alert = UIAlertController(title: localError.title, message: localError.message, preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-                
-                DispatchQueue.main.async {
-                    self?.present(alert, animated: true, completion: nil)
-                }
-            }
+            self?.handle(result: result)
         }
         
+    }
+    
+    func handle(result: Result<Bool, Error>) {
+        switch result {
+        case .success:
+            DispatchQueue.main.async {
+                self.accountDelegate?.didLogin()
+            }
+        case .failure(let error):
+            guard let localError = error as? LocalError else { return }
+            
+            let alert = UIAlertController(title: localError.title, message: localError.message, preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            
+            DispatchQueue.main.async {
+                self.present(alert, animated: true, completion: nil)
+            }
+        }
     }
 }
