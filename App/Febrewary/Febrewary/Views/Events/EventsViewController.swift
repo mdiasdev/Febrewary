@@ -37,17 +37,15 @@ class EventsViewController: UIViewController {
         super.viewWillAppear(animated)
         
         noEventsView.translatesAutoresizingMaskIntoConstraints = false
-        
         containerView.addSubview(noEventsView)
         NSLayoutConstraint.activate([
             noEventsView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
             noEventsView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
             noEventsView.topAnchor.constraint(equalTo: containerView.topAnchor),
-            noEventsView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
+            noEventsView.heightAnchor.constraint(greaterThanOrEqualToConstant: 111.5),
         ])
         
         eventsTable.tableView.translatesAutoresizingMaskIntoConstraints = false
-        
         containerView.addSubview(eventsTable.tableView)
         NSLayoutConstraint.activate([
             eventsTable.tableView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
@@ -55,9 +53,12 @@ class EventsViewController: UIViewController {
             eventsTable.tableView.topAnchor.constraint(equalTo: containerView.topAnchor),
             eventsTable.tableView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
         ])
+        
         eventsTable.tableView.isHidden = true
         
         noEventsView.titleLabel.text = "No Upcomming Events"
+        
+        setupAccessibility()
     }
     
     @IBAction func showAccount(_ sender: Any) {
@@ -131,6 +132,13 @@ class EventsViewController: UIViewController {
             self.eventsTable.tableView.reloadData()
             self.segmentChanged(self)
         }
+    }
+    
+    func setupAccessibility() {
+        view.accessibilityIdentifier = "EventsVC"
+        containerView.accessibilityIdentifier = "containerView"
+        noEventsView.accessibilityIdentifier = "noEventsView"
+        eventsTable.tableView.accessibilityIdentifier = "eventsTableView"
     }
 }
 
