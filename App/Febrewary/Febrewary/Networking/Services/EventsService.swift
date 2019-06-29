@@ -43,7 +43,8 @@ struct EventsService {
                      andAttendees attendees: [Int],
                      completionHandler: @escaping (Result<Event, Error>) -> Void) {
         
-        let url = URLBuilder(endpoint: .event).buildUrl() // FIXME: change url when networking re-thought out
+        let url = URLBuilder(endpoint: .event).buildUrl()
+        
         let payload: JSON = [
             "name": name,
             "date": date.iso8601,

@@ -1,0 +1,29 @@
+{
+    "id": 3,
+    "date": "2016-06-08T18:24:16+0000",
+    "attendees": [
+        {
+            "lastName": "Dias",
+            "email": "me@me.org",
+            "id": 1,
+            "firstName": "Matt"
+        },
+        {
+            "email": "mefriend@me.org",
+            "firstName": "Greg",
+            "id": 2,
+            "lastName": "Dias"
+        },
+        {
+            "id": 3,
+            "lastName": "Dias",
+            "firstName": "Susan",
+            "email": "mefriendlyguy@me.org"
+        }
+    ],
+    "name": "Another Awesome Event",
+    "pourerId": 1,
+    "address": "Some Other dude's home elsewhere",
+    "eventBeers": [],
+    "createdBy": 3
+}
