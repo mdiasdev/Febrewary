@@ -8,7 +8,7 @@
 
 import Foundation
 
-// FIXME: rethink
+
 enum Endpoint: String {
     case register = "register"
     case signIn = "login"

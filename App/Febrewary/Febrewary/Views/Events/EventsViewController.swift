@@ -98,20 +98,11 @@ class EventsViewController: UIViewController {
     }
     
     func getEvents() {
-        let url = URLBuilder(endpoint: .eventsForCurrentUser).buildUrl()
-        
-        ServiceClient().get(url: url) { [weak self] result in
-            switch result {
-            case .success(let json):
-                let decoder = JSONDecoder()
-                decoder.dateDecodingStrategy = .iso8601
-                guard let data = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted),
-                      let events = try? decoder.decode([Event].self, from: data) else {
-                        print("bad data")
-                        return
-                }
-                self?.parseResponse(events: events)
 
+        EventsService().getAllEventsForCurrentUser { result in
+            switch result {
+            case .success(let events):
+                self.parseResponse(events: events)
             case .failure(let error):
                 print(error)
             }
