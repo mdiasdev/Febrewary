@@ -13,6 +13,7 @@ enum Endpoint: String {
     case register = "register"
     case signIn = "login"
     case event = "event"
+    case user = "user"
 }
 
 struct URLBuilder {
@@ -24,7 +25,7 @@ struct URLBuilder {
     
     func buildUrl() -> URL {
         switch endpoint {
-            case .register, .signIn, .event:
+            case .register, .signIn, .event, .user:
                 return URL(string: "\(baseUrl)/\(endpoint.rawValue)")!
         }
     }

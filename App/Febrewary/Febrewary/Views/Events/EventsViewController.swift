@@ -109,6 +109,10 @@ class EventsViewController: UIViewController {
         }
     }
     
+    func getUser() {
+//        AuthService().
+    }
+    
     func parseResponse(events: [Event]) {
         
         for event in events {

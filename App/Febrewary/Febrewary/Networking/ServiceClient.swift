@@ -32,7 +32,7 @@ class ServiceClient {
             }
             
             do {
-                guard let data = data, let json = try JSONSerialization.jsonObject(with: data, options: .mutableLeaves) as? JSON else {
+                guard let data = data, let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? JSON else {
                     completionHandler(.failure(JSONError()))
                     return
                 }
@@ -46,7 +46,7 @@ class ServiceClient {
         }.resume()
     }
     
-    func get(url: URL, completionHandler: @escaping (Result<[JSON], Error>) -> Void) {
+    func get(url: URL, completionHandler: @escaping (Result<Any, Error>) -> Void) {
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         
@@ -60,16 +60,22 @@ class ServiceClient {
                 return
             }
             
+            guard let data = data else {
+                completionHandler(.failure(UnknownNetworkError()))
+                return
+            }
+            
             do {
-                guard let data = data, let json = try JSONSerialization.jsonObject(with: data, options: .mutableLeaves) as? [JSON] else {
+                if let json = try JSONSerialization.jsonObject(with: data, options: .mutableLeaves) as? [JSON] {
+                    completionHandler(.success(json))
+                } else if let json = try JSONSerialization.jsonObject(with: data, options: .mutableLeaves) as? JSON {
+                    completionHandler(.success(json))
+                } else {
                     completionHandler(.failure(JSONError()))
-                    return
                 }
                 
-                completionHandler(.success(json))
             } catch {
                 completionHandler(.failure(JSONError()))
-                return
             }
         }.resume()
     }

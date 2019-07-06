@@ -69,7 +69,7 @@ struct AuthService {
         }
     }
     
-    private func handle(result: Result<JSON, Error>, completion: @escaping (Error?) -> Void) {
+    func handle(result: Result<JSON, Error>, completion: @escaping (Error?) -> Void) {
         switch result {
         case .success(let response):
             guard let userJson = response["user"] as? JSON,

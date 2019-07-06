@@ -14,7 +14,7 @@ class FakeServiceClient: ServiceClient {
     var succesFileName: String?
     var errorFileName: String?
     
-    override func get(url: URL, completionHandler: @escaping (Result<[JSON], Error>) -> Void) {
+    override func get(url: URL, completionHandler: @escaping (Result<Any, Error>) -> Void) {
         if let successFileName = self.succesFileName {
             let json = jsonArray(fromFile: successFileName)
             

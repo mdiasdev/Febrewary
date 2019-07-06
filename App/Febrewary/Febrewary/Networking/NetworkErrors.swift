@@ -17,3 +17,8 @@ public struct JSONError: Error, LocalError {
     var title: String { return "Bad Response" }
     var message: String { return "Could not parse response from server." }
 }
+
+public struct UnknownNetworkError: Error, LocalError {
+    var title: String { return "Unknown Error" }
+    var message: String { return "Could not parse response from server." }
+}
