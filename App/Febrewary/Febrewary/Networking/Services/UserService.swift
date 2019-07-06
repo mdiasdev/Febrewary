@@ -18,14 +18,27 @@ struct UserService {
     func getCurrentUser(completionHandler: @escaping (Result<Bool, Error>) -> Void) {
         let url = URLBuilder(endpoint: .user).buildUrl()
         
-//        client.get(url: url) { (result) in
-//            AuthService().handle(result: result, completion: { error in
-//                if error == nil {
-//                    completionHandler(.success(true))
-//                } else {
-//                    completionHandler(.failure(error!))
-//                }
-//            })
-//        }
+        client.get(url: url) { (result) in
+            switch result {
+            case .success(let response):
+                guard let json = response as? JSON else {
+                    completionHandler(.failure(UnknownNetworkError()))
+                    return
+                }
+                
+                guard let data = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted),
+                      let user = try? JSONDecoder().decode(User.self, from: data) else {
+                        completionHandler(.failure(JSONError()))
+                        return
+                }
+                
+                user.save()
+                completionHandler(.success(true))
+                
+            case .failure(let error):
+                completionHandler(.failure(error))
+            }
+            
+        }
     }
 }

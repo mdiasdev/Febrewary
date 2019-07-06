@@ -29,8 +29,15 @@ class EventsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        getEvents()
+    
+        // FIXME: can this be done better?
+        getUser {
+            self.getEvents {
+                DispatchQueue.main.async {
+                    self.eventsTable.tableView.reloadData()
+                }
+            }
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -97,7 +104,7 @@ class EventsViewController: UIViewController {
         }
     }
     
-    func getEvents() {
+    func getEvents(completion: @escaping() -> Void) {
 
         EventsService().getAllEventsForCurrentUser { result in
             switch result {
@@ -106,11 +113,14 @@ class EventsViewController: UIViewController {
             case .failure(let error):
                 print(error)
             }
+            completion()
         }
     }
     
-    func getUser() {
-//        AuthService().
+    func getUser(completion: @escaping () -> Void) {
+        UserService().getCurrentUser { _ in
+            completion()
+        }
     }
     
     func parseResponse(events: [Event]) {
