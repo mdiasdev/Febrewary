@@ -12,7 +12,6 @@ let package = Package(
         .package(url: "https://github.com/PerfectlySoft/Perfect-Crypto.git", from: "3.2.0"),
         .package(url: "https://github.com/IBM-Swift/Configuration.git", from:"3.0.3")
         // TODO: Swagger docs https://github.com/mczachurski/Swiftgger
-        // TODO: move server values out https://github.com/IBM-Swift/Configuration.git
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
