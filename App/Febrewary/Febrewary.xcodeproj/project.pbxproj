@@ -47,6 +47,7 @@
 		6DC8FF7622061E30002749A4 /* EnterBeerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DC8FF7522061E30002749A4 /* EnterBeerViewController.swift */; };
 		6DF976BD22D11688000046BF /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DF976BC22D11688000046BF /* UserService.swift */; };
 		6DF976BF22D1169A000046BF /* UserServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DF976BE22D1169A000046BF /* UserServiceTests.swift */; };
+		6DF976C222D12239000046BF /* CurrentUser.json in Resources */ = {isa = PBXBuildFile; fileRef = 6DF976C122D12239000046BF /* CurrentUser.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -104,6 +105,7 @@
 		6DC8FF7522061E30002749A4 /* EnterBeerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnterBeerViewController.swift; sourceTree = "<group>"; };
 		6DF976BC22D11688000046BF /* UserService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
 		6DF976BE22D1169A000046BF /* UserServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserServiceTests.swift; sourceTree = "<group>"; };
+		6DF976C122D12239000046BF /* CurrentUser.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = CurrentUser.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -172,6 +174,7 @@
 		6D4900E422C7EE530071E3D3 /* Fixtures */ = {
 			isa = PBXGroup;
 			children = (
+				6DF976C022D1220B000046BF /* User */,
 				6D4900EE22C7F7460071E3D3 /* Auth */,
 				6D4900E522C7EE5B0071E3D3 /* Events */,
 			);
@@ -358,6 +361,14 @@
 			path = EnterBeerViews;
 			sourceTree = "<group>";
 		};
+		6DF976C022D1220B000046BF /* User */ = {
+			isa = PBXGroup;
+			children = (
+				6DF976C122D12239000046BF /* CurrentUser.json */,
+			);
+			path = User;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -456,6 +467,7 @@
 			files = (
 				6D4900E722C7EE6F0071E3D3 /* EventList.json in Resources */,
 				6D4900E922C7F36B0071E3D3 /* CreateEvent.json in Resources */,
+				6DF976C222D12239000046BF /* CurrentUser.json in Resources */,
 				6D4900F022C7F75E0071E3D3 /* Auth.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

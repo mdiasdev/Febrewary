@@ -11,11 +11,16 @@ import Foundation
 @testable import Febrewary
 
 class FakeServiceClient: ServiceClient {
-    var succesFileName: String?
+    var successFileName: String?
     var errorFileName: String?
     
     override func get(url: URL, completionHandler: @escaping (Result<Any, Error>) -> Void) {
-        if let successFileName = self.succesFileName {
+        if let successFileName = self.successFileName {
+            if let json = json(fromFile: successFileName) {
+                completionHandler(.success(json))
+                return
+            }
+            
             let json = jsonArray(fromFile: successFileName)
             
             guard json.count > 0 else {
@@ -33,7 +38,7 @@ class FakeServiceClient: ServiceClient {
     }
     
     override func post(url: URL, payload: JSON?, completionHandler: @escaping (Result<JSON, Error>) -> Void) {
-        if let successFileName = self.succesFileName {
+        if let successFileName = self.successFileName {
             guard let json = json(fromFile: successFileName) else {
                 assertionFailure("bad file name")
                 return

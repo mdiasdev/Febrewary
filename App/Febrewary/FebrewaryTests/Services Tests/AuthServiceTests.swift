@@ -31,7 +31,7 @@ class AuthServiceTests: XCTestCase {
     }
     
     func test_createAccount_savesAuthToken_whenSuccessful() {
-        fakeService.succesFileName = "Auth"
+        fakeService.successFileName = "Auth"
         let completed = expectation(description: "call should complete")
         
         sut.createAccount(firstName: "some",
@@ -52,7 +52,7 @@ class AuthServiceTests: XCTestCase {
     }
     
     func test_signIn_savesAuthToken_whenSuccessful() {
-        fakeService.succesFileName = "Auth"
+        fakeService.successFileName = "Auth"
         let completed = expectation(description: "call should complete")
         
         sut.signIn(email: "me@you.org", password: "hello chat!") { (result) in
