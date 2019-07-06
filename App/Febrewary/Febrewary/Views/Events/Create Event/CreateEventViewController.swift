@@ -26,6 +26,8 @@ class CreateEventViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        datePicker.minimumDate = Date()
+        
         allTextFields = [nameTextField, dateTextField, addressTextField, pourerTextField, attendeesTextField]
         
         nameTextField.delegate = self
