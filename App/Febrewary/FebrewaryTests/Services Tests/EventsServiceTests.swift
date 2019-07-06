@@ -30,7 +30,7 @@ class EventsServiceTests: XCTestCase {
     }
     
     func test_getAllEventsForCurrentUser_decodesEvents_fromSuccessfulResponse() {
-        fakeService.succesFileName = "EventList"
+        fakeService.successFileName = "EventList"
         let completed = expectation(description: "call should finish")
         
         sut.getAllEventsForCurrentUser { result in
@@ -47,7 +47,7 @@ class EventsServiceTests: XCTestCase {
     }
     
     func test_createEvent_decodesEvent_fromSuccessfulResponse() {
-        fakeService.succesFileName = "CreateEvent"
+        fakeService.successFileName = "CreateEvent"
         let completed = expectation(description: "call should finish")
         
         sut.createEvent(named: "some event",
