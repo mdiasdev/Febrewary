@@ -19,8 +19,11 @@ extension HTTPRequest {
         do {
             let validator = JWTVerifier(token)
             try validator?.verify(algo: .hs256, key: Configuration.salt)
+            
+            guard let expiration = validator?.payload["expiration"] as? TimeInterval else { return false }
              
-            return true
+            return expiration > Date().timeIntervalSince1970 &&
+                   validator?.payload["email"] != nil
         } catch {
             return false
         }
@@ -33,6 +36,9 @@ extension HTTPRequest {
         do {
             let validator = JWTVerifier(token)
             try validator?.verify(algo: .hs256, key: Configuration.salt)
+            
+            guard let expiration = validator?.payload["expiration"] as? TimeInterval,
+                  expiration > Date().timeIntervalSince1970 else { return nil }
             
             return validator?.payload["email"] as? String
         } catch {
