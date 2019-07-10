@@ -8,11 +8,17 @@
 
 import UIKit
 
+protocol EventsNavigationDelegate: class {
+    func didTap(event: Event)
+}
+
 class EventsTableViewController: UITableViewController {
     
     var isDisplayingPast = false
     var upcommingEvents = [Event]()
     var pastEvents = [Event]()
+    
+    weak var navigationDelegate: EventsNavigationDelegate?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -48,10 +54,18 @@ class EventsTableViewController: UITableViewController {
         return cell
     }
 
-    // MARK: - Navigation
-
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        var event: Event
+        
+        if isDisplayingPast {
+            guard indexPath.row < pastEvents.count else { return }
+            event = pastEvents[indexPath.row]
+        } else {
+            guard indexPath.row < upcommingEvents.count else { return }
+            event = upcommingEvents[indexPath.row]
+        }
+        
+        navigationDelegate?.didTap(event: event)
     }
 
 }
