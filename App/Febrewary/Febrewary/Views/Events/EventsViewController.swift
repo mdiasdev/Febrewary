@@ -169,7 +169,8 @@ extension EventsViewController: UIViewControllerTransitioningDelegate {
 
 extension EventsViewController: EventsNavigationDelegate {
     func didTap(event: Event) {
-        let detailsViewController = EventDetailsTableViewController()
+        let storyBoard = UIStoryboard(name: "Main", bundle: Bundle.main)
+        guard let detailsViewController = storyBoard.instantiateViewController(withIdentifier: "EventDetailsViewController") as? EventDetailsViewController else { return }
         detailsViewController.event = event
         
         navigationController?.pushViewController(detailsViewController, animated: true)
