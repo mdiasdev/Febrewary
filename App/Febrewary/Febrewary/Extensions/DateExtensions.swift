@@ -40,6 +40,18 @@ extension Date {
         
         return false
     }
+    
+    func isToday() -> Bool {
+        let today = Date()
+        let todayComponents = Calendar.current.dateComponents([.day, .month, .year], from: today)
+        let components = Calendar.current.dateComponents([.day, .month, .year], from: self)
+        
+        guard todayComponents.year == components.year else { return true }
+        guard todayComponents.month == components.month else { return true }
+        guard todayComponents.day == components.day else { return true }
+        
+        return false
+    }
 }
 
 extension String {

@@ -15,6 +15,8 @@ class EventDetailsViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var startButton: UIButton!
     
+    @IBOutlet weak var buttonContainerHeightConstraint: NSLayoutConstraint!
+    
     var event: Event!
     
     override func viewWillAppear(_ animated: Bool) {
@@ -24,6 +26,13 @@ class EventDetailsViewController: UIViewController {
         dateLabel.text = event.date.shortMonthDayYearWithTime
         addressLabel.text = event.address
         startButton.layer.cornerRadius = 8
+        
+        if let user = User().retrieve(), user.id != event.pourerId {
+            buttonContainerHeightConstraint.constant = 0
+            startButton.isHidden = true
+        }
+        
+        startButton.isEnabled = event.date.isToday()
     }
     
     func setupTable() {
