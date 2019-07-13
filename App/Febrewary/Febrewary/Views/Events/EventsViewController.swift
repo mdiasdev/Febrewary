@@ -68,6 +68,8 @@ class EventsViewController: UIViewController {
         noEventsView.titleLabel.text = "No Upcomming Events"
         
         setupAccessibility()
+        
+        segmentChanged(self)
     }
     
     @IBAction func showAccount(_ sender: Any) {
