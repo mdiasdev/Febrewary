@@ -38,6 +38,8 @@ class EventsViewController: UIViewController {
                 }
             }
         }
+        
+        eventsTable.navigationDelegate = self
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -66,6 +68,8 @@ class EventsViewController: UIViewController {
         noEventsView.titleLabel.text = "No Upcomming Events"
         
         setupAccessibility()
+        
+        segmentChanged(self)
     }
     
     @IBAction func showAccount(_ sender: Any) {
@@ -147,6 +151,7 @@ class EventsViewController: UIViewController {
     }
 }
 
+// MARK: - UIViewControllerTransitioningDelegate
 extension EventsViewController: UIViewControllerTransitioningDelegate {
     
     func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
@@ -161,5 +166,15 @@ extension EventsViewController: UIViewControllerTransitioningDelegate {
         transition.isPresenting = false
         
         return transition
+    }
+}
+
+extension EventsViewController: EventsNavigationDelegate {
+    func didTap(event: Event) {
+        let storyBoard = UIStoryboard(name: "Main", bundle: Bundle.main)
+        guard let detailsViewController = storyBoard.instantiateViewController(withIdentifier: "EventDetailsViewController") as? EventDetailsViewController else { return }
+        detailsViewController.event = event
+        
+        navigationController?.pushViewController(detailsViewController, animated: true)
     }
 }

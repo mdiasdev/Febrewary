@@ -10,6 +10,8 @@ import Foundation
 
 struct Beer {
     // TODO: Make this
+    var name: String
+    var brewerName: String
 }
 
 extension Beer: Codable { }
