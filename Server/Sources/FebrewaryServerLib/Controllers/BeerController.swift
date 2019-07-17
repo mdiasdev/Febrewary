@@ -35,7 +35,7 @@ public class BeerController: RouteController {
 
             guard let beerName = json["name"] as? String,
                   let brewerName = json["brewer"] as? String,
-                  let abv = json["abv"] as? Double
+                  let abv = json["abv"] as? Float
                 else {
                 response.setBody(string: "Missing data.")
                         .completed(status: .badRequest)

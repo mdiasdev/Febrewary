@@ -7,7 +7,7 @@ class Beer: PostgresStORM {
     var id: Int = 0
     var name: String = ""
     var brewer: String = ""
-    var abv: Double = 0.0
+    var abv: Float = 0.0
     var totalScore: Int = 0
     var totalVotes: Int = 0
     var addedBy: Int = 0
@@ -18,7 +18,7 @@ class Beer: PostgresStORM {
         id = this.data["id"] as? Int ?? 0
         name = this.data["name"] as? String ?? ""
         brewer = this.data["brewer"] as? String ?? ""
-        abv = this.data["abv"] as? Double ?? 0.0
+        abv = this.data["abv"] as? Float ?? 0.0
         totalScore = this.data["totalscore"] as? Int ?? 0
         totalVotes = this.data["totalvotes"] as? Int ?? 0
         addedBy = this.data["addedby"] as? Int ?? 0

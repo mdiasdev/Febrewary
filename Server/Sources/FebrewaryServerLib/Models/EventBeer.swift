@@ -53,7 +53,7 @@ class EventBeer: PostgresStORM {
 
         return [
             "id": self.id,
-            "attendee": user.asDictionary(),
+            "attendee": user.asSimpleDictionary(),
             "beer": beer.asDictionary(),
             "eventScore": self.eventScore
         ]
