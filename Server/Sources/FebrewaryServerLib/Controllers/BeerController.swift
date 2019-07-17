@@ -27,15 +27,15 @@ public class BeerController: RouteController {
                 return
             }
 
-            guard let json = try? request.postBodyString?.jsonDecode() as? [String: Any] else {
+            guard let postBody = try? request.postBodyString?.jsonDecode() as? [String: Any], let json = postBody else {
                 response.setBody(string: "Bad Request: malformed json")
                         .completed(status: .badRequest)
                 return
             }
 
-            guard let beerName = json?["name"] as? String,
-                  let brewerName = json?["brewer"] as? String,
-                  let abv = json?["abv"] as? Double
+            guard let beerName = json["name"] as? String,
+                  let brewerName = json["brewer"] as? String,
+                  let abv = json["abv"] as? Double
                 else {
                 response.setBody(string: "Missing data.")
                         .completed(status: .badRequest)
