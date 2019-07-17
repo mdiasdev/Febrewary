@@ -7,9 +7,10 @@ class Beer: PostgresStORM {
     var id: Int = 0
     var name: String = ""
     var brewer: String = ""
+    var abv: Double = 0.0
     var totalScore: Int = 0
     var totalVotes: Int = 0
-    var averageScore: Double = 0.0
+    var addedBy: Int = 0
 
     override open func table() -> String { return "beer" }
 
@@ -17,9 +18,10 @@ class Beer: PostgresStORM {
         id = this.data["id"] as? Int ?? 0
         name = this.data["name"] as? String ?? ""
         brewer = this.data["brewer"] as? String ?? ""
+        abv = this.data["abv"] as? Double ?? 0.0
         totalScore = this.data["totalscore"] as? Int ?? 0
         totalVotes = this.data["totalvotes"] as? Int ?? 0
-        averageScore = this.data["averagescore"] as? Double ?? 0.0
+        addedBy = this.data["addedby"] as? Int ?? 0
     }
 
     func rows() -> [Beer] {
@@ -39,13 +41,20 @@ class Beer: PostgresStORM {
     }
 
     func asDictionary() -> [String: Any] {
+        var average = 0
+        if totalVotes > 0 && totalScore > 0 {
+            average = totalScore/totalVotes
+        }
+        
         return [
             "id": self.id,
             "brewerName": self.brewer,
             "name": self.name,
+            "abv": self.abv,
             "totalScore": self.totalScore,
             "totalVotes": self.totalVotes,
-            "averageScore": self.averageScore,
+            "averageScore": average,
+            "addedBy": self.addedBy,
         ]
     }
 }

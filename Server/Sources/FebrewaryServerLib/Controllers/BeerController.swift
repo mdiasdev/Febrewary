@@ -11,88 +11,61 @@ public class BeerController: RouteController {
 
     func addBeer(request: HTTPRequest, response: HTTPResponse) {
         do {
+            
+            guard request.hasValidToken(), let email = request.emailFromAuthToken() else {
+                response.setBody(string: "Unauthorized")
+                        .completed(status: .unauthorized)
+                return
+            }
+            
+            let user = User()
+            try user.find(["email": email])
+            
+            guard user.id != 0 else {
+                response.setBody(string: "Unauthorized")
+                        .completed(status: .unauthorized)
+                return
+            }
 
             guard let json = try? request.postBodyString?.jsonDecode() as? [String: Any] else {
                 response.setBody(string: "Bad Request: malformed json")
                         .completed(status: .badRequest)
                 return
             }
-            
-            guard let userId = json?["userId"] as? Int else {
-                response.setBody(string: "Bad Request: missing userId")
-                    .completed(status: .badRequest)
-                return
-            }
-            
-            guard let eventId = json?["eventId"] as? Int else {
-                response.setBody(string: "Bad Request: missing eventId")
+
+            guard let beerName = json?["name"] as? String,
+                  let brewerName = json?["brewer"] as? String,
+                  let abv = json?["abv"] as? Double
+                else {
+                response.setBody(string: "Missing data.")
                         .completed(status: .badRequest)
                 return
             }
 
-            guard let beerName = json?["name"] as? String else {
-                response.setBody(string: "Bad Request: missing beerName")
-                        .completed(status: .badRequest)
+            let beer = Beer()
+            try beer.find(
+                ["name": beerName,
+                 "brewer": brewerName
+                ]
+            )
+
+            guard beer.id == 0 else {
+                response.setBody(string: "Beer already exists")
+                        .completed(status: .conflict)
                 return
             }
 
-            guard let brewerName = json?["brewer"] as? String else {
-                response.setBody(string: "Bad Request: missing brewerName")
-                        .completed(status: .badRequest)
-                return
+            beer.name = beerName
+            beer.brewer = brewerName
+            beer.abv = abv
+            beer.addedBy = user.id
+
+            try beer.save { id in
+                beer.id = id as! Int
             }
             
-            let user = User()
-            try user.findOne(orderBy: "id")
-            guard user.id != 0 else {
-                response.setBody(string: "Bad Request: could not find attendee")
-                    .completed(status: .badRequest)
-                return
-            }
-            
-            let event = Event()
-            try event.find(["id": eventId])
-            
-            guard event.id > 0 else {
-                response.setBody(string: "Bad Request: could not find event with Id: \(eventId)")
-                        .completed(status: .badRequest)
-                return
-            }
-
-            let beerQuery = Beer()
-            try beerQuery.find(["name": beerName])
-
-            var beer = Beer()
-
-            var exists = false
-
-            for beerRow in beerQuery.rows() {
-                if beerRow.brewer == brewerName {
-                    beer = beerRow
-                    exists = true
-                    break
-                }
-            }
-
-            if !exists {
-                beer.name = beerName
-                beer.brewer = brewerName
-
-                try beer.save { id in
-                    beer.id = id as! Int
-                }
-            }
-
-            EventController().update(event: event.id, with: beer, broughtBy: user, isPourer: userId == event.pourerId) { wasSuccessful in
-
-                guard wasSuccessful else {
-                    response.setBody(string: "Failed to add beer to event.")
-                            .completed(status: .internalServerError)
-                    return
-                }
-
-                response.completed(status: .created)
-            }
+            try response.setBody(json: beer.asDictionary())
+                        .completed(status: .created)
 
         } catch {
             response.completed(status: .internalServerError)
