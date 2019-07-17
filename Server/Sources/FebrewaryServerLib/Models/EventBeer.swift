@@ -5,9 +5,11 @@ import PostgresStORM
 class EventBeer: PostgresStORM {
     var id: Int = 0
     var userId: Int = 0
-    var beerId: Int = 0
     var _user: User?
+    var beerId: Int = 0
     var _beer: Beer?
+    var eventId: Int = 0
+    var votes: Int = 0
     var eventScore: Int = 0
 
     override open func table() -> String { return "eventbeer" }
@@ -16,7 +18,9 @@ class EventBeer: PostgresStORM {
         id = this.data["id"] as? Int ?? 0
         beerId = this.data["beerid"] as? Int ?? 0
         userId = this.data["userid"] as? Int ?? 0
+        eventId = this.data["eventid"] as? Int ?? 0
         eventScore = this.data["eventscore"] as? Int ?? 0
+        votes = this.data["votes"] as? Int ?? 0
     }
 
     func rows() -> [EventBeer] {
@@ -41,7 +45,6 @@ class EventBeer: PostgresStORM {
         try? drinker.get(self.userId)
 
         _user = drinker
-        
 
         let beer = Beer()
         try? beer.get(self.beerId)

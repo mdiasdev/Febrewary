@@ -6,6 +6,7 @@ public class EventController: RouteController {
         routes.add(method: .post, uri: "/event", handler: createEvent)
         routes.add(method: .get, uri: "/event/{id}", handler: getEvent)
         routes.add(method: .get, uri: "/event", handler: getEventForUser)
+        routes.add(method: .post, uri: "/event/{id}/beer", handler: addEventBeer)
     }
     
     func createEvent(request: HTTPRequest, response: HTTPResponse) {
@@ -96,15 +97,9 @@ public class EventController: RouteController {
     }
     
     func getEventForUser(request: HTTPRequest, response: HTTPResponse) {
-        guard request.hasValidToken() else {
+        guard request.hasValidToken(), let email = request.emailFromAuthToken() else {
             response.setBody(string: "Unauthorized")
                     .completed(status: .unauthorized)
-            return
-        }
-        
-        guard let email = request.emailFromAuthToken() else {
-            response.setBody(string: "Bad Request")
-                    .completed(status: .badRequest)
             return
         }
         
@@ -136,6 +131,84 @@ public class EventController: RouteController {
         }
         
         response.completed(status: .internalServerError)
+    }
+    
+    func addEventBeer (request: HTTPRequest, response: HTTPResponse) {
+        guard request.hasValidToken(), let email = request.emailFromAuthToken() else {
+            response.setBody(string: "Unauthorized")
+                .completed(status: .unauthorized)
+            return
+        }
+        
+        guard let id = Int(request.urlVariables["id"] ?? "0"), id > 0 else {
+            response.completed(status: .badRequest)
+            return
+        }
+        
+        guard let postBody = try? request.postBodyString?.jsonDecode() as? [String: Any],
+              let json = postBody else {
+            response.setBody(string: "Bad Request: malformed json")
+                    .completed(status: .badRequest)
+            return
+        }
+        
+        guard let beerId = json["beerId"] as? Int else {
+            response.setBody(string: "Missing data")
+                    .completed(status: .badRequest)
+            return
+        }
+        
+        do {
+            let user = User()
+            try user.find(["email": email])
+            
+            guard user.id != 0 else {
+                response.setBody(string: "Bad Request: could not find User")
+                        .completed(status: .badRequest)
+                return
+            }
+            
+            let event = Event()
+            try event.find([("id", id)])
+            
+            guard event.id > 0 else {
+                response.setBody(string: "Could not find event with id: \(id).")
+                        .completed(status: .notFound)
+                return
+            }
+            
+            guard event.drinkerIds.contains(user.id) else {
+                response.setBody(string: "User not invited")
+                        .completed(status: .unauthorized)
+                return
+            }
+            
+            let eventBeer = EventBeer()
+            
+            try eventBeer.find([("userId", user.id)])
+            
+            guard eventBeer.id == 0 else {
+                response.setBody(string: "User has already added a beer to this event")
+                        .completed(status: .conflict)
+                return
+            }
+            
+            eventBeer.userId = user.id
+            eventBeer.beerId = beerId
+            eventBeer.eventId = event.id
+            
+            try eventBeer.save { id in
+                eventBeer.id = id as! Int
+            }
+            
+            event.eventBeerIds.append(eventBeer.id)
+            try event.save()
+            
+            response.completed(status: .created)
+            
+        } catch {
+            response.completed(status: .internalServerError)
+        }
     }
     
     // MARK: internal functions
