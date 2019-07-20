@@ -18,7 +18,27 @@ class AddBeerViewController: UIViewController {
 
         // Do any additional setup after loading the view.
     }
+    
+    func isFormValid() -> Bool {
+        return nameTextField.text?.isEmpty == false &&
+               brewerTextField.text?.isEmpty == false &&
+               abvTextField.text?.isEmpty == false &&
+               Double(abvTextField.text ?? "") > 0
+    }
+    
+    func showFormError() {
+        let alert = UIAlertController(title: "Error", message: "A beer must have a name, brewer, and ABV higher than 0.", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        present(alert, animated: true, completion: nil)
+    }
 
     @IBAction func tappedAddBeer(_ sender: Any) {
+        guard isFormValid() else {
+            showFormError()
+            
+            return
+        }
+        
+        
     }
 }

@@ -16,6 +16,7 @@ class BeerViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        self.searchBar.isHidden = true
     }
     
     override func viewWillAppear(_ animated: Bool) {
