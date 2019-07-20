@@ -377,21 +377,65 @@
             </objects>
             <point key="canvasLocation" x="1470" y="-1039"/>
         </scene>
-        <!--View Controller-->
+        <!--Beer View Controller-->
         <scene sceneID="KhF-42-lHx">
             <objects>
-                <viewController id="atL-iT-S5h" sceneMemberID="viewController">
+                <viewController id="atL-iT-S5h" customClass="BeerViewController" customModule="Febrewary" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="9cA-aS-B9g">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="TNr-Cu-Cw7">
+                                <rect key="frame" x="0.0" y="64" width="375" height="554"/>
+                                <subviews>
+                                    <searchBar contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="iPQ-lK-s0h">
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="56"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </searchBar>
+                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="N9O-rd-g19">
+                                        <rect key="frame" x="0.0" y="56" width="375" height="498"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </tableView>
+                                </subviews>
+                            </stackView>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="TNr-Cu-Cw7" firstAttribute="leading" secondItem="Idi-0u-CoB" secondAttribute="leading" id="JJX-jn-HVV"/>
+                            <constraint firstItem="TNr-Cu-Cw7" firstAttribute="trailing" secondItem="Idi-0u-CoB" secondAttribute="trailing" id="Rhi-f5-htU"/>
+                            <constraint firstItem="TNr-Cu-Cw7" firstAttribute="bottom" secondItem="Idi-0u-CoB" secondAttribute="bottom" id="cak-nu-ka0"/>
+                            <constraint firstItem="TNr-Cu-Cw7" firstAttribute="top" secondItem="Idi-0u-CoB" secondAttribute="top" id="vUD-j0-8Xs"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="Idi-0u-CoB"/>
                     </view>
-                    <navigationItem key="navigationItem" id="msA-xp-uem"/>
+                    <navigationItem key="navigationItem" id="msA-xp-uem">
+                        <nil key="title"/>
+                        <segmentedControl key="titleView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="FIQ-Wl-yxr">
+                            <rect key="frame" x="90" y="7" width="195" height="30"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <segments>
+                                <segment title="My Beers"/>
+                                <segment title="Search"/>
+                            </segments>
+                            <connections>
+                                <action selector="segmentDidChange:" destination="atL-iT-S5h" eventType="valueChanged" id="QIY-Kw-Ywf"/>
+                            </connections>
+                        </segmentedControl>
+                        <barButtonItem key="rightBarButtonItem" title="Item" image="Plus_ico" id="z2G-FY-Qb1">
+                            <connections>
+                                <action selector="tappedAdd:" destination="atL-iT-S5h" id="B4m-2W-BSa"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="searchBar" destination="iPQ-lK-s0h" id="4KA-Uy-MdY"/>
+                        <outlet property="segmentedControl" destination="FIQ-Wl-yxr" id="8yx-LM-Ygl"/>
+                        <outlet property="tableView" destination="N9O-rd-g19" id="xA2-rb-GQN"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YgN-Ux-5rb" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2230" y="-1039"/>
+            <point key="canvasLocation" x="2229.5999999999999" y="-1039.4302848575712"/>
         </scene>
         <!--Root View Controller-->
         <scene sceneID="0tM-zV-vIc">
