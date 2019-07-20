@@ -423,7 +423,6 @@
                         </segmentedControl>
                         <barButtonItem key="rightBarButtonItem" title="Item" image="Plus_ico" id="z2G-FY-Qb1">
                             <connections>
-                                <action selector="tappedAdd:" destination="atL-iT-S5h" id="B4m-2W-BSa"/>
                                 <segue destination="aHb-s3-hjy" kind="presentation" id="W3i-oY-yvt"/>
                             </connections>
                         </barButtonItem>
