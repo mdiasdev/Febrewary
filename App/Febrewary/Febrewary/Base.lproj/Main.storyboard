@@ -498,7 +498,7 @@
                     <navigationItem key="navigationItem" title="Add Beer" id="8gK-dI-YLH">
                         <barButtonItem key="leftBarButtonItem" title="Item" image="X_ico" id="6ZI-B6-Wer">
                             <connections>
-                                <segue destination="WG6-J1-4ta" kind="unwind" unwindAction="unwindFromAddBeerWithSegue:" id="U6L-jj-HeE"/>
+                                <segue destination="WG6-J1-4ta" kind="unwind" identifier="unwindToBeerList" unwindAction="unwindFromAddBeerWithSegue:" id="alV-HY-SZ8"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -506,6 +506,7 @@
                         <outlet property="abvTextField" destination="K60-kG-SrN" id="lro-KT-lXS"/>
                         <outlet property="brewerTextField" destination="bhQ-4Y-yw6" id="ZIO-Zw-U7T"/>
                         <outlet property="nameTextField" destination="NXD-8m-iJn" id="DKN-PO-yZ0"/>
+                        <outlet property="submitButton" destination="aGJ-rs-mP4" id="M1C-fI-G87"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="T66-kh-5G3" userLabel="First Responder" sceneMemberID="firstResponder"/>

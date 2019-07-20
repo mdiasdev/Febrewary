@@ -35,8 +35,7 @@ public class BeerController: RouteController {
 
             guard let beerName = json["name"] as? String,
                   let brewerName = json["brewer"] as? String,
-                  let abv = json["abv"] as? Float
-                else {
+                  let abv = json["abv"] as? NSNumber else {
                 response.setBody(string: "Missing data.")
                         .completed(status: .badRequest)
                 return
@@ -57,7 +56,7 @@ public class BeerController: RouteController {
 
             beer.name = beerName
             beer.brewer = brewerName
-            beer.abv = abv
+            beer.abv = abv.floatValue
             beer.addedBy = user.id
 
             try beer.save { id in

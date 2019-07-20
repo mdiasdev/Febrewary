@@ -12,11 +12,13 @@ class AddBeerViewController: UIViewController {
     @IBOutlet weak var nameTextField: UITextField!
     @IBOutlet weak var brewerTextField: UITextField!
     @IBOutlet weak var abvTextField: UITextField!
+    @IBOutlet weak var submitButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        submitButton.layer.cornerRadius = 8
     }
     
     func isFormValid() -> Bool {
@@ -31,14 +33,41 @@ class AddBeerViewController: UIViewController {
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         present(alert, animated: true, completion: nil)
     }
+    
+    func showNetworkError(error: Error) {
+        let alert = UIAlertController(title: "Error", message: error.localizedDescription, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        present(alert, animated: true, completion: nil)
+    }
 
     @IBAction func tappedAddBeer(_ sender: Any) {
-        guard isFormValid() else {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.decimalSeparator = "."
+        formatter.maximumFractionDigits = 2
+        formatter.minimumFractionDigits = 1
+        
+        guard isFormValid(),
+            let name = nameTextField.text,
+            let brewerName = brewerTextField.text,
+            let abvText = abvTextField.text,
+            let abv = formatter.number(from: abvText)?.floatValue else {
             showFormError()
             
             return
         }
         
+        BeerService().addBeer(named: name, from: brewerName, abv: abv) { result in
+            
+            DispatchQueue.main.async {
+                switch result {
+                    case .success:
+                        self.performSegue(withIdentifier: "unwindToBeerList", sender: self)
+                    case .failure(let error):
+                        self.showNetworkError(error: error)
+                }
+            }
+        }
         
     }
 }
