@@ -377,21 +377,142 @@
             </objects>
             <point key="canvasLocation" x="1470" y="-1039"/>
         </scene>
-        <!--View Controller-->
+        <!--Beer View Controller-->
         <scene sceneID="KhF-42-lHx">
             <objects>
-                <viewController id="atL-iT-S5h" sceneMemberID="viewController">
+                <viewController id="atL-iT-S5h" customClass="BeerViewController" customModule="Febrewary" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="9cA-aS-B9g">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="TNr-Cu-Cw7">
+                                <rect key="frame" x="0.0" y="64" width="375" height="554"/>
+                                <subviews>
+                                    <searchBar contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="iPQ-lK-s0h">
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="56"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </searchBar>
+                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="N9O-rd-g19">
+                                        <rect key="frame" x="0.0" y="56" width="375" height="498"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </tableView>
+                                </subviews>
+                            </stackView>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="TNr-Cu-Cw7" firstAttribute="leading" secondItem="Idi-0u-CoB" secondAttribute="leading" id="JJX-jn-HVV"/>
+                            <constraint firstItem="TNr-Cu-Cw7" firstAttribute="trailing" secondItem="Idi-0u-CoB" secondAttribute="trailing" id="Rhi-f5-htU"/>
+                            <constraint firstItem="TNr-Cu-Cw7" firstAttribute="bottom" secondItem="Idi-0u-CoB" secondAttribute="bottom" id="cak-nu-ka0"/>
+                            <constraint firstItem="TNr-Cu-Cw7" firstAttribute="top" secondItem="Idi-0u-CoB" secondAttribute="top" id="vUD-j0-8Xs"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="Idi-0u-CoB"/>
                     </view>
-                    <navigationItem key="navigationItem" id="msA-xp-uem"/>
+                    <navigationItem key="navigationItem" id="msA-xp-uem">
+                        <nil key="title"/>
+                        <segmentedControl key="titleView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="FIQ-Wl-yxr">
+                            <rect key="frame" x="90" y="7" width="195" height="30"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <segments>
+                                <segment title="My Beers"/>
+                                <segment title="Search"/>
+                            </segments>
+                            <connections>
+                                <action selector="segmentDidChange:" destination="atL-iT-S5h" eventType="valueChanged" id="QIY-Kw-Ywf"/>
+                            </connections>
+                        </segmentedControl>
+                        <barButtonItem key="rightBarButtonItem" title="Item" image="Plus_ico" id="z2G-FY-Qb1">
+                            <connections>
+                                <action selector="tappedAdd:" destination="atL-iT-S5h" id="B4m-2W-BSa"/>
+                                <segue destination="aHb-s3-hjy" kind="presentation" id="W3i-oY-yvt"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="searchBar" destination="iPQ-lK-s0h" id="4KA-Uy-MdY"/>
+                        <outlet property="segmentedControl" destination="FIQ-Wl-yxr" id="8yx-LM-Ygl"/>
+                        <outlet property="tableView" destination="N9O-rd-g19" id="xA2-rb-GQN"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YgN-Ux-5rb" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2230" y="-1039"/>
+            <point key="canvasLocation" x="2229.5999999999999" y="-1039.4302848575712"/>
+        </scene>
+        <!--Add Beer-->
+        <scene sceneID="iFj-uR-4Qt">
+            <objects>
+                <viewController id="WS3-79-7In" customClass="AddBeerViewController" customModule="Febrewary" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="hT7-eM-bln">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="cvs-oc-Tlj">
+                                <rect key="frame" x="24" y="104" width="327" height="90"/>
+                                <subviews>
+                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Beer Name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="NXD-8m-iJn">
+                                        <rect key="frame" x="0.0" y="0.0" width="327" height="30"/>
+                                        <nil key="textColor"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
+                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Brewer Name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="bhQ-4Y-yw6">
+                                        <rect key="frame" x="0.0" y="30" width="327" height="30"/>
+                                        <nil key="textColor"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
+                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="ABV %" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="K60-kG-SrN">
+                                        <rect key="frame" x="0.0" y="60" width="327" height="30"/>
+                                        <nil key="textColor"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
+                                </subviews>
+                            </stackView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aGJ-rs-mP4">
+                                <rect key="frame" x="60" y="210" width="255" height="50"/>
+                                <color key="backgroundColor" red="0.84705882349999995" green="0.84705882349999995" blue="0.84705882349999995" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="otx-YZ-qUB"/>
+                                </constraints>
+                                <state key="normal" title="Add Beer">
+                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="didTapSubmit:" destination="5SO-ND-g7u" eventType="touchUpInside" id="pnE-hG-yXj"/>
+                                    <action selector="tappedAddBeer:" destination="WS3-79-7In" eventType="touchUpInside" id="jhi-JJ-vl6"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="cvs-oc-Tlj" firstAttribute="leading" secondItem="Xz8-qF-eJX" secondAttribute="leading" constant="24" id="82G-Vq-N3U"/>
+                            <constraint firstItem="aGJ-rs-mP4" firstAttribute="leading" secondItem="cvs-oc-Tlj" secondAttribute="leading" constant="36" id="A3J-IZ-Hdw"/>
+                            <constraint firstItem="cvs-oc-Tlj" firstAttribute="top" secondItem="Xz8-qF-eJX" secondAttribute="top" constant="40" id="AC9-iz-gVc"/>
+                            <constraint firstItem="aGJ-rs-mP4" firstAttribute="top" secondItem="cvs-oc-Tlj" secondAttribute="bottom" constant="16" id="GPp-iO-bcA"/>
+                            <constraint firstItem="Xz8-qF-eJX" firstAttribute="trailing" secondItem="cvs-oc-Tlj" secondAttribute="trailing" constant="24" id="YTt-iv-DzA"/>
+                            <constraint firstItem="aGJ-rs-mP4" firstAttribute="trailing" secondItem="cvs-oc-Tlj" secondAttribute="trailing" constant="-36" id="pLC-1y-he4"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="Xz8-qF-eJX"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Add Beer" id="8gK-dI-YLH">
+                        <barButtonItem key="leftBarButtonItem" title="Item" image="X_ico" id="6ZI-B6-Wer">
+                            <connections>
+                                <segue destination="WG6-J1-4ta" kind="unwind" identifier="unwindToBeerList" unwindAction="unwindFromAddBeerWithSegue:" id="alV-HY-SZ8"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="abvTextField" destination="K60-kG-SrN" id="lro-KT-lXS"/>
+                        <outlet property="brewerTextField" destination="bhQ-4Y-yw6" id="ZIO-Zw-U7T"/>
+                        <outlet property="nameTextField" destination="NXD-8m-iJn" id="DKN-PO-yZ0"/>
+                        <outlet property="submitButton" destination="aGJ-rs-mP4" id="M1C-fI-G87"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="T66-kh-5G3" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="WG6-J1-4ta" userLabel="Exit" sceneMemberID="exit"/>
+            </objects>
+            <point key="canvasLocation" x="3908" y="-1039.4302848575712"/>
         </scene>
         <!--Root View Controller-->
         <scene sceneID="0tM-zV-vIc">
@@ -474,6 +595,24 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3w8-8t-Ini" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2968.8000000000002" y="-2499.400299850075"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="bf4-Ku-ol3">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="aHb-s3-hjy" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="e6Z-53-Gc7">
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="WS3-79-7In" kind="relationship" relationship="rootViewController" id="8YI-Vt-Pnl"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="7Sm-Hq-m44" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2968.8000000000002" y="-1039.4302848575712"/>
         </scene>
     </scenes>
     <resources>
