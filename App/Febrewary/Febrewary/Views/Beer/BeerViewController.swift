@@ -21,7 +21,9 @@ class BeerViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        showOrHideSearchBar()
+        DispatchQueue.main.async {
+            self.showOrHideSearchBar()
+        }
     }
     
     func showOrHideSearchBar() {
@@ -43,5 +45,14 @@ class BeerViewController: UIViewController {
     }
     
     @IBAction func tappedAdd(_ sender: Any) {
+    }
+    
+    @IBAction func unwindFromAddBeer(segue: UIStoryboardSegue) {
+        
+        DispatchQueue.main.async {
+            self.segmentedControl.selectedSegmentIndex = 0
+            self.showOrHideSearchBar()
+            self.tableView.reloadData()
+        }
     }
 }
