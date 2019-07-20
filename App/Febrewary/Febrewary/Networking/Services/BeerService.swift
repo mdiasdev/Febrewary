@@ -15,7 +15,7 @@ struct BeerService {
         self.client = client
     }
     
-    func addBeer(named name: String, from brewer: String, abv: Float, completionHandler: @escaping (Result<Void, Error>) -> Void) {
+    func addBeer(named name: String, from brewer: String, abv: Float, completionHandler: @escaping (Result<Beer, Error>) -> Void) {
         let url = URLBuilder(endpoint: .beer).buildUrl()
         
         let payload: JSON = [
@@ -26,8 +26,15 @@ struct BeerService {
         
         client.post(url: url, payload: payload) { result in
             switch result {
-            case .success(_):
-                completionHandler(.success(()))
+            case .success(let beerJson):
+                let decoder = JSONDecoder()
+                guard let data = try? JSONSerialization.data(withJSONObject: beerJson, options: .prettyPrinted),
+                    let event = try? decoder.decode(Beer.self, from: data) else {
+                        print("bad data")
+                        return
+                }
+                
+                completionHandler(.success(event))
             case .failure(let error):
                 completionHandler(.failure(error))
             }

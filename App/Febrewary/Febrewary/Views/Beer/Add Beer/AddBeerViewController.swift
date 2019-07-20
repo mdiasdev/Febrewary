@@ -14,6 +14,8 @@ class AddBeerViewController: UIViewController {
     @IBOutlet weak var abvTextField: UITextField!
     @IBOutlet weak var submitButton: UIButton!
     
+    var beer: Beer?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
