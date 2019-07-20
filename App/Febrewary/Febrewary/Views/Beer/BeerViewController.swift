@@ -27,14 +27,6 @@ class BeerViewController: UIViewController {
         self.searchBar.isHidden = true
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        DispatchQueue.main.async {
-            self.segmentDidChange(self)
-        }
-    }
-    
     func setupTable() {
         tableView.delegate = self
         tableView.dataSource = self
@@ -55,23 +47,38 @@ class BeerViewController: UIViewController {
         }
     }
     
-    func fetchBeersForCurrentUser() {
-        
-    }
-    
-    @IBAction func segmentDidChange(_ sender: Any) {
-        self.showOrHideSearchBar()
-        
-        switch self.segmentedControl.selectedSegmentIndex {
+    func updateDataSource() {
+        switch segmentedControl.selectedSegmentIndex {
         case 0:
-            self.beers = self.myBeers
+            self.beers = myBeers
         case 1:
-            self.beers = self.searchedBeers
+            self.beers = searchedBeers
         default:
             assertionFailure("unexpected segment tapped")
         }
         
-        self.tableView.reloadData()
+        tableView.reloadData()
+    }
+    
+    func fetchBeersForCurrentUser() {
+        BeerService().getBeersForCurrentUser { (result) in
+            switch result {
+            case .success(let beers):
+                self.myBeers = beers
+                DispatchQueue.main.async {
+                    self.segmentDidChange(self)
+                }
+            case .failure:
+                print("failed to get beers for current user")
+            }
+        }
+    }
+    
+    @IBAction func segmentDidChange(_ sender: Any) {
+        DispatchQueue.main.async {
+            self.showOrHideSearchBar()
+            self.updateDataSource()
+        }
     }
     
     @IBAction func unwindFromAddBeer(segue: UIStoryboardSegue) {
@@ -80,15 +87,15 @@ class BeerViewController: UIViewController {
             myBeers.append(beer)
         }
         
-        DispatchQueue.main.async {
-            self.segmentedControl.selectedSegmentIndex = 0
-            self.segmentDidChange(self)
-        }
+        self.segmentedControl.selectedSegmentIndex = 0
+        self.segmentDidChange(self)
     }
 }
 
 extension BeerViewController: UITableViewDelegate {
-    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        // TODO: go to beer details
+    }
 }
 
 extension BeerViewController: UITableViewDataSource {

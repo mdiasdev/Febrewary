@@ -41,4 +41,24 @@ struct BeerService {
         }
     }
     
+    func getBeersForCurrentUser(completionHandler: @escaping (Result<[Beer], Error>) -> Void) {
+        let url = URLBuilder(endpoint: .beer).buildUrl()
+        
+        client.get(url: url) { (result) in
+            switch result {
+            case .success(let json):
+                let decoder = JSONDecoder()
+                guard let data = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted),
+                    let events = try? decoder.decode([Beer].self, from: data) else {
+                        print("bad data")
+                        return
+                }
+                completionHandler(.success(events))
+                
+            case .failure(let error):
+                print(error)
+            }
+        }
+    }
+    
 }
