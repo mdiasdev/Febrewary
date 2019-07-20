@@ -22,6 +22,7 @@ class BeerViewController: UIViewController {
         super.viewDidLoad()
 
         setupTable()
+        fetchBeersForCurrentUser()
         
         self.searchBar.isHidden = true
     }
@@ -37,8 +38,9 @@ class BeerViewController: UIViewController {
     func setupTable() {
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.rowHeight = UITableView.automaticDimension
         
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "beerCell")
+        tableView.register(UINib(nibName: "BeerTableViewCell", bundle: Bundle.main), forCellReuseIdentifier: "beerCell")
     }
     
     func showOrHideSearchBar() {
@@ -51,6 +53,10 @@ class BeerViewController: UIViewController {
                 self.searchBar.isHidden = false
             }
         }
+    }
+    
+    func fetchBeersForCurrentUser() {
+        
     }
     
     @IBAction func segmentDidChange(_ sender: Any) {
@@ -91,15 +97,16 @@ extension BeerViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "beerCell"),
+        
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "beerCell", for: indexPath) as? BeerTableViewCell,
             beers.count > indexPath.row else {
             return UITableViewCell()
         }
         
         let beer = beers[indexPath.row]
         
-        cell.textLabel?.text = beer.name
-        cell.detailTextLabel?.text = beer.brewerName
+        cell.titleLabel?.text = beer.name
+        cell.subTitleLabel?.text = beer.brewerName
         
         return cell
     }
