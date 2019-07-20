@@ -19,7 +19,6 @@ class AddBeerViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
         submitButton.layer.cornerRadius = 8
     }
     
@@ -63,7 +62,8 @@ class AddBeerViewController: UIViewController {
             
             DispatchQueue.main.async {
                 switch result {
-                    case .success:
+                    case .success(let beer):
+                        self.beer = beer
                         self.performSegue(withIdentifier: "unwindToBeerList", sender: self)
                     case .failure(let error):
                         self.showNetworkError(error: error)

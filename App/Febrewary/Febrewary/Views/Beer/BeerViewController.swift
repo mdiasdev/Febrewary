@@ -13,9 +13,16 @@ class BeerViewController: UIViewController {
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var tableView: UITableView!
     
+    var beers = [Beer]()
+    
+    private var myBeers = [Beer]()
+    private var searchedBeers = [Beer]()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        setupTable()
+        
         self.searchBar.isHidden = true
     }
     
@@ -23,8 +30,15 @@ class BeerViewController: UIViewController {
         super.viewWillAppear(animated)
         
         DispatchQueue.main.async {
-            self.showOrHideSearchBar()
+            self.segmentDidChange(self)
         }
+    }
+    
+    func setupTable() {
+        tableView.delegate = self
+        tableView.dataSource = self
+        
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "beerCell")
     }
     
     func showOrHideSearchBar() {
@@ -40,20 +54,55 @@ class BeerViewController: UIViewController {
     }
     
     @IBAction func segmentDidChange(_ sender: Any) {
-        DispatchQueue.main.async {
-            self.showOrHideSearchBar()
+        self.showOrHideSearchBar()
+        
+        switch self.segmentedControl.selectedSegmentIndex {
+        case 0:
+            self.beers = self.myBeers
+        case 1:
+            self.beers = self.searchedBeers
+        default:
+            assertionFailure("unexpected segment tapped")
         }
-    }
-    
-    @IBAction func tappedAdd(_ sender: Any) {
+        
+        self.tableView.reloadData()
     }
     
     @IBAction func unwindFromAddBeer(segue: UIStoryboardSegue) {
         
+        if let addBeerVC = segue.source as? AddBeerViewController, let beer = addBeerVC.beer {
+            myBeers.append(beer)
+        }
+        
         DispatchQueue.main.async {
             self.segmentedControl.selectedSegmentIndex = 0
-            self.showOrHideSearchBar()
-            self.tableView.reloadData()
+            self.segmentDidChange(self)
         }
     }
+}
+
+extension BeerViewController: UITableViewDelegate {
+    
+}
+
+extension BeerViewController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return beers.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "beerCell"),
+            beers.count > indexPath.row else {
+            return UITableViewCell()
+        }
+        
+        let beer = beers[indexPath.row]
+        
+        cell.textLabel?.text = beer.name
+        cell.detailTextLabel?.text = beer.brewerName
+        
+        return cell
+    }
+    
+    
 }
