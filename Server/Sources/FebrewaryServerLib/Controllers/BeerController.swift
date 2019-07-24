@@ -5,7 +5,7 @@ import Foundation
 public class BeerController: RouteController {
     override func initRoutes() {
         routes.add(Route(method: .post, uri: "beer", handler: addBeer))
-        routes.add(Route(method: .get, uri: "beer", handler: beersForCurrentUser))
+        routes.add(Route(method: .get, uri: "beer", handler: getBeers))
         routes.add(Route(method: .get, uri: "beers", handler: allBeers))
     }
 
@@ -71,6 +71,15 @@ public class BeerController: RouteController {
         }
     }
     
+    func getBeers(request: HTTPRequest, response: HTTPResponse) {
+        if let searchQuery = request.queryParamsAsDictionary()["query"] {
+            
+            searchBeers(request: request, response: response, query: searchQuery)
+        } else {
+            beersForCurrentUser(request: request, response: response)
+        }
+    }
+    
     func beersForCurrentUser(request: HTTPRequest, response: HTTPResponse) {
         guard request.hasValidToken(), let email = request.emailFromAuthToken() else {
             response.setBody(string: "Unauthorized")
@@ -100,6 +109,34 @@ public class BeerController: RouteController {
             
         } catch {
             
+        }
+    }
+    
+    func searchBeers(request: HTTPRequest, response: HTTPResponse, query: String) {
+        do {
+            var responseJson = [[String: Any]]()
+            var uniqueBeers: Set<Beer> = []
+            
+            let beers = Beer()
+            try beers.select(whereclause: "LOWER(name) ~ LOWER($1)", params: [query], orderby: ["name"])
+            for beer in beers.rows() {
+                uniqueBeers.insert(beer)
+            }
+            
+            let brewers = Beer()
+            try brewers.select(whereclause: "LOWER(brewer) ~ LOWER($1)", params: [query], orderby: ["brewer"])
+            for brewer in brewers.rows() {
+                uniqueBeers.insert(brewer)
+            }
+            
+            for uniqueBeer in uniqueBeers {
+                responseJson.append(uniqueBeer.asDictionary())
+            }
+            
+            try response.setBody(json: responseJson).completed(status: .ok)
+            
+        } catch {
+            response.completed(status: .internalServerError)
         }
     }
 

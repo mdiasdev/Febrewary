@@ -58,3 +58,15 @@ class Beer: PostgresStORM {
         ]
     }
 }
+
+extension Beer: Equatable {
+    static func == (lhs: Beer, rhs: Beer) -> Bool {
+        return lhs.id == rhs.id
+    }
+}
+
+extension Beer: Hashable {
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+}
