@@ -100,6 +100,13 @@ class BeerViewController: UIViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        defer {
+            selectedBeer = nil
+            if let selectedRow = tableView.indexPathForSelectedRow {
+                tableView.deselectRow(at: selectedRow, animated: false)
+            }
+        }
+        
         guard let beerDetails = segue.destination as? BeerDetailsViewController, selectedBeer != nil else { return }
         
         beerDetails.beer = selectedBeer
