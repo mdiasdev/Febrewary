@@ -118,13 +118,13 @@ public class BeerController: RouteController {
             var uniqueBeers: Set<Beer> = []
             
             let beers = Beer()
-            try beers.select(whereclause: "name ~ $1", params: [query], orderby: ["name"])
+            try beers.select(whereclause: "LOWER(name) ~ LOWER($1)", params: [query], orderby: ["name"])
             for beer in beers.rows() {
                 uniqueBeers.insert(beer)
             }
             
             let brewers = Beer()
-            try brewers.select(whereclause: "brewer ~ $1", params: [query], orderby: ["brewer"])
+            try brewers.select(whereclause: "LOWER(brewer) ~ LOWER($1)", params: [query], orderby: ["brewer"])
             for brewer in brewers.rows() {
                 uniqueBeers.insert(brewer)
             }
