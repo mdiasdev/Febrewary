@@ -17,10 +17,18 @@ class BeerDetailsViewController: UIViewController {
     
     var beer: Beer!
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        setLabels()
+    }
+    
+    func setLabels() {
+        nameLabel.text = beer.name
+        brewerLabel.text = beer.brewerName
+        abvLabel.text = "\(beer.abv) %"
+        averageLabel.text = String(format: "%.2f", beer.averageScore)
+        totalLabel.text = "\(beer.totalScore)"
     }
 
 }

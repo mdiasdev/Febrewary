@@ -14,6 +14,7 @@ class BeerViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     
     var beers = [Beer]()
+    var selectedBeer: Beer?
     
     private var myBeers = [Beer]()
     private var searchedBeers = [Beer]()
@@ -31,6 +32,7 @@ class BeerViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.rowHeight = UITableView.automaticDimension
+        tableView.tableFooterView = UIView()
         
         tableView.register(UINib(nibName: "BeerTableViewCell", bundle: Bundle.main), forCellReuseIdentifier: "beerCell")
     }
@@ -90,11 +92,21 @@ class BeerViewController: UIViewController {
         self.segmentedControl.selectedSegmentIndex = 0
         self.segmentDidChange(self)
     }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        guard let beerDetails = segue.destination as? BeerDetailsViewController, selectedBeer != nil else { return }
+        
+        beerDetails.beer = selectedBeer
+    }
 }
 
 extension BeerViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        // TODO: go to beer details
+        guard beers.count > indexPath.row else { return }
+        
+        selectedBeer = beers[indexPath.row]
+        
+        performSegue(withIdentifier: "beerDetails", sender: self)
     }
 }
 
