@@ -9,9 +9,13 @@
 import Foundation
 
 struct Beer {
-    // TODO: Make this
+    var id: Int
     var name: String
     var brewerName: String
+    var abv: Double
+    var addedBy: Int
+    var averageScore: Double
+    var totalScore: Double
 }
 
 extension Beer: Codable { }
