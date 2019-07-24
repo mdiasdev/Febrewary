@@ -25,7 +25,8 @@ class BeerViewController: UIViewController {
         setupTable()
         fetchBeersForCurrentUser()
         
-        self.searchBar.isHidden = true
+        searchBar.isHidden = true
+        tableView.isHidden = true
     }
     
     func setupTable() {
@@ -59,7 +60,12 @@ class BeerViewController: UIViewController {
             assertionFailure("unexpected segment tapped")
         }
         
-        tableView.reloadData()
+        if beers.count == 0  {
+            tableView.isHidden = true
+        } else {
+            tableView.isHidden = false
+            tableView.reloadData()
+        }
     }
     
     func fetchBeersForCurrentUser() {
