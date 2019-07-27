@@ -20,6 +20,7 @@ class BeerViewController: UIViewController {
     private var searchedBeers = [Beer]()
     
     var searchTimer: Timer?
+    var searchText: String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -90,6 +91,8 @@ class BeerViewController: UIViewController {
     func search() {
         guard let searchText = searchBar.text else { return }
         
+        self.searchText = searchText
+        
         BeerService().search(for: searchText) { result in
             switch result {
             case .success(let beers):
@@ -158,8 +161,20 @@ extension BeerViewController: UITableViewDataSource {
         
         let beer = beers[indexPath.row]
         
-        cell.titleLabel?.text = beer.name
-        cell.subTitleLabel?.text = beer.brewerName
+        if let searchText = searchText {
+            let attributedTitle = NSMutableAttributedString(string: beer.name)
+            let attributedSubtitle = NSMutableAttributedString(string: beer.brewerName)
+            let underlineAttribute = [NSAttributedString.Key.underlineStyle: NSUnderlineStyle.single.rawValue]
+            
+            attributedTitle.addAttributes(underlineAttribute, range: (beer.name as NSString).range(of: searchText))
+            attributedSubtitle.addAttributes(underlineAttribute, range: (beer.brewerName as NSString).range(of: searchText))
+            
+            cell.titleLabel.attributedText = attributedTitle
+            cell.subTitleLabel.attributedText = attributedSubtitle
+        } else {
+            cell.titleLabel?.text = beer.name
+            cell.subTitleLabel?.text = beer.brewerName
+        }
         
         return cell
     }  
