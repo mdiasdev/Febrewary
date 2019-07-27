@@ -17,6 +17,13 @@ class BeerDetailsViewController: UIViewController {
     @IBOutlet weak var addButton: UIButton!
     
     var beer: Beer!
+    var events = [Event]()
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        events = (events as NSArray).retrieve() as? [Event] ?? []
+    }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -33,7 +40,21 @@ class BeerDetailsViewController: UIViewController {
         averageLabel.text = String(format: "%.2f", beer.averageScore)
         totalLabel.text = "\(beer.totalScore)"
     }
+    
+    func addTo(event: Event) {
+        print(event.name)
+    }
 
     @IBAction func addToEventTapped(_ sender: Any) {
+        let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        actionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        
+        for event in events {
+            actionSheet.addAction(UIAlertAction(title: event.name, style: .default, handler: { _ in
+                self.addTo(event: event)
+            }))
+        }
+        
+        present(actionSheet, animated: true, completion: nil)
     }
 }
