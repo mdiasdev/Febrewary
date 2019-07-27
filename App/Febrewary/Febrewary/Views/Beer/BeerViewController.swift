@@ -19,11 +19,16 @@ class BeerViewController: UIViewController {
     private var myBeers = [Beer]()
     private var searchedBeers = [Beer]()
     
+    var searchTimer: Timer?
+    var searchText: String?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         setupTable()
         fetchBeersForCurrentUser()
+        
+        searchBar.delegate = self
         
         searchBar.isHidden = true
         tableView.isHidden = true
@@ -69,10 +74,29 @@ class BeerViewController: UIViewController {
     }
     
     func fetchBeersForCurrentUser() {
-        BeerService().getBeersForCurrentUser { (result) in
+        BeerService().getBeersForCurrentUser { result in
             switch result {
             case .success(let beers):
                 self.myBeers = beers
+                DispatchQueue.main.async {
+                    self.segmentDidChange(self)
+                }
+            case .failure:
+                print("failed to get beers for current user")
+            }
+        }
+    }
+    
+    @objc
+    func search() {
+        guard let searchText = searchBar.text else { return }
+        
+        self.searchText = searchText
+        
+        BeerService().search(for: searchText) { result in
+            switch result {
+            case .success(let beers):
+                self.searchedBeers = beers
                 DispatchQueue.main.async {
                     self.segmentDidChange(self)
                 }
@@ -137,11 +161,29 @@ extension BeerViewController: UITableViewDataSource {
         
         let beer = beers[indexPath.row]
         
-        cell.titleLabel?.text = beer.name
-        cell.subTitleLabel?.text = beer.brewerName
+        if let searchText = searchText {
+            let attributedTitle = NSMutableAttributedString(string: beer.name)
+            let attributedSubtitle = NSMutableAttributedString(string: beer.brewerName)
+            let underlineAttribute = [NSAttributedString.Key.underlineStyle: NSUnderlineStyle.single.rawValue]
+            
+            attributedTitle.addAttributes(underlineAttribute, range: (beer.name as NSString).range(of: searchText))
+            attributedSubtitle.addAttributes(underlineAttribute, range: (beer.brewerName as NSString).range(of: searchText))
+            
+            cell.titleLabel.attributedText = attributedTitle
+            cell.subTitleLabel.attributedText = attributedSubtitle
+        } else {
+            cell.titleLabel?.text = beer.name
+            cell.subTitleLabel?.text = beer.brewerName
+        }
         
         return cell
+    }  
+}
+
+extension BeerViewController: UISearchBarDelegate {
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        searchTimer?.invalidate()
+        searchTimer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(search), userInfo: nil, repeats: false)
     }
-    
-    
 }

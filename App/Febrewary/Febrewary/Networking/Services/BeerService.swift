@@ -29,12 +29,12 @@ struct BeerService {
             case .success(let beerJson):
                 let decoder = JSONDecoder()
                 guard let data = try? JSONSerialization.data(withJSONObject: beerJson, options: .prettyPrinted),
-                    let event = try? decoder.decode(Beer.self, from: data) else {
+                    let beer = try? decoder.decode(Beer.self, from: data) else {
                         print("bad data")
                         return
                 }
                 
-                completionHandler(.success(event))
+                completionHandler(.success(beer))
             case .failure(let error):
                 completionHandler(.failure(error))
             }
@@ -49,11 +49,31 @@ struct BeerService {
             case .success(let json):
                 let decoder = JSONDecoder()
                 guard let data = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted),
-                    let events = try? decoder.decode([Beer].self, from: data) else {
+                    let beers = try? decoder.decode([Beer].self, from: data) else {
                         print("bad data")
                         return
                 }
-                completionHandler(.success(events))
+                completionHandler(.success(beers))
+                
+            case .failure(let error):
+                print(error)
+            }
+        }
+    }
+    
+    func search(for query: String, completionHandler: @escaping (Result<[Beer], Error>) -> Void) {
+        let url = URLBuilder(endpoint: .beer).buildUrl(components: [("query", query)])
+        
+        client.get(url: url) { result in
+            switch result {
+            case .success(let json):
+                let decoder = JSONDecoder()
+                guard let data = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted),
+                    let beers = try? decoder.decode([Beer].self, from: data) else {
+                        print("bad data")
+                        return
+                }
+                completionHandler(.success(beers))
                 
             case .failure(let error):
                 print(error)
