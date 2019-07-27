@@ -14,11 +14,14 @@ class BeerDetailsViewController: UIViewController {
     @IBOutlet weak var abvLabel: UILabel!
     @IBOutlet weak var averageLabel: UILabel!
     @IBOutlet weak var totalLabel: UILabel!
+    @IBOutlet weak var addButton: UIButton!
     
     var beer: Beer!
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
+        addButton.layer.cornerRadius = 8
         
         setLabels()
     }
@@ -31,4 +34,6 @@ class BeerDetailsViewController: UIViewController {
         totalLabel.text = "\(beer.totalScore)"
     }
 
+    @IBAction func addToEventTapped(_ sender: Any) {
+    }
 }

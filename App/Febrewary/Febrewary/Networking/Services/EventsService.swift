@@ -71,4 +71,21 @@ struct EventsService {
             }
         }
     }
+    
+    func addBeer(_ beerId: Int, to event: Event, completionHandler: @escaping (Result<Void, Error>) -> Void) {
+        let url = URLBuilder(endpoint: .event).buildUrl().appendingPathComponent("\(event.id)/beer")
+        
+        let payload: JSON = [
+            "beerId": beerId
+        ]
+        
+        client.post(url: url, payload: payload) { result in
+            switch result {
+            case .success:
+                completionHandler(.success(()))
+            case .failure(let error):
+                completionHandler(.failure(error))
+            }
+        }
+    }
 }

@@ -114,7 +114,7 @@ public class EventController: RouteController {
             }
             
             let allEvents = Event()
-            try allEvents.findAll() // TODO: performance?
+            try allEvents.findAll() // TODO: performance?  --> replace with select statement (see beer search)
             
             let userEvents = allEvents.rows().filter { $0.drinkerIds.contains(user.id) }
             var responseJson = [[String: Any]]()

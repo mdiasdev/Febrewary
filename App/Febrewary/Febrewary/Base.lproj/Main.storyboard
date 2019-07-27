@@ -735,19 +735,37 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZI4-Ch-o6Y">
+                                <rect key="frame" x="60" y="297" width="255" height="50"/>
+                                <color key="backgroundColor" red="0.84705882349999995" green="0.84705882349999995" blue="0.84705882349999995" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="riU-gS-kwe"/>
+                                </constraints>
+                                <state key="normal" title="Add To Event">
+                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="addToEventTapped:" destination="cqN-Bu-VcO" eventType="touchUpInside" id="as2-7z-Vwg"/>
+                                    <action selector="didTapSubmit:" destination="5SO-ND-g7u" eventType="touchUpInside" id="Fyy-sp-f6F"/>
+                                    <action selector="tappedAddBeer:" destination="WS3-79-7In" eventType="touchUpInside" id="Zb6-tH-kWh"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstItem="bXU-Wm-ffP" firstAttribute="trailing" secondItem="ZI4-Ch-o6Y" secondAttribute="trailing" constant="60" id="1K4-u5-M1q"/>
                             <constraint firstItem="0AE-pf-3T3" firstAttribute="leading" secondItem="YjW-ef-DCP" secondAttribute="trailing" constant="8" id="1bJ-BG-LZt"/>
                             <constraint firstItem="YWz-gL-0ZU" firstAttribute="top" secondItem="YjW-ef-DCP" secondAttribute="bottom" constant="8" id="1nm-uY-Ne6"/>
                             <constraint firstItem="YjW-ef-DCP" firstAttribute="leading" secondItem="WCt-ZB-VaL" secondAttribute="leading" id="3E6-v0-FfB"/>
                             <constraint firstItem="PLK-mM-GY7" firstAttribute="leading" secondItem="WCt-ZB-VaL" secondAttribute="leading" id="7mC-jK-2Nr"/>
                             <constraint firstItem="bXU-Wm-ffP" firstAttribute="trailing" secondItem="r7e-Vh-4iO" secondAttribute="trailing" constant="16" id="7sl-jU-nmo"/>
+                            <constraint firstItem="ZI4-Ch-o6Y" firstAttribute="top" secondItem="afM-cj-o0O" secondAttribute="bottom" constant="40" id="8KG-3S-Czq"/>
                             <constraint firstItem="bXU-Wm-ffP" firstAttribute="trailing" secondItem="lW1-W4-CEn" secondAttribute="trailing" constant="16" id="BSd-4y-DAG"/>
                             <constraint firstItem="afM-cj-o0O" firstAttribute="leading" secondItem="WCt-ZB-VaL" secondAttribute="leading" id="Gof-hC-dCE"/>
                             <constraint firstItem="mVm-Y4-zWu" firstAttribute="leading" secondItem="YWz-gL-0ZU" secondAttribute="trailing" constant="8" id="Hif-Zw-1Wb"/>
                             <constraint firstItem="eWg-gK-px1" firstAttribute="top" secondItem="mVm-Y4-zWu" secondAttribute="bottom" constant="8" id="K8F-Tx-pgR"/>
                             <constraint firstItem="0AE-pf-3T3" firstAttribute="top" secondItem="lW1-W4-CEn" secondAttribute="bottom" constant="8" id="KpX-VO-WAm"/>
+                            <constraint firstItem="ZI4-Ch-o6Y" firstAttribute="leading" secondItem="bXU-Wm-ffP" secondAttribute="leading" constant="60" id="OoE-Kk-w9D"/>
                             <constraint firstItem="bXU-Wm-ffP" firstAttribute="trailing" secondItem="mVm-Y4-zWu" secondAttribute="trailing" constant="16" id="PPu-F3-hU7"/>
                             <constraint firstItem="bXU-Wm-ffP" firstAttribute="trailing" secondItem="eWg-gK-px1" secondAttribute="trailing" constant="16" id="QCh-hK-6t4"/>
                             <constraint firstItem="WCt-ZB-VaL" firstAttribute="top" secondItem="bXU-Wm-ffP" secondAttribute="top" constant="56" id="QGh-ON-And"/>
@@ -768,6 +786,7 @@
                     </view>
                     <connections>
                         <outlet property="abvLabel" destination="mVm-Y4-zWu" id="acR-Wp-NAJ"/>
+                        <outlet property="addButton" destination="ZI4-Ch-o6Y" id="Z8M-Qp-lGu"/>
                         <outlet property="averageLabel" destination="eWg-gK-px1" id="tWw-jD-Dou"/>
                         <outlet property="brewerLabel" destination="0AE-pf-3T3" id="adN-gK-s5g"/>
                         <outlet property="nameLabel" destination="lW1-W4-CEn" id="y3x-kJ-wDX"/>

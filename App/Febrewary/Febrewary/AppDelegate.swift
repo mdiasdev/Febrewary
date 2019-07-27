@@ -15,31 +15,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-
-//        window = UIWindow(frame: UIScreen.main.bounds)
-//        let storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)
-//        let today = Date()
-//        let dateFormatter = DateFormatter()
-//        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
-//
-//        // TODO: cleanup stringy things
-//        guard let token = UserDefaults.standard.string(forKey: "token"),
-//              let expirationString = UserDefaults.standard.object(forKey: "tokenExpiration") as? String,
-//              let expirationDate = dateFormatter.date(from: expirationString),
-//              today < expirationDate else {
-//                presentTokenScreen(from: storyboard)
-//                return true
-//        }
-//
-//        if token.hasPrefix("P-") || token.hasPrefix("D-") {
-//            let enterBeerScreen = storyboard.instantiateViewController(withIdentifier: "EnterBeerScreen")
-//
-//            window?.rootViewController = enterBeerScreen
-//            window?.makeKeyAndVisible()
-//        } else {
-//            presentTokenScreen(from: storyboard)
-//        }
-
         return true
     }
 
