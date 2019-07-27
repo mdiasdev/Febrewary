@@ -61,4 +61,9 @@ struct BeerService {
         }
     }
     
+    func search(for query: String, completionHandler: @escaping (Result<[Beer], Error>) -> Void) {
+        // localhost:8080/beer?query="So"
+        let url = URLBuilder(endpoint: .beer).buildUrl(components: [("query", query)])
+    }
+    
 }

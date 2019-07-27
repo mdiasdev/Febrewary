@@ -73,7 +73,7 @@ class BeerViewController: UIViewController {
     }
     
     func fetchBeersForCurrentUser() {
-        BeerService().getBeersForCurrentUser { (result) in
+        BeerService().getBeersForCurrentUser { result in
             switch result {
             case .success(let beers):
                 self.myBeers = beers
@@ -89,7 +89,10 @@ class BeerViewController: UIViewController {
     @objc
     func search() {
         guard let searchText = searchBar.text else { return }
-        print(searchText)
+        
+        BeerService().search(for: searchText) { result in
+            
+        }
     }
     
     @IBAction func segmentDidChange(_ sender: Any) {
