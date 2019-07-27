@@ -91,7 +91,15 @@ class BeerViewController: UIViewController {
         guard let searchText = searchBar.text else { return }
         
         BeerService().search(for: searchText) { result in
-            
+            switch result {
+            case .success(let beers):
+                self.searchedBeers = beers
+                DispatchQueue.main.async {
+                    self.segmentDidChange(self)
+                }
+            case .failure:
+                print("failed to get beers for current user")
+            }
         }
     }
     
