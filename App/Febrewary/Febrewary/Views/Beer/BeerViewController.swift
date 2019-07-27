@@ -19,11 +19,15 @@ class BeerViewController: UIViewController {
     private var myBeers = [Beer]()
     private var searchedBeers = [Beer]()
     
+    var searchTimer: Timer?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         setupTable()
         fetchBeersForCurrentUser()
+        
+        searchBar.delegate = self
         
         searchBar.isHidden = true
         tableView.isHidden = true
@@ -80,6 +84,12 @@ class BeerViewController: UIViewController {
                 print("failed to get beers for current user")
             }
         }
+    }
+    
+    @objc
+    func search() {
+        guard let searchText = searchBar.text else { return }
+        print(searchText)
     }
     
     @IBAction func segmentDidChange(_ sender: Any) {
@@ -141,7 +151,13 @@ extension BeerViewController: UITableViewDataSource {
         cell.subTitleLabel?.text = beer.brewerName
         
         return cell
+    }  
+}
+
+extension BeerViewController: UISearchBarDelegate {
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        searchTimer?.invalidate()
+        searchTimer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(search), userInfo: nil, repeats: false)
     }
-    
-    
 }
