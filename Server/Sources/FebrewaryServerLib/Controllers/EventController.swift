@@ -114,7 +114,7 @@ public class EventController: RouteController {
             }
             
             let allEvents = Event()
-            try allEvents.findAll() // TODO: performance?
+            try allEvents.findAll() // TODO: performance?  --> replace with select statement (see beer search)
             
             let userEvents = allEvents.rows().filter { $0.drinkerIds.contains(user.id) }
             var responseJson = [[String: Any]]()
@@ -185,7 +185,7 @@ public class EventController: RouteController {
             
             let eventBeer = EventBeer()
             
-            try eventBeer.find([("userId", user.id)])
+            try eventBeer.find([("userId", user.id), ("eventId", event.id)])
             
             guard eventBeer.id == 0 else {
                 response.setBody(string: "User has already added a beer to this event")
@@ -204,7 +204,7 @@ public class EventController: RouteController {
             event.eventBeerIds.append(eventBeer.id)
             try event.save()
             
-            response.completed(status: .created)
+            try response.setBody(json: [String: Any]()).completed(status: .created)
             
         } catch {
             response.completed(status: .internalServerError)

@@ -19,6 +19,7 @@ class EventsViewController: UIViewController {
     private var upcommingEvents = [Event]() {
         didSet {
             eventsTable.upcommingEvents = upcommingEvents
+            (upcommingEvents as NSArray).save()
         }
     }
     private var pastEvents = [Event]() {

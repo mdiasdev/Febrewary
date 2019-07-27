@@ -15,7 +15,7 @@ struct Event {
     let date: Date
     let pourerId: Int
     let attendees: [User]
-    let eventBeers: [Beer] // FIXME: EventBeer when it exists
+    let eventBeers: [EventBeer]
 }
 
 extension Event: Codable { }
