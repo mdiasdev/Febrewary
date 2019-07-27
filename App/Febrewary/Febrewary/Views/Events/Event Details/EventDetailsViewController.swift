@@ -95,8 +95,8 @@ extension EventDetailsViewController: UITableViewDataSource {
         case 1:
             let cell = tableView.dequeueReusableCell(withIdentifier: "beerCell", for: indexPath)
             
-            cell.textLabel?.text = event.eventBeers[indexPath.row].name
-            cell.detailTextLabel?.text = event.eventBeers[indexPath.row].brewerName
+            cell.textLabel?.text = event.eventBeers[indexPath.row].beer.name
+            cell.detailTextLabel?.text = event.eventBeers[indexPath.row].beer.brewerName
             
             return cell
         default:
