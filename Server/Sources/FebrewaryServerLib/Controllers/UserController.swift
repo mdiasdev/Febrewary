@@ -10,7 +10,7 @@ import PerfectHTTP
 import PerfectCrypto
 import StORM
 
-public class UserController: RouteController {
+public class UserController: Router {
     override func initRoutes() {
         routes.add(Route(method: .get, uri: "user", handler: getCurrentUser))
         routes.add(Route(method: .get, uri: "user/{id}", handler: getUserById))

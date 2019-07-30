@@ -2,7 +2,7 @@ import PerfectHTTP
 import StORM
 import Foundation
 
-public class BeerController: RouteController {
+public class BeerController: Router {
     override func initRoutes() {
         routes.add(Route(method: .post, uri: "beer", handler: addBeer))
         routes.add(Route(method: .get, uri: "beer", handler: getBeers))

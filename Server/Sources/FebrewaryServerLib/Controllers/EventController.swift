@@ -1,7 +1,7 @@
 import PerfectHTTP
 import StORM
 
-public class EventController: RouteController {
+public class EventController: Router {
     override func initRoutes() {
         routes.add(method: .post, uri: "/event", handler: createEvent)
         routes.add(method: .get, uri: "/event/{id}", handler: getEvent)
