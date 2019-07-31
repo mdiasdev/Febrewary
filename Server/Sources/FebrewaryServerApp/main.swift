@@ -13,7 +13,6 @@ DatabaseController.registerTables()
 
 server.addRoutes(AuthRouter().routes)
 server.addRoutes(BeerRouter().routes)
-server.addRoutes(DrinkerController().routes)
 server.addRoutes(EventController().routes)
 server.addRoutes(UserController().routes)
 
