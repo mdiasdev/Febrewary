@@ -46,6 +46,21 @@ class User: PostgresStORM {
         return users
     }
     
+    func getAll() throws {
+        try findAll()
+    }
+    
+    func get(_ data: [String: Any]) throws {
+        try find(data)
+    }
+    
+    func store(set: (Any) -> Void) throws {
+        try save(set: set)
+    }
+}
+
+// MARK: - Data Representation
+extension User {
     func asDictionary() -> [String: Any] {
         return [
             "id": self.id,

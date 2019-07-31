@@ -14,7 +14,7 @@ DatabaseController.registerTables()
 server.addRoutes(AuthRouter().routes)
 server.addRoutes(BeerRouter().routes)
 server.addRoutes(EventRouter().routes)
-server.addRoutes(UserController().routes)
+server.addRoutes(UserRouter().routes)
 
 do {
     try server.start()

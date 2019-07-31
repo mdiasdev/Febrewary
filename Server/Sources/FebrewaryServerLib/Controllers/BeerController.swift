@@ -78,7 +78,7 @@ class BeerController {
                 return
             }
             
-            try beers.find([("addedBy", user.id)])
+            try beers.find(["addedBy": user.id])
             
             var responseJson = [[String: Any]]()
             for beer in beers.rows() {

@@ -153,7 +153,7 @@ class EventController {
                 return
             }
             
-            try event.find([("id", id)])
+            try event.find(["id": id])
             
             guard event.id > 0 else {
                 response.setBody(string: "Could not find event with id: \(id).")
@@ -167,7 +167,10 @@ class EventController {
                 return
             }
             
-            try eventBeer.find([("userId", user.id), ("eventId", event.id)])
+            try eventBeer.find([
+                "userId": user.id,
+                "eventId": event.id
+                ])
             
             guard eventBeer.id == 0 else {
                 response.setBody(string: "User has already added a beer to this event")
