@@ -2,23 +2,15 @@ import PerfectHTTP
 import StORM
 import Foundation
 
-public class BeerController: Router {
-    override func initRoutes() {
-        routes.add(Route(method: .post, uri: "beer", handler: addBeer))
-        routes.add(Route(method: .get, uri: "beer", handler: getBeers))
-        routes.add(Route(method: .get, uri: "beers", handler: allBeers))
-    }
-
-    func addBeer(request: HTTPRequest, response: HTTPResponse) {
+public class BeerController {
+    func addBeer(request: HTTPRequest, response: HTTPResponse, user: User = User(), beer: Beer = Beer()) {
         do {
-            
             guard request.hasValidToken(), let email = request.emailFromAuthToken() else {
                 response.setBody(string: "Unauthorized")
                         .completed(status: .unauthorized)
                 return
             }
             
-            let user = User()
             try user.find(["email": email])
             
             guard user.id != 0 else {
@@ -41,7 +33,6 @@ public class BeerController: Router {
                 return
             }
 
-            let beer = Beer()
             try beer.find(
                 ["name": beerName,
                  "brewer": brewerName
@@ -71,16 +62,7 @@ public class BeerController: Router {
         }
     }
     
-    func getBeers(request: HTTPRequest, response: HTTPResponse) {
-        if let searchQuery = request.queryParamsAsDictionary()["query"] {
-            
-            searchBeers(request: request, response: response, query: searchQuery)
-        } else {
-            beersForCurrentUser(request: request, response: response)
-        }
-    }
-    
-    func beersForCurrentUser(request: HTTPRequest, response: HTTPResponse) {
+    func beersForCurrentUser(request: HTTPRequest, response: HTTPResponse, user: User = User(), beers: Beer = Beer()) {
         guard request.hasValidToken(), let email = request.emailFromAuthToken() else {
             response.setBody(string: "Unauthorized")
                 .completed(status: .unauthorized)
@@ -88,7 +70,6 @@ public class BeerController: Router {
         }
         
         do {
-            let user = User()
             try user.find(["email": email])
             
             guard user.id != 0 else {
@@ -97,7 +78,6 @@ public class BeerController: Router {
                 return
             }
             
-            let beers = Beer()
             try beers.find([("addedBy", user.id)])
             
             var responseJson = [[String: Any]]()
@@ -112,18 +92,16 @@ public class BeerController: Router {
         }
     }
     
-    func searchBeers(request: HTTPRequest, response: HTTPResponse, query: String) {
+    func searchBeers(request: HTTPRequest, response: HTTPResponse, query: String, beers: Beer = Beer(), brewers: Beer = Beer()) {
         do {
             var responseJson = [[String: Any]]()
             var uniqueBeers: Set<Beer> = []
             
-            let beers = Beer()
             try beers.select(whereclause: "LOWER(name) ~ LOWER($1)", params: [query], orderby: ["name"])
             for beer in beers.rows() {
                 uniqueBeers.insert(beer)
             }
             
-            let brewers = Beer()
             try brewers.select(whereclause: "LOWER(brewer) ~ LOWER($1)", params: [query], orderby: ["brewer"])
             for brewer in brewers.rows() {
                 uniqueBeers.insert(brewer)
@@ -140,13 +118,12 @@ public class BeerController: Router {
         }
     }
 
-    func allBeers(request: HTTPRequest, response: HTTPResponse) {
+    func allBeers(request: HTTPRequest, response: HTTPResponse, beers: Beer = Beer()) {
         do {
-            let objectQuery = Beer()
-            try objectQuery.findAll()
+            try beers.findAll()
             var responseJson: [[String: Any]] = []
 
-            for row in objectQuery.rows() {
+            for row in beers.rows() {
                 responseJson.append(row.asDictionary())
             }
 
