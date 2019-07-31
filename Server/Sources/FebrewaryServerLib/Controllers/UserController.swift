@@ -10,15 +10,8 @@ import PerfectHTTP
 import PerfectCrypto
 import StORM
 
-public class UserController: Router {
-    override func initRoutes() {
-        routes.add(Route(method: .get, uri: "user", handler: getCurrentUser))
-        routes.add(Route(method: .get, uri: "user/{id}", handler: getUserById))
-        routes.add(Route(method: .get, uri: "users", handler: getAllUsers))
-    }
-    
-    // MARK: - Endpoints
-    func getCurrentUser(request: HTTPRequest, response: HTTPResponse) {
+class UserController {
+    func getCurrentUser(request: HTTPRequest, response: HTTPResponse, user: User = User()) {
         guard request.hasValidToken() else {
             response.setBody(string: "Unauthenicated user. Please login and try again.")
                     .completed(status: .unauthorized)
@@ -32,7 +25,6 @@ public class UserController: Router {
         }
         
         do {
-            let user = User()
             try user.find(["email": email])
             
             guard user.id > 0 else {
@@ -50,7 +42,7 @@ public class UserController: Router {
         }
     }
     
-    func getUserById(request: HTTPRequest, response: HTTPResponse) {
+    func getUserById(request: HTTPRequest, response: HTTPResponse, user: User = User()) {
         guard request.hasValidToken() else {
             response.setBody(string: "Unauthenicated user. Please login and try again.")
                     .completed(status: .unauthorized)
@@ -64,7 +56,6 @@ public class UserController: Router {
         }
         
         do {
-            let user = User()
             try user.get(id)
             
             guard user.id > 0 else {
@@ -82,7 +73,7 @@ public class UserController: Router {
         }
     }
     
-    func getAllUsers(request: HTTPRequest, response: HTTPResponse) {
+    func getAllUsers(request: HTTPRequest, response: HTTPResponse, users: User = User()) {
         guard request.hasValidToken() else {
             response.setBody(string: "Unauthenicated user. Please login and try again.")
                     .completed(status: .unauthorized)
@@ -90,7 +81,6 @@ public class UserController: Router {
         }
         
         do {
-            let users = User()
             try users.findAll()
             
             guard users.rows().count > 0 else {

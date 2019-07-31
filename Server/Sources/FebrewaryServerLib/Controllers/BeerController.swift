@@ -2,7 +2,7 @@ import PerfectHTTP
 import StORM
 import Foundation
 
-public class BeerController {
+class BeerController {
     func addBeer(request: HTTPRequest, response: HTTPResponse, user: User = User(), beer: Beer = Beer()) {
         do {
             guard request.hasValidToken(), let email = request.emailFromAuthToken() else {

@@ -1,9 +1,7 @@
 import PerfectHTTP
 import StORM
 
-public class EventController: Router {
-    
-    
+class EventController {
     func createEvent(request: HTTPRequest, response: HTTPResponse, user: User = User(), event: Event = Event()) {
         guard request.hasValidToken() else {
             response.setBody(string: "Unauthorized")
