@@ -2,14 +2,9 @@ import PerfectHTTP
 import StORM
 
 public class EventController: Router {
-    override func initRoutes() {
-        routes.add(method: .post, uri: "/event", handler: createEvent)
-        routes.add(method: .get, uri: "/event/{id}", handler: getEvent)
-        routes.add(method: .get, uri: "/event", handler: getEventForUser)
-        routes.add(method: .post, uri: "/event/{id}/beer", handler: addEventBeer)
-    }
     
-    func createEvent(request: HTTPRequest, response: HTTPResponse) {
+    
+    func createEvent(request: HTTPRequest, response: HTTPResponse, user: User = User(), event: Event = Event()) {
         guard request.hasValidToken() else {
             response.setBody(string: "Unauthorized")
                     .completed(status: .unauthorized)
@@ -22,7 +17,8 @@ public class EventController: Router {
             return
         }
         
-        guard let postBody = try? request.postBodyString?.jsonDecode() as? [String: Any], let json = postBody else {
+        guard let postBody = try? request.postBodyString?.jsonDecode() as? [String: Any],
+              let json = postBody else {
             response.setBody(string: "Bad Request: malformed json")
                     .completed(status: .badRequest)
             return
@@ -43,8 +39,6 @@ public class EventController: Router {
         }
         
         do {
-            
-            let user = User()
             try user.find(["email": email])
             
             guard user.id > 0 else {
@@ -56,8 +50,6 @@ public class EventController: Router {
             if !attendees.contains(user.id){
                 attendees.append(user.id)
             }
-            
-            let event = Event()
             
             event.name = name
             event.date = date
@@ -96,7 +88,7 @@ public class EventController: Router {
         response.completed(status: .notFound)
     }
     
-    func getEventForUser(request: HTTPRequest, response: HTTPResponse) {
+    func getEventForUser(request: HTTPRequest, response: HTTPResponse, user: User = User(), events: Event = Event()) {
         guard request.hasValidToken(), let email = request.emailFromAuthToken() else {
             response.setBody(string: "Unauthorized")
                     .completed(status: .unauthorized)
@@ -104,7 +96,6 @@ public class EventController: Router {
         }
         
         do {
-            let user = User()
             try user.find(["email": email])
 
             guard user.id != 0 else {
@@ -113,13 +104,10 @@ public class EventController: Router {
                 return
             }
             
-            let allEvents = Event()
-            try allEvents.findAll() // TODO: performance?  --> replace with select statement (see beer search)
-            
-            let userEvents = allEvents.rows().filter { $0.drinkerIds.contains(user.id) }
+            try events.select(whereclause: "drinkerIds ~ $1", params: [user.id], orderby: ["id"])
             var responseJson = [[String: Any]]()
             
-            for event in userEvents {
+            for event in events.rows() {
                 responseJson.append(event.asDictionary())
             }
             
@@ -133,10 +121,10 @@ public class EventController: Router {
         response.completed(status: .internalServerError)
     }
     
-    func addEventBeer (request: HTTPRequest, response: HTTPResponse) {
+    func addEventBeer(request: HTTPRequest, response: HTTPResponse, user: User = User(), event: Event = Event(), eventBeer: EventBeer = EventBeer()) {
         guard request.hasValidToken(), let email = request.emailFromAuthToken() else {
             response.setBody(string: "Unauthorized")
-                .completed(status: .unauthorized)
+                    .completed(status: .unauthorized)
             return
         }
         
@@ -159,7 +147,6 @@ public class EventController: Router {
         }
         
         do {
-            let user = User()
             try user.find(["email": email])
             
             guard user.id != 0 else {
@@ -168,7 +155,6 @@ public class EventController: Router {
                 return
             }
             
-            let event = Event()
             try event.find([("id", id)])
             
             guard event.id > 0 else {
@@ -182,8 +168,6 @@ public class EventController: Router {
                         .completed(status: .unauthorized)
                 return
             }
-            
-            let eventBeer = EventBeer()
             
             try eventBeer.find([("userId", user.id), ("eventId", event.id)])
             
@@ -208,46 +192,6 @@ public class EventController: Router {
             
         } catch {
             response.completed(status: .internalServerError)
-        }
-    }
-    
-    // MARK: internal functions
-    func update(event eventId: Int, with beer: Beer, broughtBy attendee: User, isPourer: Bool, completion: @escaping (Bool) -> Void) {
-
-        do {
-            let event = Event()
-            try? event.find(["id": eventId])
-
-            if event.id == 0 {
-                try event.save { id in
-                    event.id = id as! Int
-                }
-            }
-
-            if isPourer {
-                event.pourerId = attendee.id
-            } else {
-                event.drinkerIds.append(attendee.id)
-            }
-
-            let eventBeer = EventBeer()
-            eventBeer.userId = attendee.id
-            eventBeer.beerId = beer.id
-
-            if eventBeer.id == 0 {
-                try eventBeer.save { id in
-                    eventBeer.id = id as! Int
-                    event.eventBeerIds.append(eventBeer.id)
-                }
-            } else {
-                event.eventBeerIds.append(eventBeer.id)
-            }
-
-            try event.save()
-
-            completion(true)
-        } catch {
-            completion(false)
         }
     }
 }
