@@ -11,7 +11,7 @@ class BeerController {
                 return
             }
             
-            try user.retrieve(["email": email])
+            try user.find(by: ["email": email])
             
             guard user.id != 0 else {
                 response.setBody(string: "Unauthorized")
@@ -33,8 +33,8 @@ class BeerController {
                 return
             }
 
-            try beer.retrieve(
-                ["name": beerName,
+            try beer.find(
+                by: ["name": beerName,
                  "brewer": brewerName
                 ]
             )
@@ -70,7 +70,7 @@ class BeerController {
         }
         
         do {
-            try user.retrieve(["email": email])
+            try user.find(by: ["email": email])
             
             guard user.id != 0 else {
                 response.setBody(string: "Unauthorized")
@@ -78,7 +78,7 @@ class BeerController {
                 return
             }
             
-            try beers.retrieve(["addedBy": user.id])
+            try beers.find(by: [("addedBy", user.id)])
             
             var responseJson = [[String: Any]]()
             for beer in beers.rows() {

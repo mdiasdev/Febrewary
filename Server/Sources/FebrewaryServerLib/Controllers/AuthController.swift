@@ -63,7 +63,7 @@ class AuthController {
         }
         
         do {
-            try user.retrieve(["email": email])
+            try user.find(by: ["email": email])
             
             guard user.id != 0 else {
                 response.setBody(string: "Invalid username or password")
@@ -113,7 +113,7 @@ class AuthController {
                 throw MissingPropertyError()
         }
         
-        try user.retrieve(["email": email])
+        try user.find(by: ["email": email])
         
         guard user.id == 0 else {
             throw UserExistsError()

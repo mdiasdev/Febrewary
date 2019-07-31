@@ -23,7 +23,16 @@ class DAO: PostgresStORM {
     ///
     /// - Parameter data: dictionary of properties to base find on
     /// - Throws:
-    func retrieve(_ data: [String: Any]) throws {
+    func find(by data: [String: Any]) throws {
+        try find(data)
+    }
+    
+    
+    /// Wrapper to PostgresStORM's `find()`
+    ///
+    /// - Parameter data: array of tuples representing properto to base find on
+    /// - Throws: 
+    func find(by data: [(String, Any)]) throws {
         try find(data)
     }
     

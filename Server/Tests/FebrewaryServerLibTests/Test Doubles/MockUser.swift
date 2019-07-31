@@ -37,7 +37,7 @@ class MockUser: User {
         self.results.rows = [row1, row2]
     }
     
-    override func retrieve(_ data: [String : Any]) throws {
+    override func find(by data: [String : Any]) throws {
         let row1 = StORMRow()
         row1.data = ["id": 1,
                      "firstName": "Matt",
@@ -52,7 +52,19 @@ class MockUser: User {
         self.results.rows = [row1]
     }
     
+    override func find(by data: [(String, Any)]) throws {
+        assertionFailure("still need to make this")
+    }
+    
     override func store(set: (Any) -> Void) throws {
         // no-op
+    }
+    
+    override func store() throws {
+        // no-op
+    }
+    
+    override func search(whereClause: String, params: [Any], orderby: [String]) throws {
+        assertionFailure("still need to make this")
     }
 }

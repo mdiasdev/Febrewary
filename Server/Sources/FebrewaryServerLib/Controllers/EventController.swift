@@ -37,7 +37,7 @@ class EventController {
         }
         
         do {
-            try user.retrieve(["email": email])
+            try user.find(by: ["email": email])
             
             guard user.id > 0 else {
                 response.setBody(string: "Could not find current User")
@@ -94,7 +94,7 @@ class EventController {
         }
         
         do {
-            try user.retrieve(["email": email])
+            try user.find(by: ["email": email])
 
             guard user.id != 0 else {
                 response.setBody(string: "Bad Request: could not find User")
@@ -145,7 +145,7 @@ class EventController {
         }
         
         do {
-            try user.retrieve(["email": email])
+            try user.find(by: ["email": email])
             
             guard user.id != 0 else {
                 response.setBody(string: "Bad Request: could not find User")
@@ -153,7 +153,7 @@ class EventController {
                 return
             }
             
-            try event.retrieve(["id": id])
+            try event.find(by: ["id": id])
             
             guard event.id > 0 else {
                 response.setBody(string: "Could not find event with id: \(id).")
@@ -167,7 +167,7 @@ class EventController {
                 return
             }
             
-            try eventBeer.retrieve([
+            try eventBeer.find(by: [
                 "userId": user.id,
                 "eventId": event.id
                 ])

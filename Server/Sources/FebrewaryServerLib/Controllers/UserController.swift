@@ -25,7 +25,7 @@ class UserController {
         }
         
         do {
-            try user.retrieve(["email": email])
+            try user.find(by: ["email": email])
             
             guard user.id > 0 else {
                 response.setBody(string: "User not found!")
@@ -56,7 +56,7 @@ class UserController {
         }
         
         do {
-            try user.retrieve(["id": id])
+            try user.find(by: ["id": id])
             
             guard user.id > 0 else {
                 response.setBody(string: "User not found!")
