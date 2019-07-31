@@ -56,7 +56,7 @@ class EventController {
             event.pourerId = pourerId
             event.drinkerIds = Array(attendees)
             
-            try event.save { id in
+            try event.store { id in
                 event.id = id as! Int
             }
             
@@ -102,7 +102,7 @@ class EventController {
                 return
             }
             
-            try events.select(whereclause: "drinkerIds ~ $1", params: [user.id], orderby: ["id"])
+            try events.search(whereClause: "drinkerIds ~ $1", params: [user.id], orderby: ["id"])
             var responseJson = [[String: Any]]()
             
             for event in events.rows() {
@@ -145,7 +145,7 @@ class EventController {
         }
         
         do {
-            try user.find(["email": email])
+            try user.retrieve(["email": email])
             
             guard user.id != 0 else {
                 response.setBody(string: "Bad Request: could not find User")
@@ -153,7 +153,7 @@ class EventController {
                 return
             }
             
-            try event.find(["id": id])
+            try event.retrieve(["id": id])
             
             guard event.id > 0 else {
                 response.setBody(string: "Could not find event with id: \(id).")
@@ -167,7 +167,7 @@ class EventController {
                 return
             }
             
-            try eventBeer.find([
+            try eventBeer.retrieve([
                 "userId": user.id,
                 "eventId": event.id
                 ])
@@ -182,12 +182,12 @@ class EventController {
             eventBeer.beerId = beerId
             eventBeer.eventId = event.id
             
-            try eventBeer.save { id in
+            try eventBeer.store { id in
                 eventBeer.id = id as! Int
             }
             
             event.eventBeerIds.append(eventBeer.id)
-            try event.save()
+            try event.store()
             
             try response.setBody(json: [String: Any]()).completed(status: .created)
             

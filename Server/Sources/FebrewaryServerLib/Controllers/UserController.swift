@@ -25,7 +25,7 @@ class UserController {
         }
         
         do {
-            try user.find(["email": email])
+            try user.retrieve(["email": email])
             
             guard user.id > 0 else {
                 response.setBody(string: "User not found!")
@@ -56,7 +56,7 @@ class UserController {
         }
         
         do {
-            try user.get(id)
+            try user.retrieve(["id": id])
             
             guard user.id > 0 else {
                 response.setBody(string: "User not found!")
@@ -65,7 +65,7 @@ class UserController {
             }
             
             try response.setBody(json: user.asDictionary())
-                    .completed(status: .ok)
+                        .completed(status: .ok)
             
         } catch {
             response.setBody(string: "Database Error")
@@ -81,7 +81,7 @@ class UserController {
         }
         
         do {
-            try users.findAll()
+            try users.getAll()
             
             guard users.rows().count > 0 else {
                 try response.setBody(json: [String: Any]())

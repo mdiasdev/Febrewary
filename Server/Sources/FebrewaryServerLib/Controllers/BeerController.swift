@@ -33,7 +33,7 @@ class BeerController {
                 return
             }
 
-            try beer.find(
+            try beer.retrieve(
                 ["name": beerName,
                  "brewer": brewerName
                 ]
@@ -50,7 +50,7 @@ class BeerController {
             beer.abv = abv.floatValue
             beer.addedBy = user.id
 
-            try beer.save { id in
+            try beer.store { id in
                 beer.id = id as! Int
             }
             
@@ -74,11 +74,11 @@ class BeerController {
             
             guard user.id != 0 else {
                 response.setBody(string: "Unauthorized")
-                    .completed(status: .unauthorized)
+                        .completed(status: .unauthorized)
                 return
             }
             
-            try beers.find(["addedBy": user.id])
+            try beers.retrieve(["addedBy": user.id])
             
             var responseJson = [[String: Any]]()
             for beer in beers.rows() {
@@ -97,12 +97,12 @@ class BeerController {
             var responseJson = [[String: Any]]()
             var uniqueBeers: Set<Beer> = []
             
-            try beers.select(whereclause: "LOWER(name) ~ LOWER($1)", params: [query], orderby: ["name"])
+            try beers.search(whereClause: "LOWER(name) ~ LOWER($1)", params: [query], orderby: ["name"])
             for beer in beers.rows() {
                 uniqueBeers.insert(beer)
             }
             
-            try brewers.select(whereclause: "LOWER(brewer) ~ LOWER($1)", params: [query], orderby: ["brewer"])
+            try brewers.search(whereClause: "LOWER(brewer) ~ LOWER($1)", params: [query], orderby: ["brewer"])
             for brewer in brewers.rows() {
                 uniqueBeers.insert(brewer)
             }
@@ -120,7 +120,7 @@ class BeerController {
 
     func allBeers(request: HTTPRequest, response: HTTPResponse, beers: Beer = Beer()) {
         do {
-            try beers.findAll()
+            try beers.getAll()
             var responseJson: [[String: Any]] = []
 
             for row in beers.rows() {

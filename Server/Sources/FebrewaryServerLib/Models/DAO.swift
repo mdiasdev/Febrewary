@@ -28,7 +28,7 @@ class DAO: PostgresStORM {
     }
     
     
-    /// Wrapper to PostgresStORM's `save()`
+    /// Wrapper to PostgresStORM's `save(set:)`
     ///
     /// - Parameter set: closure to set `id` from
     /// - Throws:
@@ -37,7 +37,15 @@ class DAO: PostgresStORM {
     }
     
     
-    /// Wrapper to PostgresStORM's `select()`
+    /// Wrapper to PostgresStORM's `save()`
+    ///
+    /// - Throws:
+    func store() throws {
+        try save()
+    }
+    
+    
+    /// Wrapper to PostgresStORM's `select(whereclause:, params:, orderby:)`
     ///
     /// - Parameters:
     ///   - whereClause: query meeting postgres formatting

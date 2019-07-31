@@ -2,7 +2,7 @@ import Foundation
 import StORM
 import PostgresStORM
 
-class Event: PostgresStORM {
+class Event: DAO {
     // MARK: - Properties: basic properties
     var id: Int = 0
     var name: String = ""
@@ -73,8 +73,10 @@ class Event: PostgresStORM {
         return events
     }
 
-    // MARK: -
-    // MARK: - Helper functions
+}
+
+    // MARK: - Data Representation
+extension Event {
     func asDictionary() -> [String: Any] {
         
         var json: [String: Any] = [
