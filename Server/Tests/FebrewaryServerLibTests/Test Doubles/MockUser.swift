@@ -37,7 +37,7 @@ class MockUser: User {
         self.results.rows = [row1, row2]
     }
     
-    override func get(_ data: [String : Any]) throws {
+    override func retrieve(_ data: [String : Any]) throws {
         let row1 = StORMRow()
         row1.data = ["id": 1,
                      "firstName": "Matt",

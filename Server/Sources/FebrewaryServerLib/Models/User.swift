@@ -9,7 +9,7 @@ import Foundation
 import StORM
 import PostgresStORM
 
-class User: PostgresStORM {
+class User: DAO {
     var id: Int = 0
     var firstName: String = ""
     var lastName: String = ""
@@ -44,18 +44,6 @@ class User: PostgresStORM {
         }
         
         return users
-    }
-    
-    func getAll() throws {
-        try findAll()
-    }
-    
-    func get(_ data: [String: Any]) throws {
-        try find(data)
-    }
-    
-    func store(set: (Any) -> Void) throws {
-        try save(set: set)
     }
 }
 

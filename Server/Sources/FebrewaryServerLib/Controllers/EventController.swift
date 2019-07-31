@@ -37,7 +37,7 @@ class EventController {
         }
         
         do {
-            try user.find(["email": email])
+            try user.retrieve(["email": email])
             
             guard user.id > 0 else {
                 response.setBody(string: "Could not find current User")
@@ -94,7 +94,7 @@ class EventController {
         }
         
         do {
-            try user.find(["email": email])
+            try user.retrieve(["email": email])
 
             guard user.id != 0 else {
                 response.setBody(string: "Bad Request: could not find User")

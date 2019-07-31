@@ -11,7 +11,7 @@ class BeerController {
                 return
             }
             
-            try user.find(["email": email])
+            try user.retrieve(["email": email])
             
             guard user.id != 0 else {
                 response.setBody(string: "Unauthorized")
@@ -70,7 +70,7 @@ class BeerController {
         }
         
         do {
-            try user.find(["email": email])
+            try user.retrieve(["email": email])
             
             guard user.id != 0 else {
                 response.setBody(string: "Unauthorized")
