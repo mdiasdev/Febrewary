@@ -5,12 +5,15 @@ import PostgresStORM
 class EventBeer: DAO {
     var id: Int = 0
     var userId: Int = 0
-    var _user: User?
     var beerId: Int = 0
-    var _beer: Beer?
     var eventId: Int = 0
     var votes: Int = 0
-    var eventScore: Int = 0
+    var score: Int = 0
+    var isBeingPoured: Bool = false
+    
+    // MARK: embeded properties
+    var _user: User?
+    var _beer: Beer?
 
     override open func table() -> String { return "eventbeer" }
 
@@ -19,7 +22,7 @@ class EventBeer: DAO {
         beerId = this.data["beerid"] as? Int ?? 0
         userId = this.data["userid"] as? Int ?? 0
         eventId = this.data["eventid"] as? Int ?? 0
-        eventScore = this.data["eventscore"] as? Int ?? 0
+        score = this.data["score"] as? Int ?? 0
         votes = this.data["votes"] as? Int ?? 0
     }
 
@@ -58,7 +61,7 @@ extension EventBeer {
             "id": self.id,
             "attendee": user.asSimpleDictionary(),
             "beer": beer.asDictionary(),
-            "eventScore": self.eventScore
+            "score": self.score
         ]
     }
 }
