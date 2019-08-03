@@ -8,15 +8,21 @@
 import Foundation
 
 extension Array {
+    
+    /// Creates a comma separated string of `Element` based on the contents of `self`
+    ///
+    /// - Returns: comma separated string of `Element`
     func toString() -> String {
-        var temp = String()
+        var output = String()
         
-        for item in self {
-            temp.append(", \(item)")
+        for (id, element) in self.enumerated() {
+            output.append("\(element)")
+            
+            if id < self.count - 1 {
+                output.append(", ")
+            }
         }
         
-        let output = temp.dropFirst(2)
-        
-        return String(output)
+        return output
     }
 }
