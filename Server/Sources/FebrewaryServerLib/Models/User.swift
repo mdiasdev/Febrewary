@@ -9,7 +9,7 @@ import Foundation
 import StORM
 import PostgresStORM
 
-class User: PostgresStORM {
+class User: DAO {
     var id: Int = 0
     var firstName: String = ""
     var lastName: String = ""
@@ -45,7 +45,10 @@ class User: PostgresStORM {
         
         return users
     }
-    
+}
+
+// MARK: - Data Representation
+extension User {
     func asDictionary() -> [String: Any] {
         return [
             "id": self.id,

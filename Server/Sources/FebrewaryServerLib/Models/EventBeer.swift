@@ -2,7 +2,7 @@ import Foundation
 import StORM
 import PostgresStORM
 
-class EventBeer: PostgresStORM {
+class EventBeer: DAO {
     var id: Int = 0
     var userId: Int = 0
     var _user: User?
@@ -38,7 +38,10 @@ class EventBeer: PostgresStORM {
 
         return beers
     }
+}
 
+// MARK: - Data Representation
+extension EventBeer {
     func asDictionary() -> [String: Any] {
 
         let drinker = User()

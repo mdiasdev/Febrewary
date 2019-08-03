@@ -2,7 +2,7 @@ import Foundation
 import StORM
 import PostgresStORM
 
-class Beer: PostgresStORM {
+class Beer: DAO {
 
     var id: Int = 0
     var name: String = ""
@@ -39,7 +39,10 @@ class Beer: PostgresStORM {
 
         return beers
     }
+}
 
+// MARK: - Data Representation
+extension Beer {
     func asDictionary() -> [String: Any] {
         var average = 0
         if totalVotes > 0 && totalScore > 0 {
@@ -59,12 +62,14 @@ class Beer: PostgresStORM {
     }
 }
 
+// MARK: - Equatable
 extension Beer: Equatable {
     static func == (lhs: Beer, rhs: Beer) -> Bool {
         return lhs.id == rhs.id
     }
 }
 
+// MARK: - Hashable
 extension Beer: Hashable {
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)

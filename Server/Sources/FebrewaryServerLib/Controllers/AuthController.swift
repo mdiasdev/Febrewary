@@ -10,14 +10,8 @@ import PerfectHTTP
 import PerfectCrypto
 import StORM
 
-public class AuthController: RouteController {
-    override func initRoutes() {
-        routes.add(Route(method: .post, uri: "register", handler: register))
-        routes.add(Route(method: .post, uri: "login", handler: login))
-    }
-    
-    // MARK: - Endpoints
-    func register(request: HTTPRequest, response: HTTPResponse) {
+class AuthController {
+    func register(request: HTTPRequest, response: HTTPResponse, user: User = User()) {
         guard let postBody = try? request.postBodyString?.jsonDecode() as? [String: Any], let json = postBody else {
             response.setBody(string: "Bad Request: malformed json")
                     .completed(status: .badRequest)
@@ -25,7 +19,7 @@ public class AuthController: RouteController {
         }
         
         do {
-            let user = try register(user: json)
+            let user = try register(user: user, from: json)
             let token = try prepareToken(user: user)
             let payload: [String: Any] = [
                 "token": token,
@@ -55,7 +49,7 @@ public class AuthController: RouteController {
         }
     }
     
-    func login(request: HTTPRequest, response: HTTPResponse) {
+    func login(request: HTTPRequest, response: HTTPResponse, user: User = User()) {
         guard let postBody = try? request.postBodyString?.jsonDecode() as? [String: Any], let json = postBody else {
             response.setBody(string: "Bad Request: malformed json")
                     .completed(status: .badRequest)
@@ -69,8 +63,7 @@ public class AuthController: RouteController {
         }
         
         do {
-            let user = User()
-            try user.find(["email": email])
+            try user.find(by: ["email": email])
             
             guard user.id != 0 else {
                 response.setBody(string: "Invalid username or password")
@@ -111,7 +104,7 @@ public class AuthController: RouteController {
     
     // MARK: - Helpers
     
-    func register(user json: [String: Any]) throws -> User {
+    func register(user: User, from json: [String: Any]) throws -> User {
         guard let firstName = json["firstName"] as? String,
               let lastName = json["lastName"] as? String,
               let email = json["email"] as? String,
@@ -120,9 +113,7 @@ public class AuthController: RouteController {
                 throw MissingPropertyError()
         }
         
-        let user = User()
-        
-        try user.find(["email": email])
+        try user.find(by: ["email": email])
         
         guard user.id == 0 else {
             throw UserExistsError()
@@ -134,7 +125,7 @@ public class AuthController: RouteController {
         user.salt = String.random(length: 14)
         user.password = try password.generateHash(salt: user.salt)
         
-        try user.save { id in
+        try user.store { id in
             user.id = id as! Int
         }
         

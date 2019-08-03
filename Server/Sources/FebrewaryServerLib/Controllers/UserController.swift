@@ -10,15 +10,8 @@ import PerfectHTTP
 import PerfectCrypto
 import StORM
 
-public class UserController: RouteController {
-    override func initRoutes() {
-        routes.add(Route(method: .get, uri: "user", handler: getCurrentUser))
-        routes.add(Route(method: .get, uri: "user/{id}", handler: getUserById))
-        routes.add(Route(method: .get, uri: "users", handler: getAllUsers))
-    }
-    
-    // MARK: - Endpoints
-    func getCurrentUser(request: HTTPRequest, response: HTTPResponse) {
+class UserController {
+    func getCurrentUser(request: HTTPRequest, response: HTTPResponse, user: User = User()) {
         guard request.hasValidToken() else {
             response.setBody(string: "Unauthenicated user. Please login and try again.")
                     .completed(status: .unauthorized)
@@ -32,8 +25,7 @@ public class UserController: RouteController {
         }
         
         do {
-            let user = User()
-            try user.find(["email": email])
+            try user.find(by: ["email": email])
             
             guard user.id > 0 else {
                 response.setBody(string: "User not found!")
@@ -50,7 +42,7 @@ public class UserController: RouteController {
         }
     }
     
-    func getUserById(request: HTTPRequest, response: HTTPResponse) {
+    func getUserById(request: HTTPRequest, response: HTTPResponse, user: User = User()) {
         guard request.hasValidToken() else {
             response.setBody(string: "Unauthenicated user. Please login and try again.")
                     .completed(status: .unauthorized)
@@ -64,8 +56,7 @@ public class UserController: RouteController {
         }
         
         do {
-            let user = User()
-            try user.get(id)
+            try user.find(by: ["id": id])
             
             guard user.id > 0 else {
                 response.setBody(string: "User not found!")
@@ -74,7 +65,7 @@ public class UserController: RouteController {
             }
             
             try response.setBody(json: user.asDictionary())
-                    .completed(status: .ok)
+                        .completed(status: .ok)
             
         } catch {
             response.setBody(string: "Database Error")
@@ -82,7 +73,7 @@ public class UserController: RouteController {
         }
     }
     
-    func getAllUsers(request: HTTPRequest, response: HTTPResponse) {
+    func getAllUsers(request: HTTPRequest, response: HTTPResponse, users: User = User()) {
         guard request.hasValidToken() else {
             response.setBody(string: "Unauthenicated user. Please login and try again.")
                     .completed(status: .unauthorized)
@@ -90,8 +81,7 @@ public class UserController: RouteController {
         }
         
         do {
-            let users = User()
-            try users.findAll()
+            try users.getAll()
             
             guard users.rows().count > 0 else {
                 try response.setBody(json: [String: Any]())
