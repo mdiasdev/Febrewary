@@ -105,8 +105,7 @@ class AuthController {
     // MARK: - Helpers
     
     func register(user: User, from json: [String: Any]) throws -> User {
-        guard let firstName = json["firstName"] as? String,
-              let lastName = json["lastName"] as? String,
+        guard let name = json["name"] as? String,
               let email = json["email"] as? String,
               let password = json["password"] as? String else {
                 
@@ -119,8 +118,7 @@ class AuthController {
             throw UserExistsError()
         }
         
-        user.firstName = firstName
-        user.lastName = lastName
+        user.name = name
         user.email = email
         user.salt = String.random(length: 14)
         user.password = try password.generateHash(salt: user.salt)

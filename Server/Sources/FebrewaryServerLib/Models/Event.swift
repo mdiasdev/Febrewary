@@ -10,10 +10,12 @@ class Event: DAO {
     var date: String = ""
     var createdBy: Int = 0
     var pourerId: Int = 0
+    var isOver: Bool = false
+    var hasStarted: Bool = false
     
     // MARK: embeded properties
     var _pourer: User = User()
-    var _drinkers: [[String: Any]] = []
+    var _attendees: [[String: Any]] = []
     var _eventBeers: [[String: Any]] = []
     
     // MARK: -
@@ -27,6 +29,8 @@ class Event: DAO {
         date = this.data["date"] as? String ?? ""
         pourerId = this.data["pourerid"] as? Int ?? 0
         createdBy = this.data["createdby"] as? Int ?? 0
+        isOver = this.data["isover"] as? Bool ?? false
+        hasStarted = this.data["hasstarted"] as? Bool ?? false
     }
 
     func rows() -> [Event] {
@@ -49,7 +53,7 @@ class Event: DAO {
 
     // MARK: - Data Representation
 extension Event {
-    func asDictionary(attendees: Attendee = Attendee(), user: User = User(), eventBeers: EventBeer = EventBeer()) -> [String: Any] {
+    func asDictionary(attendees: Attendee = Attendee(), users: User = User(), eventBeers: EventBeer = EventBeer()) -> [String: Any] {
         
         var json: [String: Any] = [
             "id": self.id,
@@ -58,36 +62,27 @@ extension Event {
             "date": self.date,
             "pourerId": self.pourerId,
             "createdBy": self.createdBy,
+            "isOver": self.isOver,
+            "hasStarted": self.hasStarted
         ]
         
-        try? attendees.search(whereClause: "eventid == $1", params: [self.id], orderby: ["id"])
-        let ids = attendees.rows().compactMap { "\($0.id)" }
-        let idsString = "(\(ids.toString()))"
-//        try? user.search(whereClause: "id", params: <#T##[Any]#>, orderby: <#T##[String]#>)
-//        //SELECT * FROM member_copy WHERE id IN (17579, 17580, 17582)
-//        
-//        for attendee in attendees.rows() {
-//            guard id != 0 else { continue }
-//
-//            let drinker = User()
-//            try? drinker.get(id)
-//            guard drinker.id > 0 else { return [:] }
-//
-//            self._drinkers.append(drinker.asSimpleDictionary())
-//        }
-//        
-//        json["attendees"] = self._drinkers
-//
-//        // FIXME: make more performant (don't access DB so many times)
-//        for id in eventBeerIds {
-//            guard id != 0 else { continue }
-//
-//            let eventBeer = EventBeer()
-//            try? eventBeer.get(id)
-//            guard eventBeer.id > 0 else { return [:] }
-//
-//            self._eventBeers.append(eventBeer.asDictionary())
-//        }
+        try? attendees.find(by: [("eventid", id)])
+        if attendees.rows().count > 0 {
+            let query = "id IN (\(attendees.rows().compactMap { "\($0.userId)" }.toString()))"
+            try? users.search(whereClause: query, params: [], orderby: ["id"])
+            
+            for user in users.rows() {
+                self._attendees.append(user.asSimpleDictionary())
+            }
+        }
+        
+        json["attendees"] = self._attendees
+
+        try? eventBeers.find(by: [("eventid", id)])
+        
+        for eventBeer in eventBeers.rows() {
+            self._eventBeers.append(eventBeer.asDictionary())
+        }
         
         json["eventBeers"] = self._eventBeers
 

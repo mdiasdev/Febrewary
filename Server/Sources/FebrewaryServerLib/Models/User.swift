@@ -11,8 +11,7 @@ import PostgresStORM
 
 class User: DAO {
     var id: Int = 0
-    var firstName: String = ""
-    var lastName: String = ""
+    var name: String = ""
     var email: String = ""
     var password: String = ""
     var salt: String = ""
@@ -23,8 +22,7 @@ class User: DAO {
     
     override func to(_ this: StORMRow) {
         id = this.data["id"] as? Int ?? 0
-        firstName = this.data["firstname"] as? String ?? ""
-        lastName = this.data["lastname"] as? String ?? ""
+        name = this.data["name"] as? String ?? ""
         email = this.data["email"] as? String ?? ""
         password = this.data["password"] as? String ?? ""
         salt = this.data["salt"] as? String ?? ""
@@ -52,8 +50,7 @@ extension User {
     func asDictionary() -> [String: Any] {
         return [
             "id": self.id,
-            "firstName": self.firstName,
-            "lastName": self.lastName,
+            "name": self.name,
             "email": self.email,
             "events": self.events,
             "beers": self.beers,
@@ -63,8 +60,7 @@ extension User {
     func asSimpleDictionary() -> [String: Any] {
         return [
             "id": self.id,
-            "firstName": self.firstName,
-            "lastName": self.lastName,
+            "name": self.name,
             "email": self.email,
         ]
     }

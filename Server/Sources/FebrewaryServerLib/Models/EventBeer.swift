@@ -24,6 +24,7 @@ class EventBeer: DAO {
         eventId = this.data["eventid"] as? Int ?? 0
         score = this.data["score"] as? Int ?? 0
         votes = this.data["votes"] as? Int ?? 0
+        isBeingPoured = this.data["isbeingpoured"] as? Bool ?? false
     }
 
     func rows() -> [EventBeer] {
@@ -61,7 +62,8 @@ extension EventBeer {
             "id": self.id,
             "attendee": user.asSimpleDictionary(),
             "beer": beer.asDictionary(),
-            "score": self.score
+            "score": self.score,
+            "isBeingPoured": self.isBeingPoured,
         ]
     }
 }
