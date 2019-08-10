@@ -19,7 +19,7 @@ class UserViewController: UIViewController {
 
         guard let user = User().retrieve() else { return }
         
-        nameLabel.text = "\(user.firstName)"
+        nameLabel.text = "\(user.name)"
         
         view.layer.cornerRadius = 22
         view.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]

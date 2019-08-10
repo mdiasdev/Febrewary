@@ -13,9 +13,8 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SignInCreateAccountViewController" customModule="Febrewary" customModuleProvider="target">
             <connections>
                 <outlet property="emailTextField" destination="eJP-Us-IOE" id="kTE-Ip-smE"/>
-                <outlet property="firstNameTextField" destination="Exd-gx-Bra" id="jzL-jT-IMS"/>
                 <outlet property="formStackView" destination="4Ud-NU-sF8" id="xUS-d3-1Wh"/>
-                <outlet property="lastNameTextField" destination="5Ea-b8-6Br" id="rWT-jQ-Imc"/>
+                <outlet property="nameTextField" destination="Exd-gx-Bra" id="jzL-jT-IMS"/>
                 <outlet property="passwordTextField" destination="iVl-gN-bmg" id="uVq-mz-OS5"/>
                 <outlet property="segmentControl" destination="boA-qd-UY0" id="8tl-1Q-P8W"/>
                 <outlet property="submitButton" destination="jeb-ud-s2p" id="wqj-Zq-eLR"/>
@@ -53,26 +52,20 @@
                 <stackView opaque="NO" contentMode="scaleToFill" placeholderIntrinsicWidth="382" placeholderIntrinsicHeight="208" axis="vertical" distribution="fillEqually" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="4Ud-NU-sF8">
                     <rect key="frame" x="16" y="60" width="382" height="208"/>
                     <subviews>
-                        <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="First Name" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="Exd-gx-Bra">
-                            <rect key="frame" x="0.0" y="0.0" width="382" height="46"/>
+                        <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Full Name" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="Exd-gx-Bra">
+                            <rect key="frame" x="0.0" y="0.0" width="382" height="64"/>
                             <nil key="textColor"/>
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                             <textInputTraits key="textInputTraits" autocapitalizationType="words" autocorrectionType="no" returnKeyType="next" smartDashesType="no" textContentType="name"/>
                         </textField>
-                        <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Last Name" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="5Ea-b8-6Br">
-                            <rect key="frame" x="0.0" y="54" width="382" height="46"/>
-                            <nil key="textColor"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                            <textInputTraits key="textInputTraits" autocapitalizationType="words" returnKeyType="next" smartDashesType="no" textContentType="family-name"/>
-                        </textField>
                         <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Email" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="eJP-Us-IOE">
-                            <rect key="frame" x="0.0" y="108" width="382" height="46"/>
+                            <rect key="frame" x="0.0" y="72" width="382" height="64"/>
                             <nil key="textColor"/>
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                             <textInputTraits key="textInputTraits" returnKeyType="next" textContentType="email"/>
                         </textField>
                         <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="iVl-gN-bmg">
-                            <rect key="frame" x="0.0" y="162" width="382" height="46"/>
+                            <rect key="frame" x="0.0" y="144" width="382" height="64"/>
                             <nil key="textColor"/>
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                             <textInputTraits key="textInputTraits" returnKeyType="done" secureTextEntry="YES" textContentType="password"/>

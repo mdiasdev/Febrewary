@@ -14,14 +14,13 @@ class SignInCreateAccountViewController: UIViewController {
         case signIn = 0
         case createAccount = 1
     }
-    typealias FormFields = (firstName: String, lastName: String, email: String, password: String)
+    typealias FormFields = (name: String, email: String, password: String)
 
     @IBOutlet weak var segmentControl: UISegmentedControl!
     @IBOutlet weak var formStackView: UIStackView!
     @IBOutlet weak var submitButton: UIButton!
     
-    @IBOutlet weak var firstNameTextField: UITextField!
-    @IBOutlet weak var lastNameTextField: UITextField!
+    @IBOutlet weak var nameTextField: UITextField!
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
     
@@ -44,8 +43,7 @@ class SignInCreateAccountViewController: UIViewController {
         segmentControl.accessibilityIdentifier = "segment control"
         formStackView.accessibilityIdentifier = "form stack view"
         
-        firstNameTextField.accessibilityIdentifier = "first name text field"
-        lastNameTextField.accessibilityIdentifier = "last name text field"
+        nameTextField.accessibilityIdentifier = "name text field"
         emailTextField.accessibilityIdentifier = "email text field"
         passwordTextField.accessibilityIdentifier = "password text field"
     }
@@ -55,11 +53,9 @@ class SignInCreateAccountViewController: UIViewController {
             switch segment
             {
             case .signIn:
-                self?.firstNameTextField.isHidden = true
-                self?.lastNameTextField.isHidden = true
+                self?.nameTextField.isHidden = true
             case .createAccount:
-                self?.firstNameTextField.isHidden = false
-                self?.lastNameTextField.isHidden = false
+                self?.nameTextField.isHidden = false
             }
         }
     }
@@ -90,8 +86,7 @@ class SignInCreateAccountViewController: UIViewController {
             
             guard formValidation.isValid, let formFields = formValidation.fields else { return }
             
-            register(firstName: formFields.firstName,
-                     lastName: formFields.lastName,
+            register(name: formFields.name,
                      email: formFields.email,
                      password: formFields.password)
         }
@@ -110,15 +105,10 @@ class SignInCreateAccountViewController: UIViewController {
                 showFormValidationFailure(for: "Password")
                 return (false, nil)
             }
-            return (true, ("", "", email, password))
+            return (true, ("", email, password))
         case .createAccount:
-            guard let firstName = firstNameTextField.text, !firstName.isEmpty else {
-                showFormValidationFailure(for: "First Name")
-                return (false, nil)
-            }
-            
-            guard let lastName = lastNameTextField.text, !lastName.isEmpty else {
-                showFormValidationFailure(for: "Last Name")
+            guard let name = nameTextField.text, !name.isEmpty else {
+                showFormValidationFailure(for: "Name")
                 return (false, nil)
             }
             
@@ -132,7 +122,7 @@ class SignInCreateAccountViewController: UIViewController {
                 return (false, nil)
             }
             
-            return (true, (firstName, lastName, email, password))
+            return (true, (name, email, password))
         }
     }
     
@@ -144,8 +134,8 @@ class SignInCreateAccountViewController: UIViewController {
     }
     
     // MARK: - Networking
-    func register(firstName: String, lastName: String, email: String, password: String) {
-        AuthService().createAccount(firstName: firstName, lastName: lastName, email: email, password: password) { [weak self] result in
+    func register(name: String, email: String, password: String) {
+        AuthService().createAccount(name: name, email: email, password: password) { [weak self] result in
             self?.handle(result: result)
         }
     }
