@@ -13,7 +13,8 @@ class CreateEventViewController: UIViewController {
     @IBOutlet weak var nameTextField: UITextField!
     @IBOutlet weak var dateTextField: UITextField!
     @IBOutlet weak var addressTextField: UITextField!
-    @IBOutlet weak var pourerTextField: UITextField!
+    @IBOutlet weak var isPourerSwitch: UISwitch!
+    
     
     @IBOutlet weak var submitButton: UIButton!
     
@@ -27,14 +28,13 @@ class CreateEventViewController: UIViewController {
         
         datePicker.minimumDate = Date()
         
-        allTextFields = [nameTextField, dateTextField, addressTextField, pourerTextField]
+        allTextFields = [nameTextField, dateTextField, addressTextField]
         
         nameTextField.delegate = self
         dateTextField.delegate = self
         dateTextField.inputView = datePicker
         dateTextField.inputAccessoryView = UIToolbar().pickerAccessory(action: #selector(setDate))
         addressTextField.delegate = self
-        pourerTextField.delegate = self
 
         submitButton.layer.cornerRadius = 8
     }
@@ -43,8 +43,7 @@ class CreateEventViewController: UIViewController {
     func isValidateForm() -> Bool {
         return nameTextField.text != nil && nameTextField.text?.isEmpty == false &&
                dateTextField.text != nil && dateTextField.text?.isEmpty == false &&
-               addressTextField.text != nil && addressTextField.text?.isEmpty == false &&
-               pourerTextField.text != nil && pourerTextField.text?.isEmpty == false
+               addressTextField.text != nil && addressTextField.text?.isEmpty == false
     }
     
     func showFormError() {
@@ -63,14 +62,13 @@ class CreateEventViewController: UIViewController {
     func createEvent() {
         guard let name = nameTextField.text,
               let address = addressTextField.text,
-              let date = dateTextField.text?.toDate(),
-              let pourerString = pourerTextField.text,
-              let pourerId = Int(pourerString) else { return } // FIXME: update after #61 and #62
+              let date = dateTextField.text?.toDate() else { return }
+        let isPourer = isPourerSwitch.isOn
         
         EventsService().createEvent(named: name,
                                     on: date,
                                     at: address,
-                                    withPourer: pourerId) { (result) in // FIXME: update after #61 and #62
+                                    isPourer: isPourer) { (result) in
             switch result {
             case .success(let event):
                 self.event = event

@@ -16,7 +16,7 @@ class EnterBeerViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        submitButton.layer.cornerRadius = 10
+        submitButton.layer.cornerRadius = 8
         submitButton.layer.borderWidth = 1
         submitButton.layer.borderColor = UIColor.gray.cgColor
     }

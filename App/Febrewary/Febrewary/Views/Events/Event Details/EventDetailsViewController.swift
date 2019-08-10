@@ -19,6 +19,13 @@ class EventDetailsViewController: UIViewController {
     
     var event: Event!
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        let addBarButton = UIBarButtonItem(image: UIImage(named: "Plus_ico"), style: .plain, target: self, action: #selector(addTapped))
+        self.navigationItem.setRightBarButtonItems([addBarButton], animated: false) 
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
@@ -46,8 +53,34 @@ class EventDetailsViewController: UIViewController {
         tableView.tableFooterView = UIView()
     }
 
+    // MARK: - Actions
     @IBAction func startEvent(_ sender: Any) {
         
+    }
+    
+    @objc func addTapped() {
+        
+        let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        actionSheet.addAction(UIAlertAction(title: "Attendee", style: .default, handler: { _ in self.addAttendeeTapped() }))
+        actionSheet.addAction(UIAlertAction(title: "Beer", style: .default, handler: { _ in self.addBeerTapped() }))
+        actionSheet.addAction(UIAlertAction(title: "Cancel", style: .destructive, handler: nil))
+        
+        present(actionSheet, animated: true, completion: nil)
+    }
+    
+    func addAttendeeTapped() {
+        performSegue(withIdentifier: "addAttendee", sender: self)
+    }
+    
+    func addBeerTapped() {
+        
+    }
+    
+    // MARK: Navigation
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let addAttendeeVC = segue.destination as? AddAttendeeViewController {
+            addAttendeeVC.event = event
+        }
     }
 }
 

@@ -246,12 +246,16 @@ class EventController {
                 return
             }
             
-            if isPourer {
+            if isPourer && event.pourerId == 0 {
                 event.pourerId = user.id
                 try event.store()
+            } else if isPourer && event.pourerId > 0 {
+                response.setBody(string: "Event already has a pourer")
+                        .completed(status: .conflict)
+                return
             }
             
-            try attendee.find(by: [("userid", userId)])
+            try attendee.find(by: [("userid", user.id), ("eventid", event.id)])
             guard attendee.id == 0 else {
                 response.setBody(string: "Person already invited")
                         .completed(status: .notFound)
@@ -265,7 +269,7 @@ class EventController {
                 attendee.id = id as! Int
             }
             
-            response.completed(status: .created)
+            try response.setBody(json: [String: Any]()).completed(status: .created)
             
         } catch {
             response.completed(status: .internalServerError)
