@@ -14,7 +14,6 @@ class CreateEventViewController: UIViewController {
     @IBOutlet weak var dateTextField: UITextField!
     @IBOutlet weak var addressTextField: UITextField!
     @IBOutlet weak var pourerTextField: UITextField!
-    @IBOutlet weak var attendeesTextField: UITextField!
     
     @IBOutlet weak var submitButton: UIButton!
     
@@ -28,7 +27,7 @@ class CreateEventViewController: UIViewController {
         
         datePicker.minimumDate = Date()
         
-        allTextFields = [nameTextField, dateTextField, addressTextField, pourerTextField, attendeesTextField]
+        allTextFields = [nameTextField, dateTextField, addressTextField, pourerTextField]
         
         nameTextField.delegate = self
         dateTextField.delegate = self
@@ -36,7 +35,6 @@ class CreateEventViewController: UIViewController {
         dateTextField.inputAccessoryView = UIToolbar().pickerAccessory(action: #selector(setDate))
         addressTextField.delegate = self
         pourerTextField.delegate = self
-        attendeesTextField.delegate = self
 
         submitButton.layer.cornerRadius = 8
     }
@@ -46,8 +44,7 @@ class CreateEventViewController: UIViewController {
         return nameTextField.text != nil && nameTextField.text?.isEmpty == false &&
                dateTextField.text != nil && dateTextField.text?.isEmpty == false &&
                addressTextField.text != nil && addressTextField.text?.isEmpty == false &&
-               pourerTextField.text != nil && pourerTextField.text?.isEmpty == false &&
-               attendeesTextField.text != nil && attendeesTextField.text?.isEmpty == false
+               pourerTextField.text != nil && pourerTextField.text?.isEmpty == false
     }
     
     func showFormError() {
@@ -73,8 +70,7 @@ class CreateEventViewController: UIViewController {
         EventsService().createEvent(named: name,
                                     on: date,
                                     at: address,
-                                    withPourer: pourerId,
-                                    andAttendees: [1,2]) { (result) in // FIXME: update after #61 and #62
+                                    withPourer: pourerId) { (result) in // FIXME: update after #61 and #62
             switch result {
             case .success(let event):
                 self.event = event

@@ -279,7 +279,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="gNo-Oa-jvS">
-                                <rect key="frame" x="24" y="104" width="327" height="182"/>
+                                <rect key="frame" x="24" y="104" width="327" height="144"/>
                                 <subviews>
                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Event Name" textAlignment="natural" minimumFontSize="17" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="lif-zk-d8H">
                                         <rect key="frame" x="0.0" y="0.0" width="327" height="30"/>
@@ -305,16 +305,10 @@
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" returnKeyType="next"/>
                                     </textField>
-                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Attendees" textAlignment="natural" minimumFontSize="17" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="ygv-HP-Z8o">
-                                        <rect key="frame" x="0.0" y="152" width="327" height="30"/>
-                                        <nil key="textColor"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits" returnKeyType="done"/>
-                                    </textField>
                                 </subviews>
                             </stackView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yFa-vn-KzD">
-                                <rect key="frame" x="60" y="302" width="255" height="50"/>
+                                <rect key="frame" x="60" y="264" width="255" height="50"/>
                                 <color key="backgroundColor" red="0.84705882352941175" green="0.84705882352941175" blue="0.84705882352941175" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="LyH-QX-Fmt"/>
@@ -347,7 +341,6 @@
                     </navigationItem>
                     <connections>
                         <outlet property="addressTextField" destination="idQ-9z-tj2" id="VPi-pI-eok"/>
-                        <outlet property="attendeesTextField" destination="ygv-HP-Z8o" id="1BQ-ZH-S93"/>
                         <outlet property="dateTextField" destination="Q8A-d0-jai" id="B0T-Tz-Qjz"/>
                         <outlet property="nameTextField" destination="lif-zk-d8H" id="DZc-f8-eGF"/>
                         <outlet property="pourerTextField" destination="X26-qq-hR9" id="piQ-3A-CN7"/>
