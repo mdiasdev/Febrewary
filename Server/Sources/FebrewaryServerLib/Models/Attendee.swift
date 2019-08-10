@@ -12,7 +12,7 @@ import PostgresStORM
 class Attendee: DAO {
     var id: Int = 0
     var eventId: Int = 0
-    var eventBeetId: Int = 0
+    var eventBeerId: Int = 0
     var userId: Int = 0
     
     override open func table() -> String { return "attendee" }
@@ -20,7 +20,7 @@ class Attendee: DAO {
     override func to(_ this: StORMRow) {
         id = this.data["id"] as? Int ?? 0
         eventId = this.data["eventid"] as? Int ?? 0
-        eventBeetId = this.data["eventBeetid"] as? Int ?? 0
+        eventBeerId = this.data["eventbeerid"] as? Int ?? 0
         userId = this.data["userid"] as? Int ?? 0
     }
     
