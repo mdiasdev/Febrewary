@@ -86,10 +86,10 @@
             </objects>
             <point key="canvasLocation" x="1473" y="-2498"/>
         </scene>
-        <!--Event Details View Controller-->
+        <!--Event Details-->
         <scene sceneID="jpq-22-H6C">
             <objects>
-                <viewController storyboardIdentifier="EventDetailsViewController" id="MDp-aZ-CgG" customClass="EventDetailsViewController" customModule="Febrewary" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="EventDetailsViewController" title="Event Details" id="MDp-aZ-CgG" customClass="EventDetailsViewController" customModule="Febrewary" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="6k4-bt-DYv">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
