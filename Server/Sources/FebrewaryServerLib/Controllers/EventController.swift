@@ -246,9 +246,13 @@ class EventController {
                 return
             }
             
-            if isPourer {
+            if isPourer && event.pourerId == 0 {
                 event.pourerId = user.id
                 try event.store()
+            } else if isPourer && event.pourerId > 0 {
+                response.setBody(string: "Event already has a pourer")
+                        .completed(status: .conflict)
+                return
             }
             
             try attendee.find(by: [("userid", user.id), ("eventid", event.id)])

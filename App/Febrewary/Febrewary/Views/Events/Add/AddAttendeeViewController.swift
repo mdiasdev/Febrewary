@@ -30,6 +30,10 @@ class AddAttendeeViewController: UIViewController {
         nameTextField.inputView = userPicker
         nameTextField.inputAccessoryView = UIToolbar().pickerAccessory(action: #selector(setUser))
         
+        if event.pourerId > 0 {
+            isPourerSwitch.isUserInteractionEnabled = false
+        }
+        
         fetchAllUsers()
     }
 
