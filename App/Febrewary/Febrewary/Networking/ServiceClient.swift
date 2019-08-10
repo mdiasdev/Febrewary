@@ -46,6 +46,40 @@ class ServiceClient {
         }.resume()
     }
     
+    func put(url: URL, payload: JSON?, completionHandler: @escaping (Result<JSON, Error>) -> Void) {
+        var request = URLRequest(url: url)
+        request.httpMethod = "PUT"
+        
+        if let token = Defaults().getToken() {
+            request.setValue(token, forHTTPHeaderField: "Authorization")
+        }
+        
+        if let payload = payload {
+            request.httpBody = try? JSONSerialization.data(withJSONObject: payload,
+                                                           options: .prettyPrinted)
+        }
+        
+        URLSession.shared.dataTask(with: request) { (data, response, error) in
+            guard error == nil else {
+                completionHandler(.failure(error!))
+                return
+            }
+            
+            do {
+                guard let data = data, let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? JSON else {
+                    completionHandler(.failure(JSONError()))
+                    return
+                }
+                
+                completionHandler(.success(json))
+            } catch {
+                completionHandler(.failure(JSONError()))
+                return
+            }
+            
+        }.resume()
+    }
+    
     func get(url: URL, completionHandler: @escaping (Result<Any, Error>) -> Void) {
         var request = URLRequest(url: url)
         request.httpMethod = "GET"

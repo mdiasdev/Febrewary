@@ -251,7 +251,7 @@ class EventController {
                 try event.store()
             }
             
-            try attendee.find(by: [("userid", userId)])
+            try attendee.find(by: [("userid", user.id), ("eventid", event.id)])
             guard attendee.id == 0 else {
                 response.setBody(string: "Person already invited")
                         .completed(status: .notFound)
@@ -265,7 +265,7 @@ class EventController {
                 attendee.id = id as! Int
             }
             
-            response.completed(status: .created)
+            try response.setBody(json: [String: Any]()).completed(status: .created)
             
         } catch {
             response.completed(status: .internalServerError)

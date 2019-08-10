@@ -86,4 +86,22 @@ struct EventsService {
             }
         }
     }
+    
+    func add(userId: Int, isPourer: Bool, to event: Event, completionHandler: @escaping (Result<Void, Error>) -> Void) {
+        let url = URLBuilder(endpoint: .event).buildUrl().appendingPathComponent("\(event.id)/attendee")
+        
+        let payload: JSON = [
+            "userId": userId,
+            "isPourer": isPourer
+        ]
+        
+        client.put(url: url, payload: payload) { result in
+            switch result {
+            case .success:
+                completionHandler(.success(()))
+            case .failure(let error):
+                completionHandler(.failure(error))
+            }
+        }
+    }
 }

@@ -33,6 +33,18 @@ class AddAttendeeViewController: UIViewController {
         fetchAllUsers()
     }
 
+    // MARK: Actions
+    @objc func setUser() {
+        let selectedRow = userPicker.selectedRow(inComponent: 0)
+        
+        guard allUsers.count > selectedRow else { return }
+        
+        selectedUser = allUsers[selectedRow]
+        nameTextField.text = selectedUser?.name
+        
+        nameTextField.resignFirstResponder()
+    }
+    
     @IBAction func closeTapped(_ sender: Any) {
         if nameTextField.isFirstResponder {
             nameTextField.resignFirstResponder()
@@ -42,9 +54,42 @@ class AddAttendeeViewController: UIViewController {
     }
     
     @IBAction func addTapped(_ sender: Any) {
+        guard let user = selectedUser else {
+            showFormError()
+            return
+        }
         
+        add(user: user, to: event, isPourer: isPourerSwitch.isOn)
     }
     
+    // MARK: Error Handling
+    func showFormError() {
+        let alert = UIAlertController(title: "Error!", message: "You must select a user to add", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+        
+        present(alert, animated: true, completion: nil)
+    }
+    
+    func showSuccessForAdding(user: User, to event: Event) {
+        let alert = UIAlertController(title: "Success!",
+                                      message: "\(user.name) has been added to \(event.name). Feel free to add more!",
+                                      preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: { _ in
+            self.nameTextField.text = nil
+            self.isPourerSwitch.setOn(false, animated: true)
+        }))
+        
+        present(alert, animated: true, completion: nil)
+    }
+    
+    func showOops() {
+        let alert = UIAlertController(title: "Error!", message: "Something went wrong", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+        
+        present(alert, animated: true, completion: nil)
+    }
+    
+    // MARK: Networking
     func fetchAllUsers() {
         UserService().getAll { (result) in
             switch result {
@@ -59,16 +104,21 @@ class AddAttendeeViewController: UIViewController {
         }
     }
     
-    @objc func setUser() {
-        let selectedRow = userPicker.selectedRow(inComponent: 0)
-        
-        guard allUsers.count > selectedRow else { return }
-        
-        selectedUser = allUsers[selectedRow]
-        nameTextField.text = selectedUser?.name
-        
-        nameTextField.resignFirstResponder()
+    func add(user: User, to event: Event, isPourer: Bool) {
+        EventsService().add(userId: user.id,
+                            isPourer: isPourer,
+                            to: event) { result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success:
+                    self.showSuccessForAdding(user: user, to: event)
+                case .failure:
+                    self.showOops() // TODO: better error handling
+                }
+            }
+        }
     }
+    
 }
 
 extension AddAttendeeViewController: UIPickerViewDelegate {
