@@ -14,6 +14,7 @@ enum Endpoint: String {
     case signIn = "login"
     case event = "event"
     case user = "user"
+    case users = "users"
     case beer = "beer"
 }
 
@@ -26,7 +27,7 @@ struct URLBuilder {
     
     func buildUrl(components: [(name: String, value: String)] = []) -> URL {
         switch endpoint {
-            case .register, .signIn, .event, .user, .beer:
+            case .register, .signIn, .event, .user, .users, .beer:
                 var url = URLComponents(string: "\(baseUrl)/\(endpoint.rawValue)")
                 
                 if components.count > 0 {

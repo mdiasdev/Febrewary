@@ -189,11 +189,97 @@
                         <outlet property="dateLabel" destination="yv6-ZO-gtS" id="MjK-vq-xtX"/>
                         <outlet property="startButton" destination="OSA-Fb-97c" id="cWe-NU-RrK"/>
                         <outlet property="tableView" destination="aIC-Wz-iPB" id="2eq-l5-9zM"/>
+                        <segue destination="Stu-0d-RPU" kind="presentation" identifier="addAttendee" id="UbL-Eo-qjW"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4Qd-7e-BJ8" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1472.8" y="-1763.568215892054"/>
+        </scene>
+        <!--Add Attendee View Controller-->
+        <scene sceneID="7ZT-4o-WYn">
+            <objects>
+                <viewController id="Stu-0d-RPU" customClass="AddAttendeeViewController" customModule="Febrewary" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="qvI-vJ-Co9">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="P1T-dp-6dP">
+                                <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                                <items>
+                                    <navigationItem title="Add Attendee" id="1cw-UE-463">
+                                        <barButtonItem key="leftBarButtonItem" image="X_ico" id="hr2-dF-Kuz">
+                                            <connections>
+                                                <action selector="closeTapped:" destination="Stu-0d-RPU" id="53a-Gu-Npa"/>
+                                            </connections>
+                                        </barButtonItem>
+                                    </navigationItem>
+                                </items>
+                            </navigationBar>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="zsI-x6-bgb">
+                                <rect key="frame" x="24" y="104" width="327" height="69"/>
+                                <subviews>
+                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="User Name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="5Eq-Ob-pjr">
+                                        <rect key="frame" x="0.0" y="0.0" width="327" height="30"/>
+                                        <nil key="textColor"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
+                                    <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ht6-jQ-nvW">
+                                        <rect key="frame" x="0.0" y="38" width="327" height="31"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Is the Pourer" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ehq-60-epX">
+                                                <rect key="frame" x="0.0" y="0.0" width="278" height="31"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="pMh-k8-SuW">
+                                                <rect key="frame" x="278" y="0.0" width="51" height="31"/>
+                                            </switch>
+                                        </subviews>
+                                    </stackView>
+                                </subviews>
+                            </stackView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MkH-gJ-9i8">
+                                <rect key="frame" x="36" y="189" width="303" height="50"/>
+                                <color key="backgroundColor" red="0.84705882349999995" green="0.84705882349999995" blue="0.84705882349999995" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="jlY-1p-CQr"/>
+                                </constraints>
+                                <state key="normal" title="Add User">
+                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="addTapped:" destination="Stu-0d-RPU" eventType="touchUpInside" id="HkR-AP-BPJ"/>
+                                    <action selector="didTapSubmit:" destination="5SO-ND-g7u" eventType="touchUpInside" id="KeO-Ue-ctu"/>
+                                    <action selector="tappedAddBeer:" destination="WS3-79-7In" eventType="touchUpInside" id="asF-TV-MGM"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="zsI-x6-bgb" firstAttribute="leading" secondItem="8Dh-g1-miJ" secondAttribute="leading" constant="24" id="9IO-Rg-6SF"/>
+                            <constraint firstItem="8Dh-g1-miJ" firstAttribute="trailing" secondItem="zsI-x6-bgb" secondAttribute="trailing" constant="24" id="IvI-ZY-lJk"/>
+                            <constraint firstItem="MkH-gJ-9i8" firstAttribute="leading" secondItem="8Dh-g1-miJ" secondAttribute="leading" constant="36" id="Kd8-xB-GIe"/>
+                            <constraint firstItem="P1T-dp-6dP" firstAttribute="trailing" secondItem="8Dh-g1-miJ" secondAttribute="trailing" id="NfE-FN-90g"/>
+                            <constraint firstItem="P1T-dp-6dP" firstAttribute="leading" secondItem="8Dh-g1-miJ" secondAttribute="leading" id="T4B-gr-ciJ"/>
+                            <constraint firstItem="zsI-x6-bgb" firstAttribute="top" secondItem="P1T-dp-6dP" secondAttribute="bottom" constant="40" id="Uai-GW-pni"/>
+                            <constraint firstItem="P1T-dp-6dP" firstAttribute="top" secondItem="8Dh-g1-miJ" secondAttribute="top" id="Vo7-Ti-UTT"/>
+                            <constraint firstItem="8Dh-g1-miJ" firstAttribute="trailing" secondItem="MkH-gJ-9i8" secondAttribute="trailing" constant="36" id="Xtb-uR-oXj"/>
+                            <constraint firstItem="MkH-gJ-9i8" firstAttribute="top" secondItem="zsI-x6-bgb" secondAttribute="bottom" constant="16" id="xw4-AS-SpB"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="8Dh-g1-miJ"/>
+                    </view>
+                    <connections>
+                        <outlet property="addButton" destination="MkH-gJ-9i8" id="3jK-ra-u2b"/>
+                        <outlet property="isPourerSwitch" destination="pMh-k8-SuW" id="Jfk-jm-ZWQ"/>
+                        <outlet property="nameTextField" destination="5Eq-Ob-pjr" id="QlU-aC-8ST"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="kmH-Ic-CLo" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2303" y="-1764"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="QcA-HG-yib">

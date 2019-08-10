@@ -69,7 +69,7 @@ class EventDetailsViewController: UIViewController {
     }
     
     func addAttendeeTapped() {
-        
+        performSegue(withIdentifier: "addAttendee", sender: self)
     }
     
     func addBeerTapped() {

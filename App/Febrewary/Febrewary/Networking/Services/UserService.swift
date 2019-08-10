@@ -41,4 +41,30 @@ struct UserService {
             
         }
     }
+    
+    func getAll(completionHandler: @escaping (Result<[User], Error>) -> Void) {
+        let url = URLBuilder(endpoint: .users).buildUrl()
+        
+        client.get(url: url) { (result) in
+            switch result {
+            case .success(let response):
+                guard let json = response as? [JSON] else {
+                    completionHandler(.failure(UnknownNetworkError()))
+                    return
+                }
+                
+                guard let data = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted),
+                    let users = try? JSONDecoder().decode([User].self, from: data) else {
+                        completionHandler(.failure(JSONError()))
+                        return
+                }
+                
+                completionHandler(.success(users))
+                
+            case .failure(let error):
+                completionHandler(.failure(error))
+            }
+            
+        }
+    }
 }
