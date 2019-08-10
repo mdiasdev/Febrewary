@@ -14,6 +14,7 @@ class AddAttendeeViewController: UIViewController {
     @IBOutlet weak var isPourerSwitch: UISwitch!
     @IBOutlet weak var addButton: UIButton!
     
+    var event: Event!
     var allUsers = [User]()
     var selectedUser: User?
     let userPicker = UIPickerView()
@@ -33,6 +34,10 @@ class AddAttendeeViewController: UIViewController {
     }
 
     @IBAction func closeTapped(_ sender: Any) {
+        if nameTextField.isFirstResponder {
+            nameTextField.resignFirstResponder()
+        }
+        
         self.dismiss(animated: true, completion: nil)
     }
     

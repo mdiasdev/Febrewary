@@ -75,6 +75,13 @@ class EventDetailsViewController: UIViewController {
     func addBeerTapped() {
         
     }
+    
+    // MARK: Navigation
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let addAttendeeVC = segue.destination as? AddAttendeeViewController {
+            addAttendeeVC.event = event
+        }
+    }
 }
 
 extension EventDetailsViewController: UITableViewDelegate {
