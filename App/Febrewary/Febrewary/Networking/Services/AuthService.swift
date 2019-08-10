@@ -42,11 +42,10 @@ struct AuthService {
         }
     }
     
-    func createAccount(firstName: String, lastName: String, email: String, password: String, completionHandler: @escaping (Result<Bool, Error>) -> Void) {
+    func createAccount(name: String, email: String, password: String, completionHandler: @escaping (Result<Bool, Error>) -> Void) {
         let url = URLBuilder(endpoint: .register).buildUrl()
         let payload = [
-            "firstName": firstName,
-            "lastName": lastName,
+            "name": name,
             "email": email,
             "password": password
         ]

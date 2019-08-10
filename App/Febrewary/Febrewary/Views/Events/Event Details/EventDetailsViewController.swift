@@ -89,7 +89,7 @@ extension EventDetailsViewController: UITableViewDataSource {
         case 0:
             let cell = tableView.dequeueReusableCell(withIdentifier: "attendeeCell", for: indexPath)
             
-            cell.textLabel?.text = "\(event.attendees[indexPath.row].firstName) \(event.attendees[indexPath.row].lastName)"
+            cell.textLabel?.text = event.attendees[indexPath.row].name
             
             return cell
         case 1:

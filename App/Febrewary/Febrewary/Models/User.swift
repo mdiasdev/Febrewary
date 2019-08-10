@@ -10,23 +10,22 @@ import Foundation
 
 final class User {
     let id: Int
-    let firstName: String
-    let lastName: String
+    let name: String
+
     let email: String
 //    let beers: [Beer]
 //    let events: [Event]
     
-    init(id: Int, firstName: String, lastName: String, email: String) { //, beers: [Beer], events: [Event]) {
+    init(id: Int, name: String, email: String) { //, beers: [Beer], events: [Event]) {
         self.id = id
-        self.firstName = firstName
-        self.lastName = lastName
+        self.name = name
         self.email = email
 //        self.beers = beers
 //        self.events = events
     }
     
     convenience init() {
-        self.init(id: -1, firstName: "", lastName: "", email: "")//, beers: [], events: [])
+        self.init(id: -1, name: "", email: "")//, beers: [], events: [])
     }
 }
 
