@@ -39,7 +39,7 @@ struct EventsService {
     func createEvent(named name: String,
                      on date: Date,
                      at address: String,
-                     withPourer pourerId: Int,
+                     isPourer: Bool,
                      completionHandler: @escaping (Result<Event, Error>) -> Void) {
         
         let url = URLBuilder(endpoint: .event).buildUrl()
@@ -48,7 +48,7 @@ struct EventsService {
             "name": name,
             "date": date.iso8601,
             "address": address,
-            "pourerId": pourerId,
+            "isPourer": isPourer,
         ]
         
         client.post(url: url, payload: payload) { result in
