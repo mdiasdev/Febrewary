@@ -22,10 +22,13 @@ public struct DatabaseController {
         let eventBeer = EventBeer()
         try? eventBeer.setup()
 
-        let round = Round()
+        let round = Vote()
         try? round.setup()
         
         let user = User()
         try? user.setup()
+        
+        let attendee = Attendee()
+        try? attendee.setup()
     }
 }

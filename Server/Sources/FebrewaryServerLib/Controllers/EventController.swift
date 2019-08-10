@@ -2,7 +2,7 @@ import PerfectHTTP
 import StORM
 
 class EventController {
-    func createEvent(request: HTTPRequest, response: HTTPResponse, user: User = User(), event: Event = Event()) {
+    func createEvent(request: HTTPRequest, response: HTTPResponse, user: User = User(), event: Event = Event(), attendee: Attendee = Attendee()) {
         guard request.hasValidToken() else {
             response.setBody(string: "Unauthorized")
                     .completed(status: .unauthorized)
@@ -25,15 +25,10 @@ class EventController {
         guard let name = json["name"] as? String,
               let date = json["date"] as? String,
               let address = json["address"] as? String,
-              let pourerId = json["pourerId"] as? Int,
-              var attendees = json["attendees"] as? [Int] else {
+              let pourerId = json["pourerId"] as? Int else {
                 response.setBody(string: "Bad Request: missing required property")
                         .completed(status: .badRequest)
                 return
-        }
-        
-        if !attendees.contains(pourerId) {
-            attendees.append(pourerId)
         }
         
         do {
@@ -45,19 +40,22 @@ class EventController {
                 return
             }
             
-            if !attendees.contains(user.id){
-                attendees.append(user.id)
-            }
-            
             event.name = name
             event.date = date
             event.address = address
             event.createdBy = user.id
             event.pourerId = pourerId
-            event.drinkerIds = Array(attendees)
             
             try event.store { id in
                 event.id = id as! Int
+            }
+            
+            if event.id > 0 {
+                attendee.eventId = event.id
+                attendee.userId = user.id
+                try attendee.store { id in
+                    attendee.id = id as! Int
+                }
             }
             
             let responseJson = event.asDictionary()
@@ -86,7 +84,7 @@ class EventController {
         response.completed(status: .notFound)
     }
     
-    func getEventForUser(request: HTTPRequest, response: HTTPResponse, user: User = User(), events: Event = Event()) {
+    func getEventForUser(request: HTTPRequest, response: HTTPResponse, user: User = User(), events: Event = Event(), attendees: Attendee = Attendee()) {
         guard request.hasValidToken(), let email = request.emailFromAuthToken() else {
             response.setBody(string: "Unauthorized")
                     .completed(status: .unauthorized)
@@ -102,7 +100,17 @@ class EventController {
                 return
             }
             
-            try events.search(whereClause: "drinkerIds ~ $1", params: [user.id], orderby: ["id"])
+            try attendees.find(by: [("userid", user.id)])
+            
+            guard attendees.rows().count > 0 else {
+                try response.setBody(json: [])
+                            .completed(status: .ok)
+                return
+            }
+            
+            let query = "id IN (\(attendees.rows().compactMap { "\($0.eventId)" }.toString()))"
+            try? events.search(whereClause: query, params: [], orderby: ["id"])
+            
             var responseJson = [[String: Any]]()
             
             for event in events.rows() {
@@ -119,7 +127,7 @@ class EventController {
         response.completed(status: .internalServerError)
     }
     
-    func addEventBeer(request: HTTPRequest, response: HTTPResponse, user: User = User(), event: Event = Event(), eventBeer: EventBeer = EventBeer()) {
+    func addEventBeer(request: HTTPRequest, response: HTTPResponse, user: User = User(), event: Event = Event(), eventBeer: EventBeer = EventBeer(), attendee: Attendee = Attendee()) {
         guard request.hasValidToken(), let email = request.emailFromAuthToken() else {
             response.setBody(string: "Unauthorized")
                     .completed(status: .unauthorized)
@@ -153,7 +161,7 @@ class EventController {
                 return
             }
             
-            try event.find(by: ["id": id])
+            try event.find(by: [("id", id)])
             
             guard event.id > 0 else {
                 response.setBody(string: "Could not find event with id: \(id).")
@@ -161,15 +169,16 @@ class EventController {
                 return
             }
             
-            guard event.drinkerIds.contains(user.id) else {
+            try attendee.find(by: [("userid", user.id), ("eventid", event.id)])
+            guard attendee.rows().count > 0 else {
                 response.setBody(string: "User not invited")
                         .completed(status: .unauthorized)
                 return
             }
             
             try eventBeer.find(by: [
-                "userId": user.id,
-                "eventId": event.id
+                ("userId", user.id),
+                ("eventId", event.id)
                 ])
             
             guard eventBeer.id == 0 else {
@@ -186,13 +195,38 @@ class EventController {
                 eventBeer.id = id as! Int
             }
             
-            event.eventBeerIds.append(eventBeer.id)
-            try event.store()
-            
             try response.setBody(json: [String: Any]()).completed(status: .created)
             
         } catch {
             response.completed(status: .internalServerError)
         }
+    }
+    
+    func addAttendee(request: HTTPRequest, response: HTTPResponse, user: User = User(), event: Event = Event(), attendee: Attendee = Attendee()) {
+        guard request.hasValidToken() else {
+            response.setBody(string: "Unauthorized")
+                .completed(status: .unauthorized)
+            return
+        }
+        
+        guard let id = Int(request.urlVariables["id"] ?? "0"), id > 0 else {
+            response.completed(status: .badRequest)
+            return
+        }
+        
+        guard let postBody = try? request.postBodyString?.jsonDecode() as? [String: Any],
+            let json = postBody else {
+                response.setBody(string: "Bad Request: malformed json")
+                    .completed(status: .badRequest)
+                return
+        }
+        
+        guard let userId = json["userId"] as? Int else {
+            response.setBody(string: "Missing data")
+                .completed(status: .badRequest)
+            return
+        }
+        
+        // TODO: finish
     }
 }

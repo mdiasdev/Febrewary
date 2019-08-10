@@ -8,26 +8,15 @@ class Event: DAO {
     var name: String = ""
     var address: String = ""
     var date: String = ""
-    
-    // MARK: - Properties: used to allow only the creator to edit an event
     var createdBy: Int = 0
-    
-    // MARK: - Properties: used to allow one user to know what beer is assigned to a round
     var pourerId: Int = 0
+    var isOver: Bool = false
+    var hasStarted: Bool = false
+    
+    // MARK: embeded properties
     var _pourer: User = User()
-    
-    // MARK: - Properties: all users planned in attendance
-    var drinkerIds: [Int] = []
-    var _drinkers: [[String: Any]] = []
-    
-    // MARK: all beers brought by attendees
-    var eventBeerIds: [Int] = []
+    var _attendees: [[String: Any]] = []
     var _eventBeers: [[String: Any]] = []
-    
-    // MARK: - Properties: voting tracking
-    var roundIds: [Int] = []
-    var _rounds: [Round] = []
-    var currentRound: Int = -1
     
     // MARK: -
     // MARK: - StORM functions
@@ -40,21 +29,8 @@ class Event: DAO {
         date = this.data["date"] as? String ?? ""
         pourerId = this.data["pourerid"] as? Int ?? 0
         createdBy = this.data["createdby"] as? Int ?? 0
-
-        let drinkerIdString = this.data["drinkerids"] as? String ?? ""
-        drinkerIds = drinkerIdString.replacingOccurrences(of: "[", with: "")
-                                    .replacingOccurrences(of: "]", with: "")
-                                    .toIdArray()
-
-        let eventBeerString = this.data["eventbeerids"] as? String ?? ""
-        eventBeerIds = eventBeerString.replacingOccurrences(of: "[", with: "")
-                                      .replacingOccurrences(of: "]", with: "")
-                                      .toIdArray()
-        
-        let roundIdString = this.data["roundids"] as? String ?? ""
-        roundIds = roundIdString.replacingOccurrences(of: "[", with: "")
-                                .replacingOccurrences(of: "]", with: "")
-                                .toIdArray()
+        isOver = this.data["isover"] as? Bool ?? false
+        hasStarted = this.data["hasstarted"] as? Bool ?? false
     }
 
     func rows() -> [Event] {
@@ -77,7 +53,7 @@ class Event: DAO {
 
     // MARK: - Data Representation
 extension Event {
-    func asDictionary() -> [String: Any] {
+    func asDictionary(attendees: Attendee = Attendee(), users: User = User(), eventBeers: EventBeer = EventBeer()) -> [String: Any] {
         
         var json: [String: Any] = [
             "id": self.id,
@@ -86,29 +62,25 @@ extension Event {
             "date": self.date,
             "pourerId": self.pourerId,
             "createdBy": self.createdBy,
+            "isOver": self.isOver,
+            "hasStarted": self.hasStarted
         ]
         
-        // FIXME: make more performant (don't access DB so many times)
-        for id in drinkerIds {
-            guard id != 0 else { continue }
-
-            let drinker = User()
-            try? drinker.get(id)
-            guard drinker.id > 0 else { return [:] }
-
-            self._drinkers.append(drinker.asSimpleDictionary())
+        try? attendees.find(by: [("eventid", id)])
+        if attendees.rows().count > 0 {
+            let query = "id IN (\(attendees.rows().compactMap { "\($0.userId)" }.toString()))"
+            try? users.search(whereClause: query, params: [], orderby: ["id"])
+            
+            for user in users.rows() {
+                self._attendees.append(user.asSimpleDictionary())
+            }
         }
         
-        json["attendees"] = self._drinkers
+        json["attendees"] = self._attendees
 
-        // FIXME: make more performant (don't access DB so many times)
-        for id in eventBeerIds {
-            guard id != 0 else { continue }
-
-            let eventBeer = EventBeer()
-            try? eventBeer.get(id)
-            guard eventBeer.id > 0 else { return [:] }
-
+        try? eventBeers.find(by: [("eventid", id)])
+        
+        for eventBeer in eventBeers.rows() {
             self._eventBeers.append(eventBeer.asDictionary())
         }
         
