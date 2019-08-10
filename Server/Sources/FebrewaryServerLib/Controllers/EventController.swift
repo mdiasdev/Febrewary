@@ -25,7 +25,7 @@ class EventController {
         guard let name = json["name"] as? String,
               let date = json["date"] as? String,
               let address = json["address"] as? String,
-              let pourerId = json["pourerId"] as? Int else {
+              let isPourer = json["isPourer"] as? Bool else {
                 response.setBody(string: "Bad Request: missing required property")
                         .completed(status: .badRequest)
                 return
@@ -44,7 +44,10 @@ class EventController {
             event.date = date
             event.address = address
             event.createdBy = user.id
-            event.pourerId = pourerId
+            
+            if isPourer {
+                event.pourerId = user.id
+            }
             
             try event.store { id in
                 event.id = id as! Int
@@ -205,11 +208,11 @@ class EventController {
     func addAttendee(request: HTTPRequest, response: HTTPResponse, user: User = User(), event: Event = Event(), attendee: Attendee = Attendee()) {
         guard request.hasValidToken() else {
             response.setBody(string: "Unauthorized")
-                .completed(status: .unauthorized)
+                    .completed(status: .unauthorized)
             return
         }
         
-        guard let id = Int(request.urlVariables["id"] ?? "0"), id > 0 else {
+        guard let eventId = Int(request.urlVariables["id"] ?? "0"), eventId > 0 else {
             response.completed(status: .badRequest)
             return
         }
@@ -217,16 +220,55 @@ class EventController {
         guard let postBody = try? request.postBodyString?.jsonDecode() as? [String: Any],
             let json = postBody else {
                 response.setBody(string: "Bad Request: malformed json")
-                    .completed(status: .badRequest)
+                        .completed(status: .badRequest)
                 return
         }
         
-        guard let userId = json["userId"] as? Int else {
+        guard let userId = json["userId"] as? Int,
+              let isPourer = json["isPourer"] as? Bool else {
             response.setBody(string: "Missing data")
-                .completed(status: .badRequest)
+                    .completed(status: .badRequest)
             return
         }
         
-        // TODO: finish
+        do {
+            try user.find(by: [("id", userId)])
+            guard user.id > 0 else {
+                response.setBody(string: "Could not find user")
+                        .completed(status: .notFound)
+                return
+            }
+            
+            try event.find(by: [("id", eventId)])
+            guard event.id > 0 else {
+                response.setBody(string: "Could not find event")
+                        .completed(status: .notFound)
+                return
+            }
+            
+            if isPourer {
+                event.pourerId = user.id
+                try event.store()
+            }
+            
+            try attendee.find(by: [("userid", userId)])
+            guard attendee.id == 0 else {
+                response.setBody(string: "Person already invited")
+                        .completed(status: .notFound)
+                return
+            }
+            
+            attendee.eventId = event.id
+            attendee.userId = user.id
+            
+            try attendee.store { id in
+                attendee.id = id as! Int
+            }
+            
+            response.completed(status: .created)
+            
+        } catch {
+            response.completed(status: .internalServerError)
+        }
     }
 }
