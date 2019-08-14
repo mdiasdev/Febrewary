@@ -65,7 +65,7 @@ class AuthController {
         do {
             try user.find(by: ["email": email])
             
-            guard user.id != 0 else {
+            guard user.isValid() else {
                 response.setBody(string: "Invalid username or password")
                         .completed(status: .preconditionFailed)
                 return
@@ -114,7 +114,7 @@ class AuthController {
         
         try user.find(by: ["email": email])
         
-        guard user.id == 0 else {
+        guard !user.isValid() else {
             throw UserExistsError()
         }
         

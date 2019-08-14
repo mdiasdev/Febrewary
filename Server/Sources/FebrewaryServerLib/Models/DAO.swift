@@ -11,6 +11,14 @@ import PostgresStORM
 
 class DAO: PostgresStORM {
     
+    var id: Int = 0
+    
+    // MARK: - Functions
+    func isValid() -> Bool {
+        return id > 0
+    }
+    
+    // MARK: - Wrappers for abstraction/overriding
     /// Wrapper to PostgresStORM's `findAll()`
     ///
     /// - Throws:

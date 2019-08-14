@@ -10,7 +10,6 @@ import StORM
 import PostgresStORM
 
 class Attendee: DAO {
-    var id: Int = 0
     var eventId: Int = 0
     var eventBeerId: Int = 0
     var userId: Int = 0
