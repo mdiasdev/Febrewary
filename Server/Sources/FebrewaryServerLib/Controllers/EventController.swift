@@ -275,4 +275,93 @@ class EventController {
             response.completed(status: .internalServerError)
         }
     }
+    
+    func pourEventBeer(request: HTTPRequest, response: HTTPResponse, event: Event = Event(), user: User = User(), eventBeer: EventBeer = EventBeer(), attendee: Attendee = Attendee()) {
+        
+        guard request.hasValidToken() else {
+            response.setBody(string: "Unauthorized")
+                    .completed(status: .unauthorized)
+            return
+        }
+        
+        guard let email = request.emailFromAuthToken() else {
+            response.setBody(string: "Bad Request")
+                    .completed(status: .badRequest)
+            return
+        }
+        
+        guard let eventId = Int(request.urlVariables["id"] ?? "0"), eventId > 0 else {
+            response.completed(status: .badRequest)
+            return
+        }
+        
+        var shouldForcePour = false
+        
+        if let isForced = request.queryParamsAsDictionary()["force"] {
+            shouldForcePour = Bool(isForced) ?? false
+        }
+        
+        do {
+            try event.find(by: [("id", eventId)])
+            guard event.id > 0 else {
+                response.setBody(string: "Could not find event with id: \(eventId)")
+                        .completed(status: .badRequest)
+                return
+            }
+            
+            try user.find(by: [("email", email)])
+            guard user.id > 0, event.pourerId == user.id else {
+                response.setBody(string: "Unauthorized")
+                        .completed(status: .unauthorized)
+                return
+            }
+            
+            try attendee.find(by: [("eventId", eventId)])
+            guard attendee.rows().count > 1 else {
+                response.setBody(string: "Event must have more than one attendee")
+                        .completed(status: .badRequest)
+                return
+            }
+            
+            try eventBeer.find(by: [("eventid", eventId)])
+            
+            guard eventBeer.rows().count > 0 else {
+                response.setBody(string: "No beers added to event \(eventId)")
+                        .completed(status: .notFound)
+                return
+            }
+            
+            if let currentlyPouringEventBeer = eventBeer.rows().first(where: { $0.isBeingPoured }) {
+                if currentlyPouringEventBeer.votes == attendee.rows().count || shouldForcePour {
+                    currentlyPouringEventBeer.isBeingPoured = false
+                    try currentlyPouringEventBeer.store()
+                } else {
+                    response.setBody(string: "Warning: not all votes are in. Pass force if you still want to proceed.")
+                            .completed(status: .preconditionFailed)
+                    return
+                }
+            }
+            
+            let unpouredEventBeers = eventBeer.rows().filter { $0.round == 0 && $0.votes == 0 && !$0.isBeingPoured }
+            let pouredEventBeers = eventBeer.rows().filter { $0.round > 0 }.sorted(by: { $0.round > $1.round})
+            
+            guard let randomBeer = unpouredEventBeers.randomElement() else {
+                // TODO: event over, do a thing (#117)
+                return
+            }
+            
+            let lastRound = pouredEventBeers.last?.round ?? 0
+            randomBeer.round = lastRound + 1
+            randomBeer.isBeingPoured = true
+            try randomBeer.store()
+            
+            let payload = randomBeer.asDictionary()
+            
+            try response.setBody(json: payload).completed(status: .ok)
+            
+        } catch {
+            // FIXME: error handling
+            print("do something in a minute")
+        }
+    }
 }

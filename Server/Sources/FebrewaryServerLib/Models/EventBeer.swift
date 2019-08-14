@@ -7,6 +7,7 @@ class EventBeer: DAO {
     var userId: Int = 0
     var beerId: Int = 0
     var eventId: Int = 0
+    var round: Int = 0
     var votes: Int = 0
     var score: Int = 0
     var isBeingPoured: Bool = false
@@ -22,6 +23,7 @@ class EventBeer: DAO {
         beerId = this.data["beerid"] as? Int ?? 0
         userId = this.data["userid"] as? Int ?? 0
         eventId = this.data["eventid"] as? Int ?? 0
+        round = this.data["round"] as? Int ?? 0
         score = this.data["score"] as? Int ?? 0
         votes = this.data["votes"] as? Int ?? 0
         isBeingPoured = this.data["isbeingpoured"] as? Bool ?? false
@@ -62,6 +64,7 @@ extension EventBeer {
             "id": self.id,
             "attendee": user.asSimpleDictionary(),
             "beer": beer.asDictionary(),
+            "round": self.round,
             "score": self.score,
             "isBeingPoured": self.isBeingPoured,
         ]
