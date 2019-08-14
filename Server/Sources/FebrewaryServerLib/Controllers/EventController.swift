@@ -360,6 +360,7 @@ class EventController {
             try response.setBody(json: payload).completed(status: .ok)
             
         } catch {
+            // FIXME: error handling
             print("do something in a minute")
         }
     }
