@@ -34,7 +34,7 @@ class EventController {
         do {
             try user.find(by: ["email": email])
             
-            guard user.isValid() else {
+            guard user.id > 0 else {
                 response.setBody(string: "Could not find current User")
                         .completed(status: .internalServerError)
                 return
@@ -53,7 +53,7 @@ class EventController {
                 event.id = id as! Int
             }
             
-            if event.isValid() {
+            if event.id > 0 {
                 attendee.eventId = event.id
                 attendee.userId = user.id
                 try attendee.store { id in
@@ -97,7 +97,7 @@ class EventController {
         do {
             try user.find(by: ["email": email])
 
-            guard user.isValid() else {
+            guard user.id != 0 else {
                 response.setBody(string: "Bad Request: could not find User")
                         .completed(status: .badRequest)
                 return
@@ -158,7 +158,7 @@ class EventController {
         do {
             try user.find(by: ["email": email])
             
-            guard user.isValid() else {
+            guard user.id != 0 else {
                 response.setBody(string: "Bad Request: could not find User")
                         .completed(status: .badRequest)
                 return
@@ -166,7 +166,7 @@ class EventController {
             
             try event.find(by: [("id", id)])
             
-            guard event.isValid() else {
+            guard event.id > 0 else {
                 response.setBody(string: "Could not find event with id: \(id).")
                         .completed(status: .notFound)
                 return
@@ -184,7 +184,7 @@ class EventController {
                 ("eventId", event.id)
                 ])
             
-            guard !eventBeer.isValid() else {
+            guard eventBeer.id == 0 else {
                 response.setBody(string: "User has already added a beer to this event")
                         .completed(status: .conflict)
                 return
@@ -233,14 +233,14 @@ class EventController {
         
         do {
             try user.find(by: [("id", userId)])
-            guard user.isValid() else {
+            guard user.id > 0 else {
                 response.setBody(string: "Could not find user")
                         .completed(status: .notFound)
                 return
             }
             
             try event.find(by: [("id", eventId)])
-            guard event.isValid() else {
+            guard event.id > 0 else {
                 response.setBody(string: "Could not find event")
                         .completed(status: .notFound)
                 return
@@ -256,7 +256,7 @@ class EventController {
             }
             
             try attendee.find(by: [("userid", user.id), ("eventid", event.id)])
-            guard !attendee.isValid() else {
+            guard attendee.id == 0 else {
                 response.setBody(string: "Person already invited")
                         .completed(status: .notFound)
                 return
@@ -273,39 +273,6 @@ class EventController {
             
         } catch {
             response.completed(status: .internalServerError)
-        }
-    }
-    
-    func pourEventBeer(request: HTTPRequest, response: HTTPResponse, event: Event = Event(), user: User = User(), eventBeer: EventBeer = EventBeer()) {
-        
-        guard request.hasValidToken() else {
-            response.setBody(string: "Unauthorized")
-                    .completed(status: .unauthorized)
-            return
-        }
-        
-        guard let email = request.emailFromAuthToken() else {
-            response.setBody(string: "Bad Request")
-                    .completed(status: .badRequest)
-            return
-        }
-        
-        guard let eventId = Int(request.urlVariables["id"] ?? "0"), eventId > 0 else {
-            response.completed(status: .badRequest)
-            return
-        }
-        
-        do {
-            try user.find(by: [("email", email)])
-            
-            try event.find(by: [("id", eventId)])
-            
-            guard event.isValid(), user.isValid(), event.pourerId == user.id else {
-                return
-            }
-            
-        } catch {
-            print("do something in a minute")
         }
     }
 }

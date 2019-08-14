@@ -4,6 +4,7 @@ import PostgresStORM
 
 class Event: DAO {
     // MARK: - Properties: basic properties
+    var id: Int = 0
     var name: String = ""
     var address: String = ""
     var date: String = ""

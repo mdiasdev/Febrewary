@@ -3,10 +3,10 @@ import StORM
 import PostgresStORM
 
 class EventBeer: DAO {
+    var id: Int = 0
     var userId: Int = 0
     var beerId: Int = 0
     var eventId: Int = 0
-    var round: Int = 0
     var votes: Int = 0
     var score: Int = 0
     var isBeingPoured: Bool = false
@@ -22,7 +22,6 @@ class EventBeer: DAO {
         beerId = this.data["beerid"] as? Int ?? 0
         userId = this.data["userid"] as? Int ?? 0
         eventId = this.data["eventid"] as? Int ?? 0
-        round = this.data["round"] as? Int ?? 0
         score = this.data["score"] as? Int ?? 0
         votes = this.data["votes"] as? Int ?? 0
         isBeingPoured = this.data["isbeingpoured"] as? Bool ?? false
@@ -57,14 +56,13 @@ extension EventBeer {
         let beer = Beer()
         try? beer.get(self.beerId)
 
-        guard let user = _user, beer.isValid() else { return [:] }
+        guard let user = _user, beer.id > 0 else { return [:] }
 
         return [
             "id": self.id,
             "attendee": user.asSimpleDictionary(),
             "beer": beer.asDictionary(),
             "score": self.score,
-            "round": self.round,
             "isBeingPoured": self.isBeingPoured,
         ]
     }

@@ -27,7 +27,7 @@ class UserController {
         do {
             try user.find(by: ["email": email])
             
-            guard user.isValid() else {
+            guard user.id > 0 else {
                 response.setBody(string: "User not found!")
                         .completed(status: .notFound)
                 return
@@ -58,7 +58,7 @@ class UserController {
         do {
             try user.find(by: ["id": id])
             
-            guard user.isValid() else {
+            guard user.id > 0 else {
                 response.setBody(string: "User not found!")
                         .completed(status: .notFound)
                 return

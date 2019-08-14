@@ -13,7 +13,7 @@ class BeerController {
             
             try user.find(by: ["email": email])
             
-            guard user.isValid() else {
+            guard user.id != 0 else {
                 response.setBody(string: "Unauthorized")
                         .completed(status: .unauthorized)
                 return
@@ -39,7 +39,7 @@ class BeerController {
                 ]
             )
 
-            guard !beer.isValid() else {
+            guard beer.id == 0 else {
                 response.setBody(string: "Beer already exists")
                         .completed(status: .conflict)
                 return
@@ -72,7 +72,7 @@ class BeerController {
         do {
             try user.find(by: ["email": email])
             
-            guard user.isValid() else {
+            guard user.id != 0 else {
                 response.setBody(string: "Unauthorized")
                         .completed(status: .unauthorized)
                 return

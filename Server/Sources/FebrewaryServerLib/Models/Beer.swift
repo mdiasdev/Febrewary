@@ -3,6 +3,8 @@ import StORM
 import PostgresStORM
 
 class Beer: DAO {
+
+    var id: Int = 0
     var name: String = ""
     var brewer: String = ""
     var abv: Float = 0.0
