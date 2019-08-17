@@ -155,6 +155,7 @@
                                         </state>
                                         <connections>
                                             <action selector="startEvent:" destination="MDp-aZ-CgG" eventType="touchUpInside" id="CSA-6f-LHG"/>
+                                            <segue destination="wZA-wq-nui" kind="presentation" id="PVk-p1-Vg5"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -195,6 +196,103 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4Qd-7e-BJ8" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1472.8" y="-1763.568215892054"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="IdE-Sk-i3H">
+            <objects>
+                <viewController id="wZA-wq-nui" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Ucg-v1-4wN">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="I3J-CH-s1S">
+                                <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                                <items>
+                                    <navigationItem title="Pour Beer" id="2Fd-gD-BQa">
+                                        <barButtonItem key="leftBarButtonItem" title="Item" image="X_ico" id="RU4-sv-LjK"/>
+                                    </navigationItem>
+                                </items>
+                            </navigationBar>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" text="Beer Name:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7A4-iv-zKG">
+                                <rect key="frame" x="16" y="128" width="90" height="20.5"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" text="Brewer Name:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QnS-ac-Vsb">
+                                <rect key="frame" x="16" y="156.5" width="108" height="21"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" text="Brought By:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1X0-ew-KoX">
+                                <rect key="frame" x="16" y="185.5" width="90" height="21"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Some Beer Name" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="U4d-b0-OWa">
+                                <rect key="frame" x="114" y="128" width="245" height="20.5"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Some Brewer Name" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LRN-Fc-EvK">
+                                <rect key="frame" x="132" y="156.5" width="227" height="21"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Some Person Name" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2Qb-Gg-XRC">
+                                <rect key="frame" x="114" y="185.5" width="245" height="21"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xtp-xX-onc">
+                                <rect key="frame" x="64" y="286.5" width="247" height="50"/>
+                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="ESZ-Mm-U27"/>
+                                </constraints>
+                                <state key="normal" title="Button">
+                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="2Qb-Gg-XRC" firstAttribute="top" secondItem="LRN-Fc-EvK" secondAttribute="bottom" constant="8" id="2Os-lk-i13"/>
+                            <constraint firstItem="LRN-Fc-EvK" firstAttribute="leading" secondItem="QnS-ac-Vsb" secondAttribute="trailing" constant="8" id="48b-Mw-nB6"/>
+                            <constraint firstItem="I3J-CH-s1S" firstAttribute="trailing" secondItem="TA2-u8-49V" secondAttribute="trailing" id="9Zb-HO-EA6"/>
+                            <constraint firstItem="7A4-iv-zKG" firstAttribute="top" secondItem="I3J-CH-s1S" secondAttribute="bottom" constant="64" id="D0j-qA-bz8"/>
+                            <constraint firstItem="1X0-ew-KoX" firstAttribute="leading" secondItem="QnS-ac-Vsb" secondAttribute="leading" id="Dya-CW-1M8"/>
+                            <constraint firstItem="QnS-ac-Vsb" firstAttribute="top" secondItem="U4d-b0-OWa" secondAttribute="bottom" constant="8" id="EiO-82-FfN"/>
+                            <constraint firstItem="Xtp-xX-onc" firstAttribute="centerX" secondItem="Ucg-v1-4wN" secondAttribute="centerX" id="G17-1h-dnN"/>
+                            <constraint firstItem="U4d-b0-OWa" firstAttribute="leading" secondItem="7A4-iv-zKG" secondAttribute="trailing" constant="8" id="GW5-Av-Pyq"/>
+                            <constraint firstItem="QnS-ac-Vsb" firstAttribute="leading" secondItem="7A4-iv-zKG" secondAttribute="leading" id="H1P-PD-m5I"/>
+                            <constraint firstItem="I3J-CH-s1S" firstAttribute="top" secondItem="TA2-u8-49V" secondAttribute="top" id="I3T-VV-h8c"/>
+                            <constraint firstItem="7A4-iv-zKG" firstAttribute="leading" secondItem="TA2-u8-49V" secondAttribute="leading" constant="16" id="I5d-FX-Uuu"/>
+                            <constraint firstItem="2Qb-Gg-XRC" firstAttribute="centerY" secondItem="1X0-ew-KoX" secondAttribute="centerY" id="LAr-D6-Bac"/>
+                            <constraint firstItem="2Qb-Gg-XRC" firstAttribute="leading" secondItem="1X0-ew-KoX" secondAttribute="trailing" constant="8" id="Q5t-dQ-unO"/>
+                            <constraint firstItem="Xtp-xX-onc" firstAttribute="top" secondItem="2Qb-Gg-XRC" secondAttribute="bottom" constant="80" id="TAv-Ks-5V3"/>
+                            <constraint firstItem="LRN-Fc-EvK" firstAttribute="centerY" secondItem="QnS-ac-Vsb" secondAttribute="centerY" id="Vab-L0-SzZ"/>
+                            <constraint firstItem="1X0-ew-KoX" firstAttribute="top" secondItem="LRN-Fc-EvK" secondAttribute="bottom" constant="8" id="XJi-8Q-uBJ"/>
+                            <constraint firstItem="Xtp-xX-onc" firstAttribute="leading" secondItem="TA2-u8-49V" secondAttribute="leading" constant="64" id="ZQ9-y6-0zd"/>
+                            <constraint firstItem="TA2-u8-49V" firstAttribute="trailing" secondItem="2Qb-Gg-XRC" secondAttribute="trailing" constant="16" id="asA-cm-dUv"/>
+                            <constraint firstItem="U4d-b0-OWa" firstAttribute="centerY" secondItem="7A4-iv-zKG" secondAttribute="centerY" id="dFy-d1-Z35"/>
+                            <constraint firstItem="TA2-u8-49V" firstAttribute="trailing" secondItem="U4d-b0-OWa" secondAttribute="trailing" constant="16" id="fba-kb-fM4"/>
+                            <constraint firstItem="LRN-Fc-EvK" firstAttribute="top" secondItem="U4d-b0-OWa" secondAttribute="bottom" constant="8" id="gaZ-T6-AHl"/>
+                            <constraint firstItem="I3J-CH-s1S" firstAttribute="leading" secondItem="TA2-u8-49V" secondAttribute="leading" id="gwN-SD-H1c"/>
+                            <constraint firstItem="TA2-u8-49V" firstAttribute="trailing" secondItem="LRN-Fc-EvK" secondAttribute="trailing" constant="16" id="qFi-47-M9B"/>
+                            <constraint firstItem="TA2-u8-49V" firstAttribute="trailing" secondItem="Xtp-xX-onc" secondAttribute="trailing" constant="64" id="ygM-QW-Wmb"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="TA2-u8-49V"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="4e6-df-ILc" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1473" y="-1050"/>
         </scene>
         <!--Add Attendee View Controller-->
         <scene sceneID="7ZT-4o-WYn">
@@ -462,7 +560,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZWr-a2-tOe" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1470" y="-1039"/>
+            <point key="canvasLocation" x="969" y="-220"/>
         </scene>
         <!--Beer View Controller-->
         <scene sceneID="KhF-42-lHx">
@@ -576,7 +674,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YgN-Ux-5rb" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2229.5999999999999" y="-1039.4302848575712"/>
+            <point key="canvasLocation" x="1729" y="-220"/>
         </scene>
         <!--Add Beer-->
         <scene sceneID="iFj-uR-4Qt">
@@ -652,7 +750,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="T66-kh-5G3" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="WG6-J1-4ta" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="3908" y="-1039.4302848575712"/>
+            <point key="canvasLocation" x="3407" y="-220"/>
         </scene>
         <!--Root View Controller-->
         <scene sceneID="0tM-zV-vIc">
@@ -681,7 +779,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sVe-cA-4ny" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="692" y="-596"/>
+            <point key="canvasLocation" x="-431" y="-219"/>
         </scene>
         <!--Friends-->
         <scene sceneID="1Ng-ng-HHp">
@@ -698,7 +796,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Jl3-Cr-TEf" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-68" y="-596"/>
+            <point key="canvasLocation" x="-1191" y="-220"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="a9f-wg-YMw">
@@ -752,7 +850,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7Sm-Hq-m44" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3132" y="-1039"/>
+            <point key="canvasLocation" x="2631" y="-220"/>
         </scene>
         <!--Beer Details View Controller-->
         <scene sceneID="nl5-ME-nHw">
@@ -882,7 +980,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="chr-OR-Eh0" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3132" y="-268"/>
+            <point key="canvasLocation" x="2631" y="551"/>
         </scene>
     </scenes>
     <resources>
