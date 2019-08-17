@@ -66,7 +66,7 @@ class PouringViewController: UIViewController {
     
     // MARK: - Networking
     func pourNext(shouldForce: Bool = false) {
-        eventService.getBeer(for: event, shouldForce: shouldForce) { [weak self] result in
+        eventService.getBeerToPour(for: event, shouldForce: shouldForce) { [weak self] result in
             DispatchQueue.main.async {
                 switch result {
                 case .success(let eventBeer):

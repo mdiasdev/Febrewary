@@ -106,7 +106,7 @@ struct EventsService {
         }
     }
     
-    func getBeer(for event: Event, shouldForce: Bool, completionHandler: @escaping (Result<EventBeer, LocalError>) -> Void) {
+    func getBeerToPour(for event: Event, shouldForce: Bool, completionHandler: @escaping (Result<EventBeer, LocalError>) -> Void) {
         let url = URLBuilder(endpoint: .event).buildUrl(components: [(name: "force", value: "\(shouldForce)")]).appendingPathComponent("\(event.id)/pour")
         
         client.get(url: url) { result in
