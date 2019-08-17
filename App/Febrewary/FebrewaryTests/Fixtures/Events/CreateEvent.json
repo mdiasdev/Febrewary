@@ -1,29 +1,18 @@
 {
-    "id": 3,
-    "date": "2016-06-08T18:24:16+0000",
+    "date": "2020-06-08T18:24:16+0000",
+    "createdBy": 1,
+    "id": 2,
+    "address": "Some dude's home",
+    "isOver": false,
     "attendees": [
         {
-            "lastName": "Dias",
-            "email": "me@me.org",
+            "name": "Test",
             "id": 1,
-            "firstName": "Matt"
-        },
-        {
-            "email": "mefriend@me.org",
-            "firstName": "Greg",
-            "id": 2,
-            "lastName": "Dias"
-        },
-        {
-            "id": 3,
-            "lastName": "Dias",
-            "firstName": "Susan",
-            "email": "mefriendlyguy@me.org"
+            "email": "1@2.org"
         }
     ],
-    "name": "Another Awesome Event",
-    "pourerId": 1,
-    "address": "Some Other dude's home elsewhere",
     "eventBeers": [],
-    "createdBy": 3
+    "hasStarted": false,
+    "name": "New Event2",
+    "pourerId": 0
 }

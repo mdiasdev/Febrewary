@@ -1,405 +1,180 @@
 [
     {
-        "id": 2,
-        "attendees": [
-            {
-                "firstName": "Matt",
-                "id": 1,
-                "lastName": "Dias",
-                "email": "me@me.org"
-            },
-            {
-                "lastName": "Dias",
-                "firstName": "Susan",
-                "email": "mefriendlyguy@me.org",
-                "id": 3
-            },
-            {
-                "email": "mefriend@me.org",
-                "id": 2,
-                "firstName": "Greg",
-                "lastName": "Dias"
-            }
-        ],
-        "date": "2016-06-08T18:24:16+0000",
-        "address": "Some Other dude's home elsewhere",
-        "pourerId": 2,
-        "name": "Another Awesome Event",
+        "date": "2020-06-08T18:24:16+0000",
         "createdBy": 1,
-        "eventBeers": []
-    },
-    {
-        "eventBeers": [],
-        "address": "Some Other dude's home elsewhere",
-        "date": "2016-06-08T18:24:16+0000",
-        "id": 3,
-        "name": "Another Awesome Event",
-        "pourerId": 1,
-        "createdBy": 3,
-        "attendees": [
-            {
-                "firstName": "Matt",
-                "id": 1,
-                "lastName": "Dias",
-                "email": "me@me.org"
-            },
-            {
-                "id": 2,
-                "email": "mefriend@me.org",
-                "firstName": "Greg",
-                "lastName": "Dias"
-            },
-            {
-                "firstName": "Susan",
-                "email": "mefriendlyguy@me.org",
-                "id": 3,
-                "lastName": "Dias"
-            }
-        ]
-    },
-    {
-        "address": "Matt’s House",
-        "createdBy": 1,
-        "name": "Matt’s Test Event",
-        "attendees": [
-            {
-                "firstName": "Matt",
-                "email": "me@me.org",
-                "id": 1,
-                "lastName": "Dias"
-            },
-            {
-                "email": "mefriend@me.org",
-                "lastName": "Dias",
-                "id": 2,
-                "firstName": "Greg"
-            }
-        ],
-        "pourerId": 1,
-        "date": "2019-06-25T20:13:00Z",
-        "id": 4,
-        "eventBeers": []
-    },
-    {
-        "pourerId": 1,
-        "id": 5,
-        "eventBeers": [],
-        "attendees": [
-            {
-                "lastName": "Dias",
-                "email": "me@me.org",
-                "firstName": "Matt",
-                "id": 1
-            },
-            {
-                "lastName": "Dias",
-                "email": "mefriend@me.org",
-                "id": 2,
-                "firstName": "Greg"
-            }
-        ],
-        "address": "Matt’s House",
-        "createdBy": 1,
-        "name": "Matt’s Second Test",
-        "date": "2019-06-23T20:15:00Z"
-    },
-    {
-        "eventBeers": [],
-        "pourerId": 1,
+        "name": "New Event",
         "attendees": [
             {
                 "id": 1,
-                "firstName": "Matt",
-                "lastName": "Dias",
-                "email": "me@me.org"
+                "name": "Test",
+                "email": "1@2.org"
             },
             {
-                "email": "mefriend@me.org",
-                "id": 2,
-                "firstName": "Greg",
-                "lastName": "Dias"
-            }
-        ],
-        "address": "Some Home",
-        "date": "2019-06-25T23:17:00Z",
-        "createdBy": 1,
-        "id": 6,
-        "name": "Matt’s 3rd Test"
-    },
-    {
-        "id": 7,
-        "address": "adsfasd",
-        "pourerId": 1,
-        "attendees": [
-            {
-                "firstName": "Matt",
-                "lastName": "Dias",
-                "email": "me@me.org",
-                "id": 1
-            },
-            {
-                "lastName": "Dias",
-                "firstName": "Greg",
-                "id": 2,
-                "email": "mefriend@me.org"
-            }
-        ],
-        "name": "Adsfadsf",
-        "eventBeers": [],
-        "createdBy": 1,
-        "date": "2019-06-24T20:18:00Z"
-    },
-    {
-        "eventBeers": [],
-        "address": "sdfgsdfgdf",
-        "date": "2019-06-23T20:20:00Z",
-        "name": "Dfsfgdsdfg",
-        "id": 8,
-        "createdBy": 1,
-        "attendees": [
-            {
-                "email": "me@me.org",
-                "id": 1,
-                "lastName": "Dias",
-                "firstName": "Matt"
-            },
-            {
-                "lastName": "Dias",
-                "firstName": "Greg",
-                "id": 2,
-                "email": "mefriend@me.org"
-            }
-        ],
-        "pourerId": 1
-    },
-    {
-        "id": 9,
-        "attendees": [
-            {
-                "email": "me@me.org",
-                "firstName": "Matt",
-                "lastName": "Dias",
-                "id": 1
-            },
-            {
-                "lastName": "Dias",
-                "id": 2,
-                "email": "mefriend@me.org",
-                "firstName": "Greg"
-            }
-        ],
-        "eventBeers": [],
-        "pourerId": 1,
-        "createdBy": 1,
-        "address": "asdfasdf",
-        "date": "2019-06-23T20:23:00Z",
-        "name": "Dsafafsdf"
-    },
-    {
-        "pourerId": 1,
-        "date": "2019-06-29T20:24:00Z",
-        "createdBy": 1,
-        "attendees": [
-            {
-                "firstName": "Matt",
-                "id": 1,
-                "lastName": "Dias",
-                "email": "me@me.org"
-            },
-            {
-                "lastName": "Dias",
-                "firstName": "Greg",
-                "id": 2,
-                "email": "mefriend@me.org"
-            }
-        ],
-        "name": "Successful Segue Maybe",
-        "id": 10,
-        "eventBeers": [],
-        "address": "asdfsdf"
-    },
-    {
-        "pourerId": 1,
-        "attendees": [
-            {
-                "lastName": "Dias",
-                "id": 1,
-                "firstName": "Matt",
-                "email": "me@me.org"
-            },
-            {
-                "firstName": "Greg",
-                "lastName": "Dias",
-                "email": "mefriend@me.org",
+                "name": "Test2",
+                "email": "2@3.org",
                 "id": 2
             }
         ],
-        "eventBeers": [],
-        "address": "asdsd",
-        "id": 11,
-        "createdBy": 1,
-        "date": "2019-06-24T20:28:00Z",
-        "name": "Asdasd"
-    },
-    {
-        "eventBeers": [],
-        "name": "This Is The One",
-        "id": 12,
-        "createdBy": 1,
-        "address": "My Home",
-        "attendees": [
+        "isOver": false,
+        "id": 1,
+        "address": "Some dude's home",
+        "pourerId": 2,
+        "eventBeers": [
             {
-                "firstName": "Matt",
-                "lastName": "Dias",
+                "round": 1,
+                "score": 0,
+                "beer": {
+                    "brewerName": "Samuel Adams",
+                    "totalScore": 0,
+                    "totalVotes": 0,
+                    "id": 1,
+                    "averageScore": 0,
+                    "addedBy": 1,
+                    "name": "Boston Lager",
+                    "abv": 0.0
+                },
+                "attendee": {
+                    "id": 1,
+                    "name": "Test",
+                    "email": "1@2.org"
+                },
                 "id": 1,
-                "email": "me@me.org"
+                "isBeingPoured": false
             },
             {
+                "attendee": {
+                    "name": "Test2",
+                    "id": 2,
+                    "email": "2@3.org"
+                },
+                "round": 2,
+                "beer": {
+                    "brewerName": "Samuel Adams",
+                    "name": "Sam Summer",
+                    "averageScore": 0,
+                    "abv": 0.0,
+                    "addedBy": 1,
+                    "totalVotes": 0,
+                    "totalScore": 0,
+                    "id": 2
+                },
+                "score": 0,
                 "id": 2,
-                "email": "mefriend@me.org",
-                "firstName": "Greg",
-                "lastName": "Dias"
+                "isBeingPoured": false
             }
         ],
-        "pourerId": 1,
-        "date": "2019-07-02T20:30:00Z"
+        "hasStarted": false
     },
     {
-        "address": "asdfasdf",
-        "attendees": [
-            {
-                "firstName": "Matt",
-                "id": 1,
-                "lastName": "Dias",
-                "email": "me@me.org"
-            },
-            {
-                "firstName": "Greg",
-                "email": "mefriend@me.org",
-                "id": 2,
-                "lastName": "Dias"
-            }
-        ],
-        "name": "Dasfsdfasdf",
-        "eventBeers": [],
-        "createdBy": 1,
-        "pourerId": 1,
-        "date": "2019-06-24T20:32:00Z",
-        "id": 13
-    },
-    {
-        "name": "Hopeful",
-        "attendees": [
-            {
-                "id": 1,
-                "lastName": "Dias",
-                "email": "me@me.org",
-                "firstName": "Matt"
-            },
-            {
-                "id": 2,
-                "firstName": "Greg",
-                "email": "mefriend@me.org",
-                "lastName": "Dias"
-            }
-        ],
-        "address": "123 My Street",
-        "createdBy": 1,
-        "eventBeers": [],
-        "pourerId": 1,
-        "date": "2019-06-25T20:33:00Z",
-        "id": 14
-    },
-    {
-        "eventBeers": [],
-        "address": "123 Home St Ave",
-        "createdBy": 1,
-        "id": 15,
-        "pourerId": 1,
-        "name": "This Is Truly The One",
+        "pourerId": 2,
+        "address": "Some dude's home",
+        "isOver": false,
         "attendees": [
             {
                 "id": 1,
-                "lastName": "Dias",
-                "email": "me@me.org",
-                "firstName": "Matt"
-            },
-            {
-                "email": "mefriend@me.org",
-                "id": 2,
-                "lastName": "Dias",
-                "firstName": "Greg"
-            }
-        ],
-        "date": "2019-08-03T22:07:00Z"
-    },
-    {
-        "name": "One Day This Will Work",
-        "date": "2019-06-24T20:36:00Z",
-        "address": "123",
-        "createdBy": 1,
-        "eventBeers": [],
-        "pourerId": 1,
-        "attendees": [
-            {
-                "lastName": "Dias",
-                "firstName": "Matt",
-                "email": "me@me.org",
-                "id": 1
+                "name": "Test",
+                "email": "1@2.org"
             },
             {
                 "id": 2,
-                "email": "mefriend@me.org",
-                "lastName": "Dias",
-                "firstName": "Greg"
+                "name": "Test2",
+                "email": "2@3.org"
             }
         ],
-        "id": 16
+        "name": "New Event2",
+        "eventBeers": [
+            {
+                "round": 1,
+                "beer": {
+                    "abv": 0.0,
+                    "averageScore": 0,
+                    "id": 2,
+                    "name": "Sam Summer",
+                    "totalScore": 0,
+                    "totalVotes": 0,
+                    "brewerName": "Samuel Adams",
+                    "addedBy": 1
+                },
+                "score": 0,
+                "id": 3,
+                "attendee": {
+                    "email": "2@3.org",
+                    "id": 2,
+                    "name": "Test2"
+                },
+                "isBeingPoured": false
+            },
+            {
+                "attendee": {
+                    "name": "Test",
+                    "email": "1@2.org",
+                    "id": 1
+                },
+                "id": 4,
+                "round": 2,
+                "beer": {
+                    "abv": 0.0,
+                    "brewerName": "Samuel Adams",
+                    "name": "Boston Lager",
+                    "averageScore": 0,
+                    "totalVotes": 0,
+                    "addedBy": 1,
+                    "id": 1,
+                    "totalScore": 0
+                },
+                "score": 0,
+                "isBeingPoured": true
+            }
+        ],
+        "date": "2020-06-08T18:24:16+0000",
+        "id": 2,
+        "createdBy": 1,
+        "hasStarted": false
     },
     {
-        "createdBy": 1,
-        "name": "Afdfsadsf",
-        "id": 17,
-        "pourerId": 1,
         "eventBeers": [],
-        "address": "asdfsf",
-        "date": "2019-06-25T20:38:00Z",
         "attendees": [
             {
+                "email": "1@2.org",
                 "id": 1,
-                "firstName": "Matt",
-                "email": "me@me.org",
-                "lastName": "Dias"
+                "name": "Test"
             },
             {
-                "firstName": "Greg",
+                "name": "Test2",
                 "id": 2,
-                "lastName": "Dias",
-                "email": "mefriend@me.org"
-            }
-        ]
-    },
-    {
-        "attendees": [
-            {
-                "id": 1,
-                "email": "me@me.org",
-                "lastName": "Dias",
-                "firstName": "Matt"
-            },
-            {
-                "lastName": "Dias",
-                "email": "mefriend@me.org",
-                "id": 2,
-                "firstName": "Greg"
+                "email": "2@3.org"
             }
         ],
-        "createdBy": 1,
-        "id": 18,
         "pourerId": 1,
-        "date": "2019-06-25T20:40:00Z",
+        "createdBy": 1,
+        "isOver": false,
+        "address": "Here",
+        "name": "Some Test Event",
+        "id": 3,
+        "date": "2019-08-17T20:08:00Z",
+        "hasStarted": false
+    },
+    {
+        "address": "Here",
+        "pourerId": 1,
+        "createdBy": 1,
+        "date": "2019-08-17T20:10:00Z",
+        "isOver": false,
+        "attendees": [
+            {
+                "name": "Test",
+                "id": 1,
+                "email": "1@2.org"
+            },
+            {
+                "id": 2,
+                "name": "Test2",
+                "email": "2@3.org"
+            }
+        ],
         "eventBeers": [],
-        "name": "123123",
-        "address": "123123"
+        "id": 4,
+        "name": "New Test Event",
+        "hasStarted": false
     }
 ]
