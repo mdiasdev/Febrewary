@@ -33,12 +33,23 @@ class PouringViewController: UIViewController {
         // Do any additional setup after loading the view.
         nextButton.layer.cornerRadius = 8
         labelContainerView.isHidden = true
+        
+        fetchCurrentBeer()
     }
     
     func setupLabels(with eventBeer: EventBeer) {
         beerNameLabel.text = eventBeer.beer.name
         brewerNameLabel.text = eventBeer.beer.brewerName
         attendeeNameLabel.text = eventBeer.attendee.name
+    }
+
+    // MARK: - Actions
+    @IBAction func nextTapped(_ sender: Any) {
+        pourNext()
+    }
+    
+    @IBAction func dismissTapped(_ sender: Any) {
+        dismiss(animated: true, completion: nil)
     }
     
     func showIncompleteAlert(error: PourWarning) {
@@ -52,11 +63,8 @@ class PouringViewController: UIViewController {
         
         present(alert, animated: true, completion: nil)
     }
-
-    @IBAction func nextTapped(_ sender: Any) {
-        pourNext()
-    }
     
+    // MARK: - Networking
     func pourNext(shouldForce: Bool = false) {
         eventService.getBeer(for: event, shouldForce: shouldForce) { [weak self] result in
             DispatchQueue.main.async {
@@ -67,6 +75,19 @@ class PouringViewController: UIViewController {
                     if let warning = error as? PourWarning {
                         self?.showIncompleteAlert(error: warning)
                     }
+                }
+            }
+        }
+    }
+    
+    func fetchCurrentBeer() {
+        eventService.getCurrentBeer(for: event) { [weak self] result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let eventBeer):
+                    self?.eventBeer = eventBeer
+                case .failure:
+                    print("silently fail getting current event beer")
                 }
             }
         }

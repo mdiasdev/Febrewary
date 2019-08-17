@@ -208,7 +208,11 @@
                                 <rect key="frame" x="0.0" y="20" width="375" height="44"/>
                                 <items>
                                     <navigationItem title="Pour Beer" id="2Fd-gD-BQa">
-                                        <barButtonItem key="leftBarButtonItem" title="Item" image="X_ico" id="RU4-sv-LjK"/>
+                                        <barButtonItem key="leftBarButtonItem" title="Item" image="X_ico" id="RU4-sv-LjK">
+                                            <connections>
+                                                <action selector="dismissTapped:" destination="wZA-wq-nui" id="c10-XK-uKf"/>
+                                            </connections>
+                                        </barButtonItem>
                                     </navigationItem>
                                 </items>
                             </navigationBar>
