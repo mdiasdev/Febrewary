@@ -26,20 +26,17 @@ struct URLBuilder {
     }
     
     func buildUrl(components: [(name: String, value: String)] = []) -> URL {
-        switch endpoint {
-            case .register, .signIn, .event, .user, .users, .beer:
-                var url = URLComponents(string: "\(baseUrl)/\(endpoint.rawValue)")
-                
-                if components.count > 0 {
-                    url?.queryItems = []
-                }
-                
-                for component in components {
-                    let queryItem = URLQueryItem(name: component.name, value: component.value)
-                    url?.queryItems?.append(queryItem)
-                }
-                
-                return url!.url!
+        var url = URLComponents(string: "\(baseUrl)/\(endpoint.rawValue)")
+    
+        if components.count > 0 {
+            url?.queryItems = []
         }
+    
+        for component in components {
+            let queryItem = URLQueryItem(name: component.name, value: component.value)
+            url?.queryItems?.append(queryItem)
+        }
+    
+        return url!.url!
     }
 }

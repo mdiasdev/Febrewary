@@ -34,8 +34,7 @@ class AuthServiceTests: XCTestCase {
         fakeService.successFileName = "Auth"
         let completed = expectation(description: "call should complete")
         
-        sut.createAccount(firstName: "some",
-                          lastName: "one",
+        sut.createAccount(name: "someone",
                           email: "me@you.org",
                           password: "hello stream!") { result in
             switch result {

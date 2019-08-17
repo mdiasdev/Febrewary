@@ -8,17 +8,46 @@
 
 import Foundation
 
-protocol LocalError {
+protocol SomeError {
     var title: String { get }
+    var code: Int { get }
     var message: String { get }
 }
 
-public struct JSONError: Error, LocalError {
-    var title: String { return "Bad Response" }
-    var message: String { return "Could not parse response from server." }
+class LocalError: SomeError, Error {
+    var title: String = ""
+    var code: Int =  -1
+    var message: String = ""
+    
+    init() { }
 }
 
-public struct UnknownNetworkError: Error, LocalError {
-    var title: String { return "Unknown Error" }
-    var message: String { return "Could not parse response from server." }
+class JSONError: LocalError {
+    override init() {
+        super.init()
+        
+        title = "Bad Response"
+        code = 400
+        message = "Could not parse response from server."
+    }
+}
+
+class UnknownNetworkError: LocalError {
+    override init() {
+        super.init()
+        
+        title = "Unknown Error"
+        code = 500
+        message = "Could not parse response from server."
+    }
+}
+
+class PourWarning: LocalError {
+    override init() {
+        super.init()
+        
+        title = "Warning!"
+        code = 412
+        message = "Not all votes are in. Are you sure you want to pour the next beer?"
+    }
 }

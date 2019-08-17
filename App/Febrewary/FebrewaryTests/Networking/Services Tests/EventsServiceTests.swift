@@ -53,8 +53,7 @@ class EventsServiceTests: XCTestCase {
         sut.createEvent(named: "some event",
                         on: Date(),
                         at: "some address",
-                        withPourer: 1,
-                        andAttendees: [1,2,3]) { result in
+                        isPourer: true) { result in
             completed.fulfill()
             switch result {
             case .success(let event):

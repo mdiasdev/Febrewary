@@ -54,10 +54,6 @@ class EventDetailsViewController: UIViewController {
     }
 
     // MARK: - Actions
-    @IBAction func startEvent(_ sender: Any) {
-        
-    }
-    
     @objc func addTapped() {
         
         let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
@@ -80,6 +76,8 @@ class EventDetailsViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let addAttendeeVC = segue.destination as? AddAttendeeViewController {
             addAttendeeVC.event = event
+        } else if let pouringScreen = segue.destination as? PouringViewController {
+            pouringScreen.event = event
         }
     }
 }

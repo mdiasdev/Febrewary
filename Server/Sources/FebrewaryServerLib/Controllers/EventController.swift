@@ -364,4 +364,53 @@ class EventController {
             print("do something in a minute")
         }
     }
+    
+    func getCurrentEventBeer(request: HTTPRequest, response: HTTPResponse, event: Event = Event(), eventBeer: EventBeer = EventBeer(), user: User = User()) {
+        guard request.hasValidToken() else {
+            response.setBody(string: "Unauthorized")
+                    .completed(status: .unauthorized)
+            return
+        }
+        
+        guard let email = request.emailFromAuthToken() else {
+            response.setBody(string: "Bad Request")
+                    .completed(status: .badRequest)
+            return
+        }
+        
+        guard let eventId = Int(request.urlVariables["id"] ?? "0"), eventId > 0 else {
+            response.completed(status: .badRequest)
+            return
+        }
+        
+        do {
+            try event.find(by: [("id", eventId)])
+            guard event.id > 0 else {
+                response.setBody(string: "Could not find event with id: \(eventId)")
+                        .completed(status: .badRequest)
+                return
+            }
+            
+            try user.find(by: [("email", email)])
+            guard user.id > 0, event.pourerId == user.id else {
+                response.setBody(string: "Unauthorized")
+                        .completed(status: .unauthorized)
+                return
+            }
+            
+            try eventBeer.find(by: [("eventid", eventId), ("isbeingpoured", true)])
+            guard eventBeer.rows().count == 1, let currentlyPouring = eventBeer.rows().first else {
+                response.setBody(string: "No beer in event \(eventId) is currently being poured")
+                        .completed(status: .notFound)
+                return
+            }
+            
+            let payload = currentlyPouring.asDictionary()
+            
+            try response.setBody(json: payload).completed(status: .ok)
+        } catch {
+            response.completed(status: .internalServerError)
+        }
+        
+    }
 }

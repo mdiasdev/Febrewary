@@ -80,7 +80,7 @@ class ServiceClient {
         }.resume()
     }
     
-    func get(url: URL, completionHandler: @escaping (Result<Any, Error>) -> Void) {
+    func get(url: URL, completionHandler: @escaping (Result<Any, LocalError>) -> Void) {
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         
@@ -89,8 +89,13 @@ class ServiceClient {
         }
         
         URLSession.shared.dataTask(with: request) { (data, response, error) in
-            guard error == nil else {
-                completionHandler(.failure(error!))
+            guard let response = response as? HTTPURLResponse, error == nil else {
+                completionHandler(.failure(UnknownNetworkError()))
+                return
+            }
+            
+            guard (200..<300).contains(response.statusCode) else {
+                completionHandler(.failure(self.localError(from: response, request: request)))
                 return
             }
             
@@ -112,5 +117,19 @@ class ServiceClient {
                 completionHandler(.failure(JSONError()))
             }
         }.resume()
+    }
+    
+    // FIXME: more thorough
+    private func localError(from response: HTTPURLResponse, request: URLRequest) -> LocalError {
+        switch response.statusCode {
+        case 412:
+            if (request.url?.absoluteString ?? "").contains("pour") {
+                return PourWarning()
+            } else {
+                return UnknownNetworkError()
+            }
+        default:
+            return JSONError()
+        }
     }
 }
