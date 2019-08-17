@@ -13,19 +13,15 @@ final class User {
     let name: String
 
     let email: String
-//    let beers: [Beer]
-//    let events: [Event]
     
-    init(id: Int, name: String, email: String) { //, beers: [Beer], events: [Event]) {
+    init(id: Int, name: String, email: String) {
         self.id = id
         self.name = name
         self.email = email
-//        self.beers = beers
-//        self.events = events
     }
     
     convenience init() {
-        self.init(id: -1, name: "", email: "")//, beers: [], events: [])
+        self.init(id: -1, name: "", email: "")
     }
 }
 

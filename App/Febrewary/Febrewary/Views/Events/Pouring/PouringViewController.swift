@@ -10,6 +10,7 @@ import UIKit
 
 class PouringViewController: UIViewController {
 
+    @IBOutlet weak var labelContainerView: UIView!
     @IBOutlet weak var beerNameLabel: UILabel!
     @IBOutlet weak var brewerNameLabel: UILabel!
     @IBOutlet weak var attendeeNameLabel: UILabel!
@@ -21,6 +22,7 @@ class PouringViewController: UIViewController {
         didSet {
             guard let eventBeer = eventBeer else { return }
             
+            labelContainerView.isHidden = false
             setupLabels(with: eventBeer)
         }
     }
@@ -30,6 +32,7 @@ class PouringViewController: UIViewController {
 
         // Do any additional setup after loading the view.
         nextButton.layer.cornerRadius = 8
+        labelContainerView.isHidden = true
     }
     
     func setupLabels(with eventBeer: EventBeer) {
