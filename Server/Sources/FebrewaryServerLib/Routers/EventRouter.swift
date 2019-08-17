@@ -16,6 +16,7 @@ public class EventRouter: Router {
         routes.add(method: .post, uri: "/event/{id}/beer", handler: addEventBeer)
         routes.add(method: .put, uri: "/event/{id}/attendee", handler: addAttendee)
         routes.add(method: .get, uri: "/event/{id}/pour", handler: pourEventBeer)
+        routes.add(method: .get, uri: "/event/{id}/currentbeer", handler: getCurrentEventBeer)
     }
     
     func createEvent(request: HTTPRequest, response: HTTPResponse) {
@@ -40,5 +41,9 @@ public class EventRouter: Router {
     
     func pourEventBeer(request: HTTPRequest, response: HTTPResponse) {
         EventController().pourEventBeer(request: request, response: response)
+    }
+    
+    func getCurrentEventBeer(request: HTTPRequest, response: HTTPResponse) {
+        EventController().getCurrentEventBeer(request: request, response: response)
     }
 }
