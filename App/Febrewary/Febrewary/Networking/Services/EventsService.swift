@@ -106,10 +106,17 @@ struct EventsService {
         }
     }
     
-    func getBeer(for event: Event, shouldForce: Bool, completionHandler: @escaping (Result<EventBeer, Error>) -> Void) {
-        let url = URLBuilder(endpoint: .event).buildUrl().appendingPathComponent("\(event.id)/pour?force=\(shouldForce)")
+    func getBeer(for event: Event, shouldForce: Bool, completionHandler: @escaping (Result<EventBeer, LocalError>) -> Void) {
+        let url = URLBuilder(endpoint: .event).buildUrl().appendingPathComponent("\(event.id)/pour")
+        guard var components = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
+            completionHandler(.failure(UnknownNetworkError()))
+            return
+        }
+        let queryItemQuery = URLQueryItem(name: "force", value: "\(shouldForce)")
         
-        client.get(url: url) { result in
+        components.queryItems = [queryItemQuery]
+        
+        client.get(url: components.url!) { result in
             switch result {
             case .success(let eventJson):
                 let decoder = JSONDecoder()
@@ -122,6 +129,7 @@ struct EventsService {
                 completionHandler(.success(eventBeer))
                 
             case .failure(let error):
+                
                 completionHandler(.failure(error))
             }
         }
