@@ -154,8 +154,7 @@
                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
                                         <connections>
-                                            <action selector="startEvent:" destination="MDp-aZ-CgG" eventType="touchUpInside" id="CSA-6f-LHG"/>
-                                            <segue destination="wZA-wq-nui" kind="presentation" id="PVk-p1-Vg5"/>
+                                            <segue destination="wZA-wq-nui" kind="presentation" id="BjQ-rQ-VEs"/>
                                         </connections>
                                     </button>
                                 </subviews>

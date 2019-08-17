@@ -38,9 +38,9 @@ class PouringViewController: UIViewController {
         attendeeNameLabel.text = eventBeer.attendee.name
     }
     
-    func showIncompleteAlert() {
-        let alert = UIAlertController(title: "Warning!",
-                                      message: "Not all votes are in. Are you sure you want to pour the next beer?",
+    func showIncompleteAlert(error: PourWarning) {
+        let alert = UIAlertController(title: error.title,
+                                      message: error.message,
                                       preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         alert.addAction(UIAlertAction(title: "Pour Next", style: .default, handler: { _ in
@@ -55,19 +55,15 @@ class PouringViewController: UIViewController {
     }
     
     func pourNext(shouldForce: Bool = false) {
-        eventService.getBeer(for: event, shouldForce: shouldForce) { result in
-            switch result {
-            case .success(let eventBeer):
-                DispatchQueue.main.async {
-                    self.eventBeer = eventBeer
-                }
-            case .failure(let error):
-                if error.localizedDescription == "warning" {
-                    DispatchQueue.main.async {
-                        self.showIncompleteAlert()
+        eventService.getBeer(for: event, shouldForce: shouldForce) { [weak self] result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let eventBeer):
+                    self?.eventBeer = eventBeer
+                case .failure(let error):
+                    if let warning = error as? PourWarning {
+                        self?.showIncompleteAlert(error: warning)
                     }
-                } else {
-                    print("do a thing")
                 }
             }
         }
