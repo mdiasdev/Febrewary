@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		6D06DA2222BEA7B100EE9DA9 /* CreateEventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D06DA2122BEA7B100EE9DA9 /* CreateEventViewController.swift */; };
 		6D08496422FF4E30009B09A2 /* AddAttendeeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D08496322FF4E30009B09A2 /* AddAttendeeViewController.swift */; };
+		6D08496723087E02009B09A2 /* PouringViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D08496623087E02009B09A2 /* PouringViewController.swift */; };
 		6D147AFA22ECCAB0000D94E0 /* URLBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D147AF922ECCAB0000D94E0 /* URLBuilderTests.swift */; };
 		6D147AFC22ECD5C3000D94E0 /* NSArrayExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D147AFB22ECD5C3000D94E0 /* NSArrayExtension.swift */; };
 		6D147AFE22ECDB48000D94E0 /* EventBeer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D147AFD22ECDB48000D94E0 /* EventBeer.swift */; };
@@ -74,6 +75,7 @@
 /* Begin PBXFileReference section */
 		6D06DA2122BEA7B100EE9DA9 /* CreateEventViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateEventViewController.swift; sourceTree = "<group>"; };
 		6D08496322FF4E30009B09A2 /* AddAttendeeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddAttendeeViewController.swift; sourceTree = "<group>"; };
+		6D08496623087E02009B09A2 /* PouringViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PouringViewController.swift; sourceTree = "<group>"; };
 		6D147AF922ECCAB0000D94E0 /* URLBuilderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLBuilderTests.swift; sourceTree = "<group>"; };
 		6D147AFB22ECD5C3000D94E0 /* NSArrayExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSArrayExtension.swift; sourceTree = "<group>"; };
 		6D147AFD22ECDB48000D94E0 /* EventBeer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventBeer.swift; sourceTree = "<group>"; };
@@ -162,6 +164,14 @@
 				6D08496322FF4E30009B09A2 /* AddAttendeeViewController.swift */,
 			);
 			path = Add;
+			sourceTree = "<group>";
+		};
+		6D08496523087DEA009B09A2 /* Pouring */ = {
+			isa = PBXGroup;
+			children = (
+				6D08496623087E02009B09A2 /* PouringViewController.swift */,
+			);
+			path = Pouring;
 			sourceTree = "<group>";
 		};
 		6D147AF822ECCA97000D94E0 /* Networking */ = {
@@ -260,6 +270,7 @@
 		6D63F6DC229095EC00ABF4AB /* Events */ = {
 			isa = PBXGroup;
 			children = (
+				6D08496523087DEA009B09A2 /* Pouring */,
 				6D08496222FF4E14009B09A2 /* Add */,
 				6D5B60E822D567560027192C /* Event Details */,
 				6D06DA2022BEA79A00EE9DA9 /* Create Event */,
@@ -562,6 +573,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6DBF826622A305CE00E334B9 /* Cache.swift in Sources */,
+				6D08496723087E02009B09A2 /* PouringViewController.swift in Sources */,
 				6DBF826B22A30A0200E334B9 /* UserViewController.swift in Sources */,
 				6D63F6E12290965300ABF4AB /* AccountViewController.swift in Sources */,
 				6D750FFA22B6CBBB004BA26F /* SubtitleTableCell.swift in Sources */,

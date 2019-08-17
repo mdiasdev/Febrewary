@@ -197,10 +197,10 @@
             </objects>
             <point key="canvasLocation" x="1472.8" y="-1763.568215892054"/>
         </scene>
-        <!--View Controller-->
+        <!--Pouring View Controller-->
         <scene sceneID="IdE-Sk-i3H">
             <objects>
-                <viewController id="wZA-wq-nui" sceneMemberID="viewController">
+                <viewController id="wZA-wq-nui" customClass="PouringViewController" customModule="Febrewary" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Ucg-v1-4wN">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -258,6 +258,9 @@
                                 <state key="normal" title="Button">
                                     <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
+                                <connections>
+                                    <action selector="nextTapped:" destination="wZA-wq-nui" eventType="touchUpInside" id="Hzf-Sj-4ky"/>
+                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -289,6 +292,12 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="TA2-u8-49V"/>
                     </view>
+                    <connections>
+                        <outlet property="attendeeNameLabel" destination="2Qb-Gg-XRC" id="Ukt-rD-QbV"/>
+                        <outlet property="beerNameLabel" destination="U4d-b0-OWa" id="Nhg-SW-c3j"/>
+                        <outlet property="brewerNameLabel" destination="LRN-Fc-EvK" id="C85-Di-QOE"/>
+                        <outlet property="nextButton" destination="Xtp-xX-onc" id="4un-ZE-nSc"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4e6-df-ILc" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
