@@ -34,11 +34,11 @@ extension Date {
         let todayComponents = Calendar.current.dateComponents([.day, .month, .year], from: today)
         let components = Calendar.current.dateComponents([.day, .month, .year], from: self)
         
-        guard todayComponents.year >= components.year else { return true }
-        guard todayComponents.month >= components.month else { return true }
-        guard todayComponents.day >= components.day else { return true }
+        guard components.year >= todayComponents.year else { return false }
+        guard components.month >= todayComponents.month else { return false }
+        guard components.day >= todayComponents.day else { return false }
         
-        return false
+        return true
     }
     
     func isToday() -> Bool {
@@ -46,11 +46,11 @@ extension Date {
         let todayComponents = Calendar.current.dateComponents([.day, .month, .year], from: today)
         let components = Calendar.current.dateComponents([.day, .month, .year], from: self)
         
-        guard todayComponents.year == components.year else { return true }
-        guard todayComponents.month == components.month else { return true }
-        guard todayComponents.day == components.day else { return true }
+        guard todayComponents.year == components.year else { return false }
+        guard todayComponents.month == components.month else { return false }
+        guard todayComponents.day == components.day else { return false }
         
-        return false
+        return true
     }
 }
 
