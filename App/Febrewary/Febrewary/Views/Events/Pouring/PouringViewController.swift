@@ -30,7 +30,6 @@ class PouringViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
         nextButton.layer.cornerRadius = 8
         labelContainerView.isHidden = true
         
