@@ -30,8 +30,11 @@
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="Vtu-vj-76R">
+                <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" minValue="1" maxValue="5" translatesAutoresizingMaskIntoConstraints="NO" id="Vtu-vj-76R">
                     <rect key="frame" x="14" y="184" width="292" height="31"/>
+                    <connections>
+                        <action selector="setValue:" destination="-1" eventType="valueChanged" id="uMF-bt-OST"/>
+                    </connections>
                 </slider>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2ub-tE-Bor">
                     <rect key="frame" x="32" y="238" width="256" height="50"/>

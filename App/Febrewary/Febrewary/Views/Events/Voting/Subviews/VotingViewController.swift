@@ -15,7 +15,14 @@ class VotingViewController: UIViewController {
     @IBOutlet weak var slider: UISlider!
     @IBOutlet weak var submitButton: UIButton!
     
-    var eventBeer: EventBeer!
+    var score = 1
+    var eventBeer: EventBeer! {
+        didSet {
+            roundLabel.text = "Round \(eventBeer.round)"
+            slider.value = 1
+            scoreLabel.text = "1"
+        }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,5 +31,10 @@ class VotingViewController: UIViewController {
     }
 
     @IBAction func submitTapped(_ sender: Any) {
+    }
+    
+    @IBAction func setValue(_ sender: UISlider) {
+        score = Int(round(sender.value))
+        scoreLabel.text = "\(score)"
     }
 }
