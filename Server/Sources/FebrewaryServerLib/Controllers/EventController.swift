@@ -413,4 +413,9 @@ class EventController {
         }
         
     }
+    
+    func vote(request: HTTPRequest, response: HTTPResponse, event: Event = Event(), vote: Vote = Vote(), user: User = User(), eventBeer: EventBeer = EventBeer()) {
+        
+        
+    }
 }
