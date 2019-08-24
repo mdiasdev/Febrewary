@@ -154,7 +154,7 @@
                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
                                         <connections>
-                                            <segue destination="wZA-wq-nui" kind="presentation" id="BjQ-rQ-VEs"/>
+                                            <segue destination="wZA-wq-nui" kind="presentation" identifier="Pouring" id="BjQ-rQ-VEs"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -190,7 +190,7 @@
                         <outlet property="startButton" destination="OSA-Fb-97c" id="cWe-NU-RrK"/>
                         <outlet property="tableView" destination="aIC-Wz-iPB" id="2eq-l5-9zM"/>
                         <segue destination="Stu-0d-RPU" kind="presentation" identifier="addAttendee" id="UbL-Eo-qjW"/>
-                        <segue destination="Aau-dm-cLs" kind="presentation" id="kc7-Ox-mSz"/>
+                        <segue destination="Aau-dm-cLs" kind="presentation" identifier="Voting" id="kc7-Ox-mSz"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4Qd-7e-BJ8" userLabel="First Responder" sceneMemberID="firstResponder"/>

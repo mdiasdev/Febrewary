@@ -17,22 +17,48 @@ class VoteViewController: UIViewController {
         didSet {
             guard eventBeer != nil else { return }
             
-            votingVC.eventBeer = eventBeer
-            containerView.isHidden = false
+            DispatchQueue.main.async {
+                self.setupVoting(for: self.eventBeer)
+            }
         }
     }
     
-    private var timer = Timer(timeInterval: 15, target: self, selector: #selector(getCurrentBeer), userInfo: nil, repeats: true)
+    private var timer: Timer!
     private var votingVC = VotingViewController()
     
     // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
+        timer = Timer(timeInterval: 1, target: self, selector: #selector(getCurrentBeer), userInfo: nil, repeats: true)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        
+        pollServer()
     }
     
     deinit {
         timer.invalidate()
+    }
+    
+    func setupVoting(for eventBeer: EventBeer) {
+        if containerView.subviews.count == 0 {
+            votingVC.view.translatesAutoresizingMaskIntoConstraints = false
+            containerView.addSubview(votingVC.view)
+            
+            NSLayoutConstraint.activate([
+                votingVC.view.topAnchor.constraint(equalTo: containerView.topAnchor),
+                votingVC.view.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
+                votingVC.view.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+                votingVC.view.trailingAnchor.constraint(equalTo: containerView.trailingAnchor)
+            ])
+            
+            containerView.isHidden = false
+        }
+        
+        votingVC.eventBeer = eventBeer
     }
     
     // MARK: - Networking

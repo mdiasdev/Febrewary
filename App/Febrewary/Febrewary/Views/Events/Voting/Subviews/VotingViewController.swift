@@ -36,5 +36,6 @@ class VotingViewController: UIViewController {
     @IBAction func setValue(_ sender: UISlider) {
         score = Int(round(sender.value))
         scoreLabel.text = "\(score)"
+        sender.setValue(Float(score), animated: true)
     }
 }
