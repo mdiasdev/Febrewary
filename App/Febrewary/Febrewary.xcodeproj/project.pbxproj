@@ -36,6 +36,9 @@
 		6D750FF522B6C18F004BA26F /* OptionalExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D750FF422B6C18F004BA26F /* OptionalExtension.swift */; };
 		6D750FF722B6C234004BA26F /* EventsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D750FF622B6C234004BA26F /* EventsTableViewController.swift */; };
 		6D750FFA22B6CBBB004BA26F /* SubtitleTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D750FF922B6CBBB004BA26F /* SubtitleTableCell.swift */; };
+		6D7831702311B9C2004888CC /* VoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D78316F2311B9C2004888CC /* VoteViewController.swift */; };
+		6D7831742311BAAB004888CC /* VotingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D7831722311BAAB004888CC /* VotingViewController.swift */; };
+		6D7831752311BAAB004888CC /* VotingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6D7831732311BAAB004888CC /* VotingViewController.xib */; };
 		6D814A1322E7D1910076A166 /* BeerDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D814A1222E7D1910076A166 /* BeerDetailsViewController.swift */; };
 		6D902A8A21FA968600A3860B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D902A8921FA968600A3860B /* AppDelegate.swift */; };
 		6D902A8F21FA968600A3860B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6D902A8D21FA968600A3860B /* Main.storyboard */; };
@@ -102,6 +105,9 @@
 		6D750FF422B6C18F004BA26F /* OptionalExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionalExtension.swift; sourceTree = "<group>"; };
 		6D750FF622B6C234004BA26F /* EventsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsTableViewController.swift; sourceTree = "<group>"; };
 		6D750FF922B6CBBB004BA26F /* SubtitleTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubtitleTableCell.swift; sourceTree = "<group>"; };
+		6D78316F2311B9C2004888CC /* VoteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoteViewController.swift; sourceTree = "<group>"; };
+		6D7831722311BAAB004888CC /* VotingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VotingViewController.swift; sourceTree = "<group>"; };
+		6D7831732311BAAB004888CC /* VotingViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = VotingViewController.xib; sourceTree = "<group>"; };
 		6D814A1222E7D1910076A166 /* BeerDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeerDetailsViewController.swift; sourceTree = "<group>"; };
 		6D902A8621FA968600A3860B /* Febrewary.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Febrewary.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6D902A8921FA968600A3860B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -270,6 +276,7 @@
 		6D63F6DC229095EC00ABF4AB /* Events */ = {
 			isa = PBXGroup;
 			children = (
+				6D78316E2311B9B0004888CC /* Voting */,
 				6D08496523087DEA009B09A2 /* Pouring */,
 				6D08496222FF4E14009B09A2 /* Add */,
 				6D5B60E822D567560027192C /* Event Details */,
@@ -328,6 +335,24 @@
 				6D750FF922B6CBBB004BA26F /* SubtitleTableCell.swift */,
 			);
 			path = Reusable;
+			sourceTree = "<group>";
+		};
+		6D78316E2311B9B0004888CC /* Voting */ = {
+			isa = PBXGroup;
+			children = (
+				6D7831712311BA7F004888CC /* Subviews */,
+				6D78316F2311B9C2004888CC /* VoteViewController.swift */,
+			);
+			path = Voting;
+			sourceTree = "<group>";
+		};
+		6D7831712311BA7F004888CC /* Subviews */ = {
+			isa = PBXGroup;
+			children = (
+				6D7831722311BAAB004888CC /* VotingViewController.swift */,
+				6D7831732311BAAB004888CC /* VotingViewController.xib */,
+			);
+			path = Subviews;
 			sourceTree = "<group>";
 		};
 		6D902A7D21FA968600A3860B = {
@@ -551,6 +576,7 @@
 				6D902A9121FA968800A3860B /* Assets.xcassets in Resources */,
 				6D63F6E922909B8B00ABF4AB /* SignInCreateAccountViewController.xib in Resources */,
 				6D902A8F21FA968600A3860B /* Main.storyboard in Resources */,
+				6D7831752311BAAB004888CC /* VotingViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -575,10 +601,12 @@
 				6DBF826622A305CE00E334B9 /* Cache.swift in Sources */,
 				6D08496723087E02009B09A2 /* PouringViewController.swift in Sources */,
 				6DBF826B22A30A0200E334B9 /* UserViewController.swift in Sources */,
+				6D7831742311BAAB004888CC /* VotingViewController.swift in Sources */,
 				6D63F6E12290965300ABF4AB /* AccountViewController.swift in Sources */,
 				6D750FFA22B6CBBB004BA26F /* SubtitleTableCell.swift in Sources */,
 				6D4900DB22C7E1210071E3D3 /* EventsService.swift in Sources */,
 				6DBF8255229C288400E334B9 /* URLBuilder.swift in Sources */,
+				6D7831702311B9C2004888CC /* VoteViewController.swift in Sources */,
 				6DF976BD22D11688000046BF /* UserService.swift in Sources */,
 				6D63F6DE2290960C00ABF4AB /* EventsViewController.swift in Sources */,
 				6D08496422FF4E30009B09A2 /* AddAttendeeViewController.swift in Sources */,
