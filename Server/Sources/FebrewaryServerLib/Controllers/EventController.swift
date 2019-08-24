@@ -312,8 +312,13 @@ class EventController {
             try user.find(by: [("email", email)])
             guard user.id > 0, event.pourerId == user.id else {
                 response.setBody(string: "Unauthorized")
-                        .completed(status: .unauthorized)
+                    .completed(status: .unauthorized)
                 return
+            }
+            
+            if !event.hasStarted {
+                event.hasStarted = true
+                try event.store()
             }
             
             try attendee.find(by: [("eventId", eventId)])
@@ -332,7 +337,7 @@ class EventController {
             }
             
             if let currentlyPouringEventBeer = eventBeer.rows().first(where: { $0.isBeingPoured }) {
-                if currentlyPouringEventBeer.votes == attendee.rows().count || shouldForcePour {
+                if currentlyPouringEventBeer.votes == attendee.rows().count - 1 || shouldForcePour { // -1 is to account for Pourer being an Attendee
                     currentlyPouringEventBeer.isBeingPoured = false
                     try currentlyPouringEventBeer.store()
                 } else {
@@ -412,5 +417,99 @@ class EventController {
             response.completed(status: .internalServerError)
         }
         
+    }
+    
+    func vote(request: HTTPRequest, response: HTTPResponse, event: Event = Event(), vote: Vote = Vote(), user: User = User(), eventBeer: EventBeer = EventBeer(), attendee: Attendee = Attendee()) {
+        guard request.hasValidToken() else {
+            response.setBody(string: "Unauthorized")
+                    .completed(status: .unauthorized)
+            return
+        }
+        
+        guard let email = request.emailFromAuthToken() else {
+            response.setBody(string: "Bad Request")
+                    .completed(status: .badRequest)
+            return
+        }
+        
+        guard let eventId = Int(request.urlVariables["id"] ?? "0"), eventId > 0 else {
+            response.completed(status: .badRequest)
+            return
+        }
+        
+        guard let postBody = try? request.postBodyString?.jsonDecode() as? [String: Any],
+            let json = postBody else {
+                response.setBody(string: "Bad Request: malformed json")
+                        .completed(status: .badRequest)
+                return
+        }
+        
+        guard let voteEventBeerId = json["eventBeerId"] as? Int,
+              let score = json["vote"] as? Int else {
+                response.setBody(string: "Bad Request: missing required property")
+                        .completed(status: .badRequest)
+                return
+        }
+        
+        do {
+            try event.find(by: [("id", eventId)])
+            guard event.id > 0, event.hasStarted && !event.isOver else {
+                response.setBody(string: "Could not find event with id: \(eventId)")
+                        .completed(status: .badRequest)
+                return
+            }
+            
+            try user.find(by: [("email", email)])
+            guard user.id > 0 else {
+                response.setBody(string: "Unauthorized")
+                        .completed(status: .unauthorized)
+                return
+            }
+            
+            try attendee.find(by: [("eventid", event.id), ("userid", user.id)])
+            guard attendee.rows().count == 1 else {
+                response.setBody(string: "User not invited to this Event")
+                        .completed(status: .unauthorized)
+                return
+            }
+            
+            try eventBeer.find(by: [("eventid", eventId), ("id", voteEventBeerId), ("isbeingpoured", true)])
+            guard eventBeer.rows().count == 1, let currentBeer = eventBeer.rows().first else {
+                response.setBody(string: "No beer in event \(eventId) is currently being poured")
+                    .completed(status: .notFound)
+                return
+            }
+            
+            guard currentBeer.id == voteEventBeerId else {
+                response.setBody(string: "Voting for this beer has ended. Please vote for next")
+                        .completed(status: .notFound)
+                return
+            }
+            
+            try vote.find(by: [("eventid", event.id), ("eventbeerid", eventBeer.id), ("userid", user.id)])
+            guard vote.id == 0 else {
+                response.setBody(string: "You have already voted for this beer! Please wait until the next round to vote again")
+                        .completed(status: .badRequest)
+                return
+            }
+            
+            vote.eventId = event.id
+            vote.eventBeerId = eventBeer.id
+            vote.userId = user.id
+            vote.score = score
+            
+            try vote.store(set: { id in
+                vote.id = id as! Int
+            })
+            
+            response.completed(status: .ok)
+            
+            currentBeer.votes += 1
+            currentBeer.score += vote.score
+            try currentBeer.store()
+            
+        } catch {
+            response.completed(status: .internalServerError)
+        }
     }
 }

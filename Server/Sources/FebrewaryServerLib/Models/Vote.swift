@@ -2,7 +2,7 @@ import Foundation
 import StORM
 import PostgresStORM
 
-class Vote: PostgresStORM {
+class Vote: DAO {
     var id: Int = 0
     var eventId: Int = 0 // the event the user is at
     var eventBeerId: Int = 0 // beer the user is voting on
