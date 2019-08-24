@@ -337,7 +337,7 @@ class EventController {
             }
             
             if let currentlyPouringEventBeer = eventBeer.rows().first(where: { $0.isBeingPoured }) {
-                if currentlyPouringEventBeer.votes == attendee.rows().count || shouldForcePour {
+                if currentlyPouringEventBeer.votes == attendee.rows().count - 1 || shouldForcePour { // -1 is to account for Pourer being an Attendee
                     currentlyPouringEventBeer.isBeingPoured = false
                     try currentlyPouringEventBeer.store()
                 } else {
@@ -503,6 +503,10 @@ class EventController {
             })
             
             response.completed(status: .ok)
+            
+            currentBeer.votes += 1
+            currentBeer.score += vote.score
+            try currentBeer.store()
             
         } catch {
             response.completed(status: .internalServerError)
