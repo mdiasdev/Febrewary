@@ -45,20 +45,26 @@ class VoteViewController: UIViewController {
     
     func setupVoting(for eventBeer: EventBeer) {
         if containerView.subviews.count == 0 {
-            votingVC.view.translatesAutoresizingMaskIntoConstraints = false
-            containerView.addSubview(votingVC.view)
-            
-            NSLayoutConstraint.activate([
-                votingVC.view.topAnchor.constraint(equalTo: containerView.topAnchor),
-                votingVC.view.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
-                votingVC.view.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
-                votingVC.view.trailingAnchor.constraint(equalTo: containerView.trailingAnchor)
-            ])
-            
-            containerView.isHidden = false
+            addVotingSubview()
         }
         
-        votingVC.eventBeer = eventBeer
+        votingVC.set(eventBeer: eventBeer)
+        votingVC.event = event
+        votingVC.voteDelegate = self
+    }
+    
+    func addVotingSubview() {
+        votingVC.view.translatesAutoresizingMaskIntoConstraints = false
+        containerView.addSubview(votingVC.view)
+        
+        NSLayoutConstraint.activate([
+            votingVC.view.topAnchor.constraint(equalTo: containerView.topAnchor),
+            votingVC.view.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
+            votingVC.view.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+            votingVC.view.trailingAnchor.constraint(equalTo: containerView.trailingAnchor)
+        ])
+        
+        containerView.isHidden = false
     }
     
     // MARK: - Networking
@@ -71,6 +77,8 @@ class VoteViewController: UIViewController {
         EventsService().getCurrentBeer(for: event) { [weak self] result in
             switch result {
             case .success(let eventBeer):
+                guard eventBeer.id != self?.eventBeer.id else { return }
+                
                 self?.eventBeer = eventBeer
                 self?.timer.invalidate()
             case .failure: break // fail silently
@@ -81,5 +89,12 @@ class VoteViewController: UIViewController {
     // MARK: - Actions
     @IBAction func dismissTapped(_ sender: Any) {
         dismiss(animated: true, completion: nil)
+    }
+}
+
+extension VoteViewController: VoteDelegate {
+    
+    func didVote() {
+        pollServer()
     }
 }

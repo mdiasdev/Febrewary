@@ -8,6 +8,10 @@
 
 import UIKit
 
+protocol VoteDelegate: class {    
+    func didVote()
+}
+
 class VotingViewController: UIViewController {
     
     @IBOutlet weak var roundLabel: UILabel!
@@ -15,7 +19,9 @@ class VotingViewController: UIViewController {
     @IBOutlet weak var slider: UISlider!
     @IBOutlet weak var submitButton: UIButton!
     
+    weak var voteDelegate: VoteDelegate?
     var score = 1
+    var event: Event!
     var eventBeer: EventBeer! {
         didSet {
             roundLabel.text = "Round \(eventBeer.round)"
@@ -29,8 +35,22 @@ class VotingViewController: UIViewController {
 
         submitButton.layer.cornerRadius = 8
     }
+    
+    func set(eventBeer: EventBeer) {
+        self.eventBeer = eventBeer
+        // hide spinner
+    }
 
     @IBAction func submitTapped(_ sender: Any) {
+        EventsService().vote(score: score, for: eventBeer, in: event) { [weak self] result in
+            switch result {
+            case .success:
+                self?.voteDelegate?.didVote()
+            case .failure(let error):
+                // TODO: better error handling
+                print(error.localizedDescription)
+            }
+        }
     }
     
     @IBAction func setValue(_ sender: UISlider) {
