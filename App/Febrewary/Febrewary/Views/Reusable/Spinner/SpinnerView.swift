@@ -14,7 +14,7 @@ protocol Spinable: UIViewController {
 
 extension Spinable {
     // MARK: - Presentation
-    func show() {
+    func showSpinner(with title: String) {
         spinnerView.spinner.startAnimating()
         self.view.addSubview(spinnerView)
         
@@ -25,9 +25,11 @@ extension Spinable {
             spinnerView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
             spinnerView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
         ])
+        
+        spinnerView.titleLabel.text = title
     }
     
-    func hide() {
+    func hideSpinner() {
         spinnerView.spinner.stopAnimating()
         spinnerView.removeFromSuperview()
     }
@@ -35,16 +37,11 @@ extension Spinable {
 
 class SpinnerView: UIView {
     @IBOutlet fileprivate weak var spinner: UIActivityIndicatorView!
-    @IBOutlet private weak var titleLabel: UILabel!
-    
-    // MARK: - Lifecycle
-    init(title: String) {
-        super.init(frame: CGRect.zero)
-        
-        titleLabel.text = title
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+    @IBOutlet fileprivate weak var titleLabel: UILabel!
+}
+
+extension UIView {
+    class func fromNib<T: UIView>() -> T {
+        return Bundle.main.loadNibNamed(String(describing: T.self), owner: nil, options: nil)![0] as! T
     }
 }

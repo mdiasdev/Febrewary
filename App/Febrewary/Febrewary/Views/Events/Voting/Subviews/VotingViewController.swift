@@ -12,13 +12,13 @@ protocol VoteDelegate: class {
     func didVote()
 }
 
-class VotingViewController: UIViewController {
-    
+class VotingViewController: UIViewController, Spinable {
     @IBOutlet weak var roundLabel: UILabel!
     @IBOutlet weak var scoreLabel: UILabel!
     @IBOutlet weak var slider: UISlider!
     @IBOutlet weak var submitButton: UIButton!
     
+    var spinnerView: SpinnerView = SpinnerView.fromNib()
     weak var voteDelegate: VoteDelegate?
     var score = 1
     var event: Event!
@@ -42,6 +42,7 @@ class VotingViewController: UIViewController {
     }
 
     @IBAction func submitTapped(_ sender: Any) {
+        showSpinner(with: "Waiting for next pour.")
         EventsService().vote(score: score, for: eventBeer, in: event) { [weak self] result in
             switch result {
             case .success:

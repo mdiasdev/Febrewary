@@ -13,12 +13,12 @@ class VoteViewController: UIViewController {
     @IBOutlet weak var containerView: UIView!
     
     var event: Event!
-    var eventBeer: EventBeer! {
+    var eventBeer: EventBeer? {
         didSet {
-            guard eventBeer != nil else { return }
+            guard let eventBeer = eventBeer else { return }
             
             DispatchQueue.main.async {
-                self.setupVoting(for: self.eventBeer)
+                self.setupVoting(for: eventBeer)
             }
         }
     }
@@ -51,6 +51,7 @@ class VoteViewController: UIViewController {
         votingVC.set(eventBeer: eventBeer)
         votingVC.event = event
         votingVC.voteDelegate = self
+        votingVC.hideSpinner()
     }
     
     func addVotingSubview() {
@@ -77,7 +78,7 @@ class VoteViewController: UIViewController {
         EventsService().getCurrentBeer(for: event) { [weak self] result in
             switch result {
             case .success(let eventBeer):
-                guard eventBeer.id != self?.eventBeer.id else { return }
+                guard eventBeer.id != self?.eventBeer?.id else { return }
                 
                 self?.eventBeer = eventBeer
                 self?.timer.invalidate()
