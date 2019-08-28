@@ -12,6 +12,7 @@ class Defaults {
     
     private enum Keys: String {
         case token
+        case eventBeerId
     }
     
     private var userDefaults: UserDefaults
@@ -20,6 +21,7 @@ class Defaults {
         self.userDefaults = userDefaults
     }
     
+    // MARK: - Auth Token
     func save(token: String) {
         userDefaults.set(token, forKey: Keys.token.rawValue)
     }
@@ -30,5 +32,21 @@ class Defaults {
     
     func removeToken() {
         userDefaults.removeObject(forKey: Keys.token.rawValue)
+    }
+    
+    // MARK: EventBeer
+    func save(eventBeer: EventBeer) {
+        guard let eventBeerData = try? JSONEncoder().encode(eventBeer) else { return }
+    
+        userDefaults.set(eventBeerData, forKey: Keys.eventBeerId.rawValue)
+    }
+    
+    func getCurrentEventBeer() -> EventBeer? {
+        guard let data = userDefaults.object(forKey: Keys.eventBeerId.rawValue) as? Data else { return nil }
+        return try? JSONDecoder().decode(EventBeer.self, from: data)
+    }
+    
+    func removeCurrentEventBeer() {
+        userDefaults.removeObject(forKey: Keys.eventBeerId.rawValue)
     }
 }

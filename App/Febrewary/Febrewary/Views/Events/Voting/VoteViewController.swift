@@ -8,17 +8,19 @@
 
 import UIKit
 
-class VoteViewController: UIViewController {
+class VoteViewController: UIViewController, Spinable {
 
     @IBOutlet weak var containerView: UIView!
+    var spinnerView: SpinnerView = SpinnerView.fromNib()
     
     var event: Event!
     var eventBeer: EventBeer? {
         didSet {
             guard let eventBeer = eventBeer else { return }
-            
+            Defaults().save(eventBeer: eventBeer)
             DispatchQueue.main.async {
                 self.setupVoting(for: eventBeer)
+                self.votingVC.hideSpinner()
             }
         }
     }
@@ -36,6 +38,14 @@ class VoteViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         
+        if let currentEventBeer = Defaults().getCurrentEventBeer() {
+            setupVoting(for: currentEventBeer)
+            votingVC.showSpinner(with: "Waiting for next pour.")
+            
+        } else {
+            showSpinner(with: "Fetching data.")
+        }
+
         pollServer()
     }
     
@@ -51,7 +61,6 @@ class VoteViewController: UIViewController {
         votingVC.set(eventBeer: eventBeer)
         votingVC.event = event
         votingVC.voteDelegate = self
-        votingVC.hideSpinner()
     }
     
     func addVotingSubview() {
@@ -74,11 +83,12 @@ class VoteViewController: UIViewController {
     }
     
     @objc func getCurrentBeer() {
-        
+        let currentEventBeer = Defaults().getCurrentEventBeer()
         EventsService().getCurrentBeer(for: event) { [weak self] result in
+            self?.hideSpinner()
             switch result {
             case .success(let eventBeer):
-                guard eventBeer.id != self?.eventBeer?.id else { return }
+                guard eventBeer.id != currentEventBeer?.id else { return }
                 
                 self?.eventBeer = eventBeer
                 self?.timer.invalidate()

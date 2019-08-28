@@ -38,7 +38,6 @@ class VotingViewController: UIViewController, Spinable {
     
     func set(eventBeer: EventBeer) {
         self.eventBeer = eventBeer
-        // hide spinner
     }
 
     @IBAction func submitTapped(_ sender: Any) {

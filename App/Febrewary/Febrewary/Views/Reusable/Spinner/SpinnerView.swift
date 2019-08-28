@@ -30,8 +30,10 @@ extension Spinable {
     }
     
     func hideSpinner() {
-        spinnerView.spinner.stopAnimating()
-        spinnerView.removeFromSuperview()
+        DispatchQueue.main.async { [weak self] in
+            self?.spinnerView.spinner.stopAnimating()
+            self?.spinnerView.removeFromSuperview()
+        }
     }
 }
 
