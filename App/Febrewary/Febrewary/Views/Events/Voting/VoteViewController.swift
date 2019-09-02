@@ -32,7 +32,7 @@ class VoteViewController: UIViewController, Spinable {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        timer = Timer(timeInterval: 1, target: self, selector: #selector(getCurrentBeer), userInfo: nil, repeats: true)
+        timer = Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(getCurrentBeer), userInfo: nil, repeats: true)
     }
     
     override func viewWillAppear(_ animated: Bool) {
