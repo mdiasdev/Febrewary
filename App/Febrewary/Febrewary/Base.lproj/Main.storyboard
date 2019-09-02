@@ -28,7 +28,7 @@
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="233"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
-                                        <visualEffectView opaque="NO" alpha="0.80000000000000004" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WbM-3g-Aj3">
+                                        <visualEffectView opaque="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WbM-3g-Aj3">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="233"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" insetsLayoutMarginsFromSafeArea="NO" id="ZlK-ip-2yM">
@@ -79,7 +79,7 @@
                     </navigationBar>
                     <connections>
                         <segue destination="nWy-F2-Tfq" kind="relationship" relationship="rootViewController" id="hDL-TZ-vTW"/>
-                        <segue destination="MDp-aZ-CgG" kind="showDetail" id="8Sf-Wy-9wP"/>
+                        <segue destination="MDp-aZ-CgG" kind="showDetail" identifier="showEventDetails" id="8Sf-Wy-9wP"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bXC-gz-aBB" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -160,7 +160,7 @@
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstAttribute="trailing" secondItem="OSA-Fb-97c" secondAttribute="trailing" constant="36" id="Tkh-Ka-pmb"/>
+                                    <constraint firstAttribute="trailing" relation="lessThanOrEqual" secondItem="OSA-Fb-97c" secondAttribute="trailing" constant="36" id="Tkh-Ka-pmb"/>
                                     <constraint firstAttribute="bottom" secondItem="OSA-Fb-97c" secondAttribute="bottom" id="hL2-IL-16h"/>
                                     <constraint firstItem="OSA-Fb-97c" firstAttribute="top" secondItem="t0H-wE-yGf" secondAttribute="top" id="k7t-7S-1KB"/>
                                     <constraint firstAttribute="height" constant="50" id="s5y-tA-lJD"/>
@@ -304,7 +304,7 @@
                             <constraint firstItem="Xtp-xX-onc" firstAttribute="leading" secondItem="TA2-u8-49V" secondAttribute="leading" constant="64" id="ZQ9-y6-0zd"/>
                             <constraint firstItem="La1-Kl-8RP" firstAttribute="top" secondItem="I3J-CH-s1S" secondAttribute="bottom" constant="64" id="Zbp-IG-qvS"/>
                             <constraint firstItem="I3J-CH-s1S" firstAttribute="leading" secondItem="TA2-u8-49V" secondAttribute="leading" id="gwN-SD-H1c"/>
-                            <constraint firstItem="TA2-u8-49V" firstAttribute="trailing" secondItem="Xtp-xX-onc" secondAttribute="trailing" constant="64" id="ygM-QW-Wmb"/>
+                            <constraint firstItem="TA2-u8-49V" firstAttribute="trailing" relation="lessThanOrEqual" secondItem="Xtp-xX-onc" secondAttribute="trailing" constant="64" id="ygM-QW-Wmb"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="TA2-u8-49V"/>
                     </view>
@@ -845,7 +845,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="wiL-8D-smw">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="cell" id="wiL-8D-smw">
                                 <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="wiL-8D-smw" id="1gL-jM-X1R">
