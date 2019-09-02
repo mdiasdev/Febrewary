@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="SpinnerView" customModule="Febrewary" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <visualEffectView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="D7M-Bh-vAL">
+                    <rect key="frame" x="0.0" y="44" width="414" height="818"/>
+                    <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="yVY-UB-OSe">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="818"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                    </view>
+                    <blurEffect style="light"/>
+                </visualEffectView>
+                <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xI5-3i-HlA">
+                    <rect key="frame" x="169.5" y="410.5" width="75.5" height="75.5"/>
+                    <subviews>
+                        <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="9Iz-v1-HbG">
+                            <rect key="frame" x="19" y="8" width="37" height="37"/>
+                            <color key="color" red="0.29803921570000003" green="0.29803921570000003" blue="0.29803921570000003" alpha="1" colorSpace="calibratedRGB"/>
+                        </activityIndicatorView>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="748" verticalHuggingPriority="251" horizontalCompressionResistancePriority="250" verticalCompressionResistancePriority="749" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Elb-2o-yxA">
+                            <rect key="frame" x="8" y="53" width="59.5" height="14.5"/>
+                            <fontDescription key="fontDescription" style="UICTFontTextStyleCaption1"/>
+                            <nil key="textColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstItem="9Iz-v1-HbG" firstAttribute="top" secondItem="xI5-3i-HlA" secondAttribute="top" constant="8" id="DgO-9X-n5Z"/>
+                        <constraint firstItem="Elb-2o-yxA" firstAttribute="top" secondItem="9Iz-v1-HbG" secondAttribute="bottom" constant="8" id="Lbj-gJ-Sma"/>
+                        <constraint firstItem="Elb-2o-yxA" firstAttribute="leading" secondItem="xI5-3i-HlA" secondAttribute="leading" constant="8" id="MWr-cD-ttc"/>
+                        <constraint firstAttribute="bottom" secondItem="Elb-2o-yxA" secondAttribute="bottom" constant="8" id="REU-Mj-xlJ"/>
+                        <constraint firstItem="9Iz-v1-HbG" firstAttribute="centerX" secondItem="xI5-3i-HlA" secondAttribute="centerX" id="dHf-kX-H5T"/>
+                        <constraint firstAttribute="trailing" secondItem="Elb-2o-yxA" secondAttribute="trailing" constant="8" id="vNi-VY-GhF"/>
+                        <constraint firstAttribute="width" secondItem="xI5-3i-HlA" secondAttribute="height" multiplier="1:1" id="xh3-m4-rQd"/>
+                    </constraints>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                            <integer key="value" value="10"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                </view>
+            </subviews>
+            <constraints>
+                <constraint firstItem="xI5-3i-HlA" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="HI8-EO-ayq"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="D7M-Bh-vAL" secondAttribute="bottom" id="I9c-19-EzI"/>
+                <constraint firstItem="D7M-Bh-vAL" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="duW-ZR-b5t"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="D7M-Bh-vAL" secondAttribute="trailing" id="e0a-fP-SNw"/>
+                <constraint firstItem="D7M-Bh-vAL" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="gTi-yo-1zJ"/>
+                <constraint firstItem="xI5-3i-HlA" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="gZ3-Xj-EtK"/>
+            </constraints>
+            <nil key="simulatedTopBarMetrics"/>
+            <nil key="simulatedBottomBarMetrics"/>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <connections>
+                <outlet property="spinner" destination="9Iz-v1-HbG" id="G8F-LR-PVO"/>
+                <outlet property="titleLabel" destination="Elb-2o-yxA" id="EXT-yH-C2K"/>
+            </connections>
+            <point key="canvasLocation" x="110.14492753623189" y="28.125"/>
+        </view>
+    </objects>
+</document>

@@ -149,4 +149,22 @@ struct EventsService {
             }
         }
     }
+    
+    func vote(score: Int, for eventBeer: EventBeer, in event: Event, completionHandler: @escaping (Result<Void, LocalError>) -> Void) {
+        let url = URLBuilder(endpoint: .event).buildUrl().appendingPathComponent("\(event.id)/vote")
+        
+        let payload = [
+            "eventBeerId": eventBeer.id,
+            "score": score
+        ]
+        
+        client.post(url: url, payload: payload) { result in
+            switch result {
+            case .success:
+                completionHandler(.success(()))
+            case .failure(let error):
+                completionHandler(.failure(error))
+            }
+        }
+    }
 }

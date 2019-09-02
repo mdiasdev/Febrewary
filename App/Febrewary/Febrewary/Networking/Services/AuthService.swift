@@ -17,7 +17,7 @@ struct AuthService {
         self.userDefaults = defaults
     }
     
-    func signIn(email: String, password: String, completionHandler: @escaping (Result<Bool, Error>) -> Void) {
+    func signIn(email: String, password: String, completionHandler: @escaping (Result<Bool, LocalError>) -> Void) {
         
         let url = URLBuilder(endpoint: .signIn).buildUrl()
         let payload = [
@@ -42,7 +42,7 @@ struct AuthService {
         }
     }
     
-    func createAccount(name: String, email: String, password: String, completionHandler: @escaping (Result<Bool, Error>) -> Void) {
+    func createAccount(name: String, email: String, password: String, completionHandler: @escaping (Result<Bool, LocalError>) -> Void) {
         let url = URLBuilder(endpoint: .register).buildUrl()
         let payload = [
             "name": name,
@@ -68,7 +68,7 @@ struct AuthService {
         }
     }
     
-    func handle(result: Result<JSON, Error>, completion: @escaping (Error?) -> Void) {
+    func handle(result: Result<JSON, LocalError>, completion: @escaping (LocalError?) -> Void) {
         switch result {
         case .success(let response):
             guard let userJson = response["user"] as? JSON,

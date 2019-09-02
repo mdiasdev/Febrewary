@@ -13,6 +13,7 @@ struct EventBeer {
     var attendee: User
     var beer: Beer
     var score: Int
+    var round: Int
 }
 
 extension EventBeer: Codable { }

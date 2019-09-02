@@ -31,12 +31,8 @@ extension Date {
     
     func isTodayOrFuture() -> Bool {
         let today = Date()
-        let todayComponents = Calendar.current.dateComponents([.day, .month, .year], from: today)
-        let components = Calendar.current.dateComponents([.day, .month, .year], from: self)
         
-        guard components.year >= todayComponents.year else { return false }
-        guard components.month >= todayComponents.month else { return false }
-        guard components.day >= todayComponents.day else { return false }
+        guard isToday() || self > today else { return false }
         
         return true
     }

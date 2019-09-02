@@ -12,7 +12,7 @@ typealias JSON = [String: Any]
 
 class ServiceClient {
     
-    func post(url: URL, payload: JSON?, completionHandler: @escaping (Result<JSON, Error>) -> Void) {
+    func post(url: URL, payload: JSON?, completionHandler: @escaping (Result<JSON, LocalError>) -> Void) {
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         
@@ -26,8 +26,13 @@ class ServiceClient {
         }
         
         URLSession.shared.dataTask(with: request) { (data, response, error) in
-            guard error == nil else {
-                completionHandler(.failure(error!))
+            guard let response = response as? HTTPURLResponse, error == nil else {
+                completionHandler(.failure(UnknownNetworkError()))
+                return
+            }
+            
+            guard (200..<300).contains(response.statusCode) else {
+                completionHandler(.failure(self.localError(from: response, request: request)))
                 return
             }
             

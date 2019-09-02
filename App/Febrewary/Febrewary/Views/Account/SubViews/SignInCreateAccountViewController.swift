@@ -147,16 +147,15 @@ class SignInCreateAccountViewController: UIViewController {
         
     }
     
-    func handle(result: Result<Bool, Error>) {
+    func handle(result: Result<Bool, LocalError>) {
         switch result {
         case .success:
             DispatchQueue.main.async {
                 self.accountDelegate?.didLogin()
             }
         case .failure(let error):
-            guard let localError = error as? LocalError else { return }
             
-            let alert = UIAlertController(title: localError.title, message: localError.message, preferredStyle: .alert)
+            let alert = UIAlertController(title: error.title, message: error.message, preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
             
             DispatchQueue.main.async {

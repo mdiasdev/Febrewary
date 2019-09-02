@@ -14,6 +14,8 @@ struct Event {
     let address: String
     let date: Date
     let pourerId: Int
+    let hasStarted: Bool
+    let isOver: Bool
     let attendees: [User]
     let eventBeers: [EventBeer]
 }

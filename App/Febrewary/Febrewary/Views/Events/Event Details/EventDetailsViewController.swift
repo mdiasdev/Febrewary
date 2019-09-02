@@ -23,7 +23,15 @@ class EventDetailsViewController: UIViewController {
         super.viewDidLoad()
         
         let addBarButton = UIBarButtonItem(image: UIImage(named: "Plus_ico"), style: .plain, target: self, action: #selector(addTapped))
-        self.navigationItem.setRightBarButtonItems([addBarButton], animated: false) 
+        self.navigationItem.setRightBarButtonItems([addBarButton], animated: false)
+        
+        if let user = User().retrieve(), event.hasStarted && !event.isOver {
+            if user.id == event.pourerId {
+                performSegue(withIdentifier: "Pouring", sender: self)
+            } else {
+                performSegue(withIdentifier: "Voting", sender: self)
+            }
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -78,6 +86,8 @@ class EventDetailsViewController: UIViewController {
             addAttendeeVC.event = event
         } else if let pouringScreen = segue.destination as? PouringViewController {
             pouringScreen.event = event
+        } else if let votingScreen = segue.destination as? VoteViewController {
+            votingScreen.event = event
         }
     }
 }

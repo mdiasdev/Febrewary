@@ -397,7 +397,7 @@ class EventController {
             }
             
             try user.find(by: [("email", email)])
-            guard user.id > 0, event.pourerId == user.id else {
+            guard user.id > 0 else {
                 response.setBody(string: "Unauthorized")
                         .completed(status: .unauthorized)
                 return
