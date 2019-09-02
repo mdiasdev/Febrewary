@@ -28,13 +28,7 @@ class VoteViewController: UIViewController, Spinable {
     private var timer: Timer?
     private var votingVC = VotingViewController()
     
-    // MARK: - Life Cycle
-//    override func viewDidLoad() {
-//        super.viewDidLoad()
-//
-//        startTimer()
-//    }
-    
+    // MARK: - Life Cycle    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         
