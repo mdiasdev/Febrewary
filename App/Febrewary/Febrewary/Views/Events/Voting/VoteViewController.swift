@@ -25,22 +25,26 @@ class VoteViewController: UIViewController, Spinable {
         }
     }
     
-    private var timer: Timer!
+    private var timer: Timer?
     private var votingVC = VotingViewController()
     
     // MARK: - Life Cycle
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        timer = Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(getCurrentBeer), userInfo: nil, repeats: true)
-    }
+//    override func viewDidLoad() {
+//        super.viewDidLoad()
+//
+//        startTimer()
+//    }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         
         if let currentEventBeer = Defaults().getCurrentEventBeer() {
-            setupVoting(for: currentEventBeer)
-            votingVC.showSpinner(with: "Waiting for next pour.")
+            if event.eventBeers.contains(where: { $0.id == currentEventBeer.id }) {
+                setupVoting(for: currentEventBeer)
+                votingVC.showSpinner(with: "Waiting for next pour.")
+            } else {
+                Defaults().removeCurrentEventBeer()
+            }
             
         } else {
             showSpinner(with: "Fetching data.")
@@ -49,8 +53,11 @@ class VoteViewController: UIViewController, Spinable {
         pollServer()
     }
     
-    deinit {
-        timer.invalidate()
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        
+        stopTimer()
+        hideSpinner()
     }
     
     func setupVoting(for eventBeer: EventBeer) {
@@ -59,11 +66,12 @@ class VoteViewController: UIViewController, Spinable {
         }
         
         votingVC.set(eventBeer: eventBeer)
-        votingVC.event = event
-        votingVC.voteDelegate = self
     }
     
     func addVotingSubview() {
+        votingVC.event = event
+        votingVC.voteDelegate = self
+        
         votingVC.view.translatesAutoresizingMaskIntoConstraints = false
         containerView.addSubview(votingVC.view)
         
@@ -77,9 +85,22 @@ class VoteViewController: UIViewController, Spinable {
         containerView.isHidden = false
     }
     
+    // MARK: - Timer
+    func startTimer() {
+        guard timer == nil else { return }
+        timer = Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(getCurrentBeer), userInfo: nil, repeats: true)
+    }
+    
+    func stopTimer() {
+        if timer != nil {
+            timer?.invalidate()
+            timer = nil
+        }
+    }
+    
     // MARK: - Networking
     func pollServer() {
-        timer.fire()
+        startTimer()
     }
     
     @objc func getCurrentBeer() {
@@ -91,7 +112,7 @@ class VoteViewController: UIViewController, Spinable {
                 guard eventBeer.id != currentEventBeer?.id else { return }
                 
                 self?.eventBeer = eventBeer
-                self?.timer.invalidate()
+                self?.stopTimer()
             case .failure: break // fail silently
             }
         }
