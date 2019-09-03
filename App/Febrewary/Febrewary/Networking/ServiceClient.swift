@@ -36,8 +36,18 @@ class ServiceClient {
                 return
             }
             
+            guard let data = data else {
+                completionHandler(.failure(self.localError(from: response, request: request)))
+                return
+            }
+            
+            guard data.count > 0 else {
+                completionHandler(.success([:]))
+                return
+            }
+            
             do {
-                guard let data = data, let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? JSON else {
+                guard let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? JSON else {
                     completionHandler(.failure(JSONError()))
                     return
                 }
@@ -65,13 +75,28 @@ class ServiceClient {
         }
         
         URLSession.shared.dataTask(with: request) { (data, response, error) in
-            guard error == nil else {
-                completionHandler(.failure(error!))
+            guard let response = response as? HTTPURLResponse, error == nil else {
+                completionHandler(.failure(UnknownNetworkError()))
+                return
+            }
+            
+            guard (200..<300).contains(response.statusCode) else {
+                completionHandler(.failure(self.localError(from: response, request: request)))
+                return
+            }
+            
+            guard let data = data else {
+                completionHandler(.failure(self.localError(from: response, request: request)))
+                return
+            }
+            
+            guard data.count > 0 else {
+                completionHandler(.success([:]))
                 return
             }
             
             do {
-                guard let data = data, let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? JSON else {
+                guard let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? JSON else {
                     completionHandler(.failure(JSONError()))
                     return
                 }
@@ -106,6 +131,11 @@ class ServiceClient {
             
             guard let data = data else {
                 completionHandler(.failure(UnknownNetworkError()))
+                return
+            }
+            
+            guard data.count > 0 else {
+                completionHandler(.success([:]))
                 return
             }
             
