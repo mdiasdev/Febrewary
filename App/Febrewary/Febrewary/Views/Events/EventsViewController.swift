@@ -28,19 +28,13 @@ class EventsViewController: UIViewController {
         }
     }
     
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-    
-        // FIXME: can this be done better?
-        getUser {
-            self.getEvents {
-                DispatchQueue.main.async {
-                    self.eventsTable.tableView.reloadData()
-                }
-            }
-        }
-        
+
         eventsTable.navigationDelegate = self
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(updateUI), name: .loggedIn, object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -73,6 +67,30 @@ class EventsViewController: UIViewController {
         segmentChanged(self)
     }
     
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    // MARK: - Helpers
+    @objc func updateUI() {
+        // FIXME: can this be done better?
+        getUser {
+            self.getEvents {
+                DispatchQueue.main.async {
+                    self.eventsTable.tableView.reloadData()
+                }
+            }
+        }
+    }
+    
+    func setupAccessibility() {
+        view.accessibilityIdentifier = "EventsVC"
+        containerView.accessibilityIdentifier = "containerView"
+        noEventsView.accessibilityIdentifier = "noEventsView"
+        eventsTable.tableView.accessibilityIdentifier = "eventsTableView"
+    }
+    
+    // MARK: - Actions
     @IBAction func showAccount(_ sender: Any) {
         guard let accountVC = UIStoryboard(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "Account") as? UINavigationController else { return }
         
@@ -98,6 +116,7 @@ class EventsViewController: UIViewController {
         }
     }
     
+    // MARK: - Navigation
     @IBAction func unwindFromCreateEvent(segue: UIStoryboardSegue) {
         if let createEventVC = segue.source as? CreateEventViewController, let event = createEventVC.event {
             upcommingEvents.append(event)
@@ -109,6 +128,7 @@ class EventsViewController: UIViewController {
         }
     }
     
+    // MARK: - Networking
     func getEvents(completion: @escaping() -> Void) {
 
         EventsService().getAllEventsForCurrentUser { result in
@@ -143,13 +163,6 @@ class EventsViewController: UIViewController {
             self.segmentChanged(self)
         }
     }
-    
-    func setupAccessibility() {
-        view.accessibilityIdentifier = "EventsVC"
-        containerView.accessibilityIdentifier = "containerView"
-        noEventsView.accessibilityIdentifier = "noEventsView"
-        eventsTable.tableView.accessibilityIdentifier = "eventsTableView"
-    }
 }
 
 // MARK: - UIViewControllerTransitioningDelegate
@@ -170,6 +183,7 @@ extension EventsViewController: UIViewControllerTransitioningDelegate {
     }
 }
 
+// MARK: - EventsNavigationDelegate
 extension EventsViewController: EventsNavigationDelegate {
     func didTap(event: Event) {
         let storyBoard = UIStoryboard(name: "Main", bundle: Bundle.main)
