@@ -35,6 +35,7 @@ class EventsViewController: UIViewController {
         eventsTable.navigationDelegate = self
         
         NotificationCenter.default.addObserver(self, selector: #selector(updateUI), name: .loggedIn, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(clearData), name: .loggedOut, object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -81,6 +82,17 @@ class EventsViewController: UIViewController {
                 }
             }
         }
+    }
+    
+    @objc private func clearData() {
+        pastEvents = []
+        upcommingEvents = []
+        
+        eventsTable.isDisplayingPast = false
+        eventsTable.tableView.reloadData()
+        
+        segmentControl.selectedSegmentIndex = 0
+        segmentChanged(self)
     }
     
     func setupAccessibility() {

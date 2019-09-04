@@ -35,6 +35,7 @@ class BeerViewController: UIViewController {
         tableView.isHidden = true
         
         NotificationCenter.default.addObserver(self, selector: #selector(fetchBeersForCurrentUser), name: .loggedIn, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(clearData), name: .loggedOut, object: nil)
     }
     
     deinit {
@@ -79,6 +80,12 @@ class BeerViewController: UIViewController {
             tableView.isHidden = false
             tableView.reloadData()
         }
+    }
+    
+    @objc private func clearData() {
+        self.beers = []
+        tableView.reloadData()
+        segmentedControl.selectedSegmentIndex = 0
     }
     
     // MARK: - Networking

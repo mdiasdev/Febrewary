@@ -10,6 +10,7 @@ import Foundation
 
 enum NotificationName: String {
     case loggedIn
+    case loggedOut
 }
 
 struct NotificationManager {
@@ -21,4 +22,5 @@ struct NotificationManager {
 
 extension NSNotification.Name {
     static let loggedIn = Notification.Name(NotificationName.loggedIn.rawValue)
+    static let loggedOut = Notification.Name(NotificationName.loggedOut.rawValue)
 }
