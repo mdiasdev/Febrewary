@@ -28,6 +28,8 @@ class SignInCreateAccountViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        passwordTextField.delegate = self
 
         view.layer.cornerRadius = 22
         view.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
@@ -162,5 +164,14 @@ class SignInCreateAccountViewController: UIViewController {
                 self.present(alert, animated: true, completion: nil)
             }
         }
+    }
+}
+
+extension SignInCreateAccountViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if textField == passwordTextField {
+            submit(self)
+        }
+        return true
     }
 }

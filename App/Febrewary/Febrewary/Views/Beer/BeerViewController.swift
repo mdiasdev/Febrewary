@@ -22,6 +22,7 @@ class BeerViewController: UIViewController {
     var searchTimer: Timer?
     var searchText: String?
     
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -32,8 +33,16 @@ class BeerViewController: UIViewController {
         
         searchBar.isHidden = true
         tableView.isHidden = true
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(fetchBeersForCurrentUser), name: .loggedIn, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(clearData), name: .loggedOut, object: nil)
     }
     
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    // MARK: - UI Setup
     func setupTable() {
         tableView.delegate = self
         tableView.dataSource = self
@@ -73,7 +82,14 @@ class BeerViewController: UIViewController {
         }
     }
     
-    func fetchBeersForCurrentUser() {
+    @objc private func clearData() {
+        self.beers = []
+        tableView.reloadData()
+        segmentedControl.selectedSegmentIndex = 0
+    }
+    
+    // MARK: - Networking
+    @objc func fetchBeersForCurrentUser() {
         BeerService().getBeersForCurrentUser { result in
             switch result {
             case .success(let beers):
@@ -87,8 +103,7 @@ class BeerViewController: UIViewController {
         }
     }
     
-    @objc
-    func search() {
+    @objc func search() {
         guard let searchText = searchBar.text else { return }
         
         self.searchText = searchText
@@ -106,6 +121,7 @@ class BeerViewController: UIViewController {
         }
     }
     
+    // MARK: - Actions
     @IBAction func segmentDidChange(_ sender: Any) {
         DispatchQueue.main.async {
             self.showOrHideSearchBar()
@@ -113,6 +129,7 @@ class BeerViewController: UIViewController {
         }
     }
     
+    // MARK: - Navigation
     @IBAction func unwindFromAddBeer(segue: UIStoryboardSegue) {
         
         if let addBeerVC = segue.source as? AddBeerViewController, let beer = addBeerVC.beer {
@@ -137,6 +154,7 @@ class BeerViewController: UIViewController {
     }
 }
 
+// MARK: - UITableViewDelegate
 extension BeerViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard beers.count > indexPath.row else { return }
@@ -147,6 +165,7 @@ extension BeerViewController: UITableViewDelegate {
     }
 }
 
+// MARK: - UITableViewDataSource
 extension BeerViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return beers.count
@@ -180,6 +199,7 @@ extension BeerViewController: UITableViewDataSource {
     }  
 }
 
+// MARK: - UISearchBarDelegate
 extension BeerViewController: UISearchBarDelegate {
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {

@@ -22,21 +22,13 @@ class AccountViewController: UIViewController {
         containerView.accessibilityIdentifier = "Account container view"
 
         if User().retrieve() != nil {
-            didLogin()
+            buildLoggedInView()
         } else {
-            didLogout()
+            buildLoggedOutView()
         }
     }
     
-    @IBAction func close(_ sender: Any) {
-        self.dismiss(animated: true, completion: nil)
-    }
-    
-}
-
-extension AccountViewController: AccountDelegate {
-    func didLogin() {
-        
+    func buildLoggedInView() {
         if containerView.subviews.count > 0 {
             for subView in containerView.subviews {
                 subView.removeFromSuperview()
@@ -53,14 +45,13 @@ extension AccountViewController: AccountDelegate {
             userVC.view.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
             userVC.view.topAnchor.constraint(equalTo: containerView.topAnchor),
             userVC.view.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
-        ])
+            ])
         
         
         containerView.layoutIfNeeded()
     }
     
-    func didLogout() {
-        
+    func buildLoggedOutView() {
         if containerView.subviews.count > 0 {
             for subView in containerView.subviews {
                 subView.removeFromSuperview()
@@ -77,7 +68,26 @@ extension AccountViewController: AccountDelegate {
             signInVC.view.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
             signInVC.view.topAnchor.constraint(equalTo: containerView.topAnchor),
             signInVC.view.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
-        ])
+            ])
         containerView.layoutIfNeeded()
+    }
+    
+    @IBAction func close(_ sender: Any) {
+        self.dismiss(animated: true, completion: nil)
+    }
+    
+}
+
+extension AccountViewController: AccountDelegate {
+    func didLogin() {
+        buildLoggedInView()
+        
+        NotificationManager.notifyAll(of: .loggedIn)
+    }
+    
+    func didLogout() {
+        buildLoggedOutView()
+        
+        NotificationManager.notifyAll(of: .loggedOut)
     }
 }
