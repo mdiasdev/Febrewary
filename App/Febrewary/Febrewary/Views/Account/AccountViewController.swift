@@ -57,6 +57,8 @@ extension AccountViewController: AccountDelegate {
         
         
         containerView.layoutIfNeeded()
+        
+        NotificationManager.notifyAll(of: .loggedIn)
     }
     
     func didLogout() {
