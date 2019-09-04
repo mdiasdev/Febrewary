@@ -60,6 +60,7 @@ class BeerViewController: UIViewController {
             } else {
                 self.searchBar.alpha = 100
                 self.searchBar.isHidden = false
+                self.tableView.isHidden = false
             }
         }
     }
@@ -85,7 +86,9 @@ class BeerViewController: UIViewController {
     @objc private func clearData() {
         self.beers = []
         tableView.reloadData()
+        
         segmentedControl.selectedSegmentIndex = 0
+        segmentDidChange(self)
     }
     
     // MARK: - Networking
