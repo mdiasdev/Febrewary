@@ -71,7 +71,6 @@ class BeerViewController: UIViewController {
             DispatchQueue.main.async {
                 self.refreshControl.endRefreshing()
                 self.updateDataSource()
-//                self.tableView.reloadData()
             }
         }
         
