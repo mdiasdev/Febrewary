@@ -399,6 +399,11 @@ class EventController {
                 return
             }
             
+            guard !event.isOver else {
+                response.completed(status: .noContent)
+                return
+            }
+            
             try user.find(by: [("email", email)])
             guard user.id > 0 else {
                 response.setBody(string: "Unauthorized")
