@@ -11,6 +11,7 @@ import UIKit
 class EventDetailsViewController: UIViewController {
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var addressLabel: UILabel!
+    @IBOutlet weak var mapsButton: UIStackView!
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var startButton: UIButton!
