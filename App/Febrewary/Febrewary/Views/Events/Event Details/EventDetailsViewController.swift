@@ -62,6 +62,7 @@ class EventDetailsViewController: UIViewController {
         tableView.dataSource = self
         
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "attendeeCell")
+        tableView.register(UINib(nibName: "EventSummaryCell", bundle: Bundle.main), forCellReuseIdentifier: "summaryCell")
 
         tableView.tableFooterView = UIView()
     }
@@ -120,10 +121,14 @@ extension EventDetailsViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
         if event.isOver {
-            return UITableViewCell() // full detail cell
+            guard event.eventBeers.count > indexPath.row else { return UITableViewCell() }
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "summaryCell", for: indexPath) as? EventSummaryCell else { return UITableViewCell() }
+            
+            cell.set(eventBeer: event.eventBeers[indexPath.row])
+            
+            return cell
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "attendeeCell", for: indexPath)
-            
             cell.textLabel?.text = event.attendees[indexPath.row].name
             
             return cell
