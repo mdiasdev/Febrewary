@@ -48,7 +48,7 @@ class EventDetailsViewController: UIViewController {
         addressLabel.text = event.address
         startButton.layer.cornerRadius = 8
         
-        if let user = User().retrieve(), user.id != event.pourerId {
+        if let user = User().retrieve(), user.id != event.pourerId || event.isOver {
             buttonContainerHeightConstraint.constant = 0
             startButton.isHidden = true
         }
