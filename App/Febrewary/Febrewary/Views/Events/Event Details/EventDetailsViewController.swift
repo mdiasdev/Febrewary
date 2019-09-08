@@ -11,6 +11,7 @@ import UIKit
 class EventDetailsViewController: UIViewController {
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var addressLabel: UILabel!
+    @IBOutlet weak var mapsButton: UIButton!
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var startButton: UIButton!
@@ -22,8 +23,13 @@ class EventDetailsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let addBarButton = UIBarButtonItem(image: UIImage(named: "Plus_ico"), style: .plain, target: self, action: #selector(addTapped))
-        self.navigationItem.setRightBarButtonItems([addBarButton], animated: false)
+        if event.isOver {
+            mapsButton.isHidden = true
+            navigationItem.rightBarButtonItem = nil
+        } else {
+            let addBarButton = UIBarButtonItem(image: UIImage(named: "Plus_ico"), style: .plain, target: self, action: #selector(addTapped))
+            self.navigationItem.setRightBarButtonItems([addBarButton], animated: false)
+        }
         
         if let user = User().retrieve(), event.hasStarted && !event.isOver {
             if user.id == event.pourerId {
@@ -42,7 +48,7 @@ class EventDetailsViewController: UIViewController {
         addressLabel.text = event.address
         startButton.layer.cornerRadius = 8
         
-        if let user = User().retrieve(), user.id != event.pourerId {
+        if let user = User().retrieve(), user.id != event.pourerId || event.isOver {
             buttonContainerHeightConstraint.constant = 0
             startButton.isHidden = true
         }
@@ -56,7 +62,7 @@ class EventDetailsViewController: UIViewController {
         tableView.dataSource = self
         
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "attendeeCell")
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "beerCell")
+        tableView.register(UINib(nibName: "EventSummaryCell", bundle: Bundle.main), forCellReuseIdentifier: "summaryCell")
 
         tableView.tableFooterView = UIView()
     }
@@ -77,7 +83,10 @@ class EventDetailsViewController: UIViewController {
     }
     
     func addBeerTapped() {
+        let alert = UIAlertController(title: "unimplemented", message: "this is a future feature", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         
+        present(alert, animated: true, completion: nil)
     }
     
     // MARK: Navigation
@@ -94,15 +103,7 @@ class EventDetailsViewController: UIViewController {
 
 extension EventDetailsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        switch section {
-        case 0:
-            return event.attendees.count > 0 ? "Attendees" : nil
-        case 1:
-            return event.eventBeers.count > 0 ? "Beers" : nil
-        default:
-            assertionFailure("Table only supports 2 sections")
-            return nil
-        }
+        return !event.isOver ? "Attendees" : nil
     }
     
 }
@@ -110,39 +111,27 @@ extension EventDetailsViewController: UITableViewDelegate {
 extension EventDetailsViewController: UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        return 1
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        switch section {
-        case 0:
-            return event.attendees.count
-        case 1:
-            return event.eventBeers.count
-        default:
-            assertionFailure("Table only supports 2 sections")
-            return 0
-        }
+        return event.attendees.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        switch indexPath.section {
-        case 0:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "attendeeCell", for: indexPath)
+
+        if event.isOver {
+            guard event.eventBeers.count > indexPath.row else { return UITableViewCell() }
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "summaryCell", for: indexPath) as? EventSummaryCell else { return UITableViewCell() }
             
+            cell.set(eventBeer: event.eventBeers[indexPath.row])
+            
+            return cell
+        } else {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "attendeeCell", for: indexPath)
             cell.textLabel?.text = event.attendees[indexPath.row].name
             
             return cell
-        case 1:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "beerCell", for: indexPath)
-            
-            cell.textLabel?.text = event.eventBeers[indexPath.row].beer.name
-            cell.detailTextLabel?.text = event.eventBeers[indexPath.row].beer.brewerName
-            
-            return cell
-        default:
-            assertionFailure("Table only supports 2 sections")
-            return UITableViewCell()
         }
     }
     

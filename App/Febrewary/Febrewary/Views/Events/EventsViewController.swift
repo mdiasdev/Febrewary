@@ -31,6 +31,10 @@ class EventsViewController: UIViewController {
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if let _ = Defaults().getToken() {
+            updateUI()
+        }
 
         eventsTable.navigationDelegate = self
         
