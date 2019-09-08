@@ -350,8 +350,11 @@ class EventController {
             let unpouredEventBeers = eventBeer.rows().filter { $0.round == 0 && $0.votes == 0 && !$0.isBeingPoured }
             let pouredEventBeers = eventBeer.rows().filter { $0.round > 0 }.sorted(by: { $0.round > $1.round})
             
-            guard let randomBeer = unpouredEventBeers.randomElement() else {
-                // TODO: event over, do a thing (#117)
+            guard unpouredEventBeers.count > 0, let randomBeer = unpouredEventBeers.randomElement() else {
+                event.isOver = true
+                try event.store()
+                
+                response.completed(status: .noContent)
                 return
             }
             
