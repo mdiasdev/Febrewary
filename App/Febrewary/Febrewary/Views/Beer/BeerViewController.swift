@@ -36,11 +36,14 @@ class BeerViewController: UIViewController {
         super.viewDidLoad()
 
         setupTable()
-        fetchBeersForCurrentUser()
+        fetchBeersForCurrentUser {
+            DispatchQueue.main.async {
+                self.updateDataSource()
+            }
+        }
         
         searchBar.delegate = self
         
-        searchBar.isHidden = true
         tableView.isHidden = true
         
         NotificationCenter.default.addObserver(self, selector: #selector(refreshTable), name: .loggedIn, object: nil)
@@ -55,9 +58,10 @@ class BeerViewController: UIViewController {
     func setupTable() {
         tableView.delegate = self
         tableView.dataSource = self
+        
         tableView.rowHeight = UITableView.automaticDimension
         tableView.tableFooterView = UIView()
-        tableView.addSubview(refreshControl)
+        tableView.refreshControl = refreshControl
         
         tableView.register(UINib(nibName: "BeerTableViewCell", bundle: Bundle.main), forCellReuseIdentifier: "beerCell")
     }
@@ -66,7 +70,8 @@ class BeerViewController: UIViewController {
         fetchBeersForCurrentUser {
             DispatchQueue.main.async {
                 self.refreshControl.endRefreshing()
-                self.tableView.reloadData()
+                self.updateDataSource()
+//                self.tableView.reloadData()
             }
         }
         
@@ -75,12 +80,11 @@ class BeerViewController: UIViewController {
     func showOrHideSearchBar() {
         UIView.animate(withDuration: 0.25) {
             if self.segmentedControl.selectedSegmentIndex == 0 {
-                self.searchBar.alpha = 0
-                self.searchBar.isHidden = true
-            } else {
                 self.searchBar.alpha = 100
                 self.searchBar.isHidden = false
-                self.tableView.isHidden = false
+            } else {
+                self.searchBar.alpha = 0
+                self.searchBar.isHidden = true
             }
         }
     }
@@ -88,9 +92,9 @@ class BeerViewController: UIViewController {
     func updateDataSource() {
         switch segmentedControl.selectedSegmentIndex {
         case 0:
-            self.beers = myBeers
-        case 1:
             self.beers = searchedBeers
+        case 1:
+            self.beers = myBeers
         default:
             assertionFailure("unexpected segment tapped")
         }
@@ -101,6 +105,8 @@ class BeerViewController: UIViewController {
             tableView.isHidden = false
             tableView.reloadData()
         }
+        
+        showOrHideSearchBar()
     }
     
     @objc private func clearData() {
@@ -112,19 +118,16 @@ class BeerViewController: UIViewController {
     }
     
     // MARK: - Networking
-    func fetchBeersForCurrentUser(completion: (() -> Void)? = nil) {
+    func fetchBeersForCurrentUser(completion: @escaping () -> Void) {
         BeerService().getBeersForCurrentUser { result in
             switch result {
             case .success(let beers):
                 self.myBeers = beers
-                DispatchQueue.main.async {
-                    self.segmentDidChange(self)
-                }
             case .failure:
                 print("failed to get beers for current user")
             }
             
-            completion?()
+            completion()
         }
     }
     
@@ -138,7 +141,8 @@ class BeerViewController: UIViewController {
             case .success(let beers):
                 self.searchedBeers = beers
                 DispatchQueue.main.async {
-                    self.segmentDidChange(self)
+                    self.updateDataSource()
+                    self.showOrHideSearchBar()
                 }
             case .failure:
                 print("failed to get beers for current user")
@@ -149,7 +153,6 @@ class BeerViewController: UIViewController {
     // MARK: - Actions
     @IBAction func segmentDidChange(_ sender: Any) {
         DispatchQueue.main.async {
-            self.showOrHideSearchBar()
             self.updateDataSource()
         }
     }
@@ -161,7 +164,7 @@ class BeerViewController: UIViewController {
             myBeers.append(beer)
         }
         
-        self.segmentedControl.selectedSegmentIndex = 0
+        self.segmentedControl.selectedSegmentIndex = 1
         self.segmentDidChange(self)
     }
     
