@@ -22,6 +22,15 @@ class BeerViewController: UIViewController {
     var searchTimer: Timer?
     var searchText: String?
     
+    lazy var refreshControl: UIRefreshControl = {
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self,
+                                 action:#selector(refreshTable),
+                                 for: UIControl.Event.valueChanged)
+        
+        return refreshControl
+    }()
+    
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,7 +43,7 @@ class BeerViewController: UIViewController {
         searchBar.isHidden = true
         tableView.isHidden = true
         
-        NotificationCenter.default.addObserver(self, selector: #selector(fetchBeersForCurrentUser), name: .loggedIn, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(refreshTable), name: .loggedIn, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(clearData), name: .loggedOut, object: nil)
     }
     
@@ -48,8 +57,19 @@ class BeerViewController: UIViewController {
         tableView.dataSource = self
         tableView.rowHeight = UITableView.automaticDimension
         tableView.tableFooterView = UIView()
+        tableView.addSubview(refreshControl)
         
         tableView.register(UINib(nibName: "BeerTableViewCell", bundle: Bundle.main), forCellReuseIdentifier: "beerCell")
+    }
+    
+    @objc func refreshTable() {
+        fetchBeersForCurrentUser {
+            DispatchQueue.main.async {
+                self.refreshControl.endRefreshing()
+                self.tableView.reloadData()
+            }
+        }
+        
     }
     
     func showOrHideSearchBar() {
@@ -92,7 +112,7 @@ class BeerViewController: UIViewController {
     }
     
     // MARK: - Networking
-    @objc func fetchBeersForCurrentUser() {
+    func fetchBeersForCurrentUser(completion: (() -> Void)? = nil) {
         BeerService().getBeersForCurrentUser { result in
             switch result {
             case .success(let beers):
@@ -103,6 +123,8 @@ class BeerViewController: UIViewController {
             case .failure:
                 print("failed to get beers for current user")
             }
+            
+            completion?()
         }
     }
     

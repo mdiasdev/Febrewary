@@ -16,6 +16,15 @@ class EventsViewController: UIViewController {
     let noEventsView = Bundle.main.loadNibNamed("NoEventsView", owner: self, options: nil)?.first as! NoEventsView // FIXME: no force unwrapping
     let eventsTable = EventsTableViewController()
     
+    lazy var refreshControl: UIRefreshControl = {
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self,
+                                 action:#selector(refreshTable),
+                                 for: UIControl.Event.valueChanged)
+        
+        return refreshControl
+    }()
+    
     private var upcommingEvents = [Event]() {
         didSet {
             eventsTable.upcommingEvents = upcommingEvents
@@ -33,12 +42,13 @@ class EventsViewController: UIViewController {
         super.viewDidLoad()
         
         if let _ = Defaults().getToken() {
-            updateUI()
+            refreshTable()
         }
 
         eventsTable.navigationDelegate = self
+        eventsTable.tableView.addSubview(refreshControl)
         
-        NotificationCenter.default.addObserver(self, selector: #selector(updateUI), name: .loggedIn, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(refreshTable), name: .loggedIn, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(clearData), name: .loggedOut, object: nil)
     }
     
@@ -76,15 +86,21 @@ class EventsViewController: UIViewController {
         NotificationCenter.default.removeObserver(self)
     }
     
-    // MARK: - Helpers
-    @objc func updateUI() {
-        // FIXME: can this be done better?
+    @objc func refreshTable() {
+        let group = DispatchGroup()
+        group.enter()
         getUser {
-            self.getEvents {
-                DispatchQueue.main.async {
-                    self.eventsTable.tableView.reloadData()
-                }
-            }
+            group.leave()
+        }
+        
+        group.enter()
+        self.getEvents {
+            group.leave()
+        }
+        
+        group.notify(queue: DispatchQueue.main) {
+            self.refreshControl.endRefreshing()
+            self.eventsTable.tableView.reloadData()
         }
     }
     
