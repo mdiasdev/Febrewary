@@ -756,8 +756,8 @@
                             <rect key="frame" x="90" y="7" width="195" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <segments>
-                                <segment title="My Beers"/>
                                 <segment title="Search"/>
+                                <segment title="My Beers"/>
                             </segments>
                             <connections>
                                 <action selector="segmentDidChange:" destination="atL-iT-S5h" eventType="valueChanged" id="QIY-Kw-Ywf"/>
