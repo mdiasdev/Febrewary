@@ -37,7 +37,7 @@ class FakeServiceClient: ServiceClient {
         }
     }
     
-    override func post(url: URL, payload: JSON?, completionHandler: @escaping (Result<JSON, Error>) -> Void) {
+    override func post(url: URL, payload: JSON?, completionHandler: @escaping (Result<JSON, LocalError>) -> Void) {
         if let successFileName = self.successFileName {
             guard let json = json(fromFile: successFileName) else {
                 assertionFailure("bad file name")
