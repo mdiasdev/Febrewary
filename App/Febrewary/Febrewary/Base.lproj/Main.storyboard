@@ -375,7 +375,7 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
                         </subviews>
-                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <color key="backgroundColor" systemColor="systemGroupedBackgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="qkt-WT-4we" firstAttribute="trailing" secondItem="vmK-EY-Ijy" secondAttribute="trailing" id="6Wz-a6-rE9"/>
                             <constraint firstItem="vmK-EY-Ijy" firstAttribute="bottom" secondItem="3c0-1q-tOT" secondAttribute="bottom" id="Jwu-IF-IPz"/>
@@ -495,7 +495,6 @@
                     <connections>
                         <segue destination="Niu-OA-nxc" kind="relationship" relationship="viewControllers" id="cVs-No-gDd"/>
                         <segue destination="fLd-HN-Rrd" kind="relationship" relationship="viewControllers" id="EdS-VI-tSD"/>
-                        <segue destination="OpU-Bn-eZT" kind="relationship" relationship="viewControllers" id="pqP-KU-jxp"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="CKD-Vh-AlN" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -525,7 +524,7 @@
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
                         </subviews>
-                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <color key="backgroundColor" systemColor="systemGroupedBackgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="Bxh-iG-249" firstAttribute="trailing" secondItem="MGk-HO-J6p" secondAttribute="trailing" id="EEz-hX-F3Z"/>
                             <constraint firstItem="oCe-4T-kT6" firstAttribute="top" secondItem="Bxh-iG-249" secondAttribute="top" constant="16" id="GHS-4f-0FI"/>
@@ -712,7 +711,7 @@
                                                         </constraints>
                                                     </view>
                                                 </subviews>
-                                                <color key="backgroundColor" red="0.85098039215686272" green="0.85098039215686272" blue="0.8666666666666667" alpha="1" colorSpace="calibratedRGB"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
                                                     <constraint firstItem="AgE-RA-Uux" firstAttribute="centerX" secondItem="Tc1-gF-tQ9" secondAttribute="centerX" id="HQ9-O7-pdj"/>
                                                     <constraint firstItem="AgE-RA-Uux" firstAttribute="centerY" secondItem="Tc1-gF-tQ9" secondAttribute="centerY" id="hjY-Wv-HYc"/>
@@ -720,10 +719,10 @@
                                             </view>
                                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="N9O-rd-g19">
                                                 <rect key="frame" x="0.0" y="0.0" width="375" height="498"/>
-                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             </tableView>
                                         </subviews>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstItem="N9O-rd-g19" firstAttribute="leading" secondItem="9cC-To-KgR" secondAttribute="leading" id="B2C-pi-EkZ"/>
                                             <constraint firstAttribute="bottom" secondItem="N9O-rd-g19" secondAttribute="bottom" id="Ph7-72-zfe"/>
@@ -738,7 +737,7 @@
                                 </subviews>
                             </stackView>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" systemColor="systemGroupedBackgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="TNr-Cu-Cw7" firstAttribute="leading" secondItem="Idi-0u-CoB" secondAttribute="leading" id="JJX-jn-HVV"/>
                             <constraint firstItem="TNr-Cu-Cw7" firstAttribute="trailing" secondItem="Idi-0u-CoB" secondAttribute="trailing" id="Rhi-f5-htU"/>
@@ -820,7 +819,7 @@
                                 </connections>
                             </button>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
                             <constraint firstItem="cvs-oc-Tlj" firstAttribute="leading" secondItem="Xz8-qF-eJX" secondAttribute="leading" constant="24" id="82G-Vq-N3U"/>
                             <constraint firstItem="aGJ-rs-mP4" firstAttribute="leading" secondItem="cvs-oc-Tlj" secondAttribute="leading" constant="36" id="A3J-IZ-Hdw"/>
@@ -849,52 +848,6 @@
                 <exit id="WG6-J1-4ta" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="3204" y="1101"/>
-        </scene>
-        <!--Root View Controller-->
-        <scene sceneID="0tM-zV-vIc">
-            <objects>
-                <tableViewController id="tSF-Uo-lmq" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="HFd-10-Slu">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="cell" id="wiL-8D-smw">
-                                <rect key="frame" x="0.0" y="28" width="375" height="43.5"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="wiL-8D-smw" id="1gL-jM-X1R">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                </tableViewCellContentView>
-                            </tableViewCell>
-                        </prototypes>
-                        <connections>
-                            <outlet property="dataSource" destination="tSF-Uo-lmq" id="AdL-Pg-Bzy"/>
-                            <outlet property="delegate" destination="tSF-Uo-lmq" id="Ua1-pK-6Ew"/>
-                        </connections>
-                    </tableView>
-                    <navigationItem key="navigationItem" title="Root View Controller" id="jAY-8N-bcP"/>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="sVe-cA-4ny" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-633" y="1102"/>
-        </scene>
-        <!--Friends-->
-        <scene sceneID="1Ng-ng-HHp">
-            <objects>
-                <navigationController id="OpU-Bn-eZT" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Friends" image="Friends_ico" id="jgR-Cl-KEO"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="ntG-i5-blZ">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <connections>
-                        <segue destination="tSF-Uo-lmq" kind="relationship" relationship="rootViewController" id="pe3-dE-z9c"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Jl3-Cr-TEf" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-1393" y="1101"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="a9f-wg-YMw">
@@ -1034,7 +987,7 @@
                                 </connections>
                             </button>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
                             <constraint firstItem="bXU-Wm-ffP" firstAttribute="trailing" secondItem="ZI4-Ch-o6Y" secondAttribute="trailing" constant="60" id="1K4-u5-M1q"/>
                             <constraint firstItem="0AE-pf-3T3" firstAttribute="leading" secondItem="YjW-ef-DCP" secondAttribute="trailing" constant="8" id="1bJ-BG-LZt"/>
@@ -1086,7 +1039,6 @@
         <image name="Beer_ico" width="25" height="27"/>
         <image name="BeersDark" width="62" height="74"/>
         <image name="Calendar_ico" width="25" height="25"/>
-        <image name="Friends_ico" width="25" height="25"/>
         <image name="Plus_ico" width="25" height="25"/>
         <image name="X_ico" width="25" height="25"/>
     </resources>
