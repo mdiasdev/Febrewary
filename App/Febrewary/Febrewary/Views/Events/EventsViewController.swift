@@ -25,10 +25,10 @@ class EventsViewController: UIViewController {
         return refreshControl
     }()
     
-    private var upcommingEvents = [Event]() {
+    private var upcomingEvents = [Event]() {
         didSet {
-            eventsTable.upcommingEvents = upcommingEvents
-            (upcommingEvents as NSArray).save()
+            eventsTable.upcomingEvents = upcomingEvents
+            (upcomingEvents as NSArray).save()
         }
     }
     private var pastEvents = [Event]() {
@@ -106,7 +106,7 @@ class EventsViewController: UIViewController {
     
     @objc private func clearData() {
         pastEvents = []
-        upcommingEvents = []
+        upcomingEvents = []
         
         eventsTable.isDisplayingPast = false
         eventsTable.tableView.reloadData()
@@ -133,10 +133,10 @@ class EventsViewController: UIViewController {
     @IBAction func segmentChanged(_ sender: Any) {
         if segmentControl.selectedSegmentIndex == 0 {
             noEventsView.titleLabel.text = "No Upcomming Events"
-            noEventsView.isHidden = upcommingEvents.count > 0
+            noEventsView.isHidden = upcomingEvents.count > 0
             
             eventsTable.isDisplayingPast = false
-            eventsTable.tableView.isHidden = upcommingEvents.count == 0
+            eventsTable.tableView.isHidden = upcomingEvents.count == 0
             eventsTable.tableView.reloadData()
         } else {
             noEventsView.titleLabel.text = "No Past Events"
@@ -151,7 +151,7 @@ class EventsViewController: UIViewController {
     // MARK: - Navigation
     @IBAction func unwindFromCreateEvent(segue: UIStoryboardSegue) {
         if let createEventVC = segue.source as? CreateEventViewController, let event = createEventVC.event {
-            upcommingEvents.append(event)
+            upcomingEvents.append(event)
         }
         
         DispatchQueue.main.async {
@@ -181,14 +181,19 @@ class EventsViewController: UIViewController {
     }
     
     func parseResponse(events: [Event]) {
+        var upcoming = [Event]()
+        var past = [Event]()
         
         for event in events {
             if event.date.isTodayOrFuture() {
-                upcommingEvents.append(event)
+                upcoming.append(event)
             } else {
-                pastEvents.append(event)
+                past.append(event)
             }
         }
+        
+        upcomingEvents = upcoming
+        pastEvents = past
         
         DispatchQueue.main.async {
             self.eventsTable.tableView.reloadData()

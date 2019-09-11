@@ -15,7 +15,7 @@ protocol EventsNavigationDelegate: class {
 class EventsTableViewController: UITableViewController {
     
     var isDisplayingPast = false
-    var upcommingEvents = [Event]()
+    var upcomingEvents = [Event]()
     var pastEvents = [Event]()
     
     weak var navigationDelegate: EventsNavigationDelegate?
@@ -33,7 +33,7 @@ class EventsTableViewController: UITableViewController {
     override func numberOfSections(in tableView: UITableView) -> Int { return 1 }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return isDisplayingPast ? pastEvents.count : upcommingEvents.count
+        return isDisplayingPast ? pastEvents.count : upcomingEvents.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -43,10 +43,10 @@ class EventsTableViewController: UITableViewController {
         if isDisplayingPast {
             guard pastEvents.count > indexPath.row else { return UITableViewCell() }
         } else {
-            guard upcommingEvents.count > indexPath.row else { return UITableViewCell() }
+            guard upcomingEvents.count > indexPath.row else { return UITableViewCell() }
         }
         
-        let event = isDisplayingPast ? pastEvents[indexPath.row] : upcommingEvents[indexPath.row]
+        let event = isDisplayingPast ? pastEvents[indexPath.row] : upcomingEvents[indexPath.row]
 
         cell.textLabel?.text = event.name
         cell.detailTextLabel?.text = event.date.shortMonthDayYear
@@ -61,8 +61,8 @@ class EventsTableViewController: UITableViewController {
             guard indexPath.row < pastEvents.count else { return }
             event = pastEvents[indexPath.row]
         } else {
-            guard indexPath.row < upcommingEvents.count else { return }
-            event = upcommingEvents[indexPath.row]
+            guard indexPath.row < upcomingEvents.count else { return }
+            event = upcomingEvents[indexPath.row]
         }
         
         navigationDelegate?.didTap(event: event)
