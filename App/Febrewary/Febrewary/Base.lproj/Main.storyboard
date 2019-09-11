@@ -29,7 +29,7 @@
                                                 <rect key="frame" x="0.0" y="0.0" width="375" height="623"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             </view>
-                                            <blurEffect style="extraLight"/>
+                                            <blurEffect style="light"/>
                                         </visualEffectView>
                                     </subviews>
                                 </view>
@@ -512,7 +512,7 @@
                             <segmentedControl opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="1000" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="oCe-4T-kT6">
                                 <rect key="frame" x="32" y="60" width="311" height="32"/>
                                 <segments>
-                                    <segment title="Upcomming"/>
+                                    <segment title="Upcoming"/>
                                     <segment title="Past"/>
                                 </segments>
                                 <connections>
@@ -524,7 +524,7 @@
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
                         </subviews>
-                        <color key="backgroundColor" red="0.7803921568627451" green="0.7803921568627451" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="Bxh-iG-249" firstAttribute="trailing" secondItem="MGk-HO-J6p" secondAttribute="trailing" id="EEz-hX-F3Z"/>
                             <constraint firstItem="oCe-4T-kT6" firstAttribute="top" secondItem="Bxh-iG-249" secondAttribute="top" constant="16" id="GHS-4f-0FI"/>
@@ -613,7 +613,7 @@
                                 </connections>
                             </button>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
                             <constraint firstItem="yFa-vn-KzD" firstAttribute="trailing" secondItem="gNo-Oa-jvS" secondAttribute="trailing" constant="-36" id="0Ne-v0-tdc"/>
                             <constraint firstItem="gNo-Oa-jvS" firstAttribute="leading" secondItem="H8x-Jn-OVB" secondAttribute="leading" constant="24" id="Z93-m5-F0h"/>
@@ -748,7 +748,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="msA-xp-uem">
                         <nil key="title"/>
-                        <segmentedControl key="titleView" opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="FIQ-Wl-yxr">
+                        <segmentedControl key="titleView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="FIQ-Wl-yxr">
                             <rect key="frame" x="90" y="6" width="195" height="32"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <segments>
