@@ -225,13 +225,6 @@
 			path = Beer;
 			sourceTree = "<group>";
 		};
-		6D4900D622BEB6D50071E3D3 /* Date Picker */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = "Date Picker";
-			sourceTree = "<group>";
-		};
 		6D4900D922C7E10F0071E3D3 /* Services */ = {
 			isa = PBXGroup;
 			children = (
@@ -358,7 +351,6 @@
 			isa = PBXGroup;
 			children = (
 				6D7831762315F955004888CC /* Spinner */,
-				6D4900D622BEB6D50071E3D3 /* Date Picker */,
 				6D750FF922B6CBBB004BA26F /* SubtitleTableCell.swift */,
 			);
 			path = Reusable;
