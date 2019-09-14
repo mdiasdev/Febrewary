@@ -129,6 +129,11 @@ class ServiceClient {
                 return
             }
             
+            guard response.statusCode != 204 else {
+                completionHandler(.failure(EventCompleted()))
+                return
+            }
+            
             guard let data = data else {
                 completionHandler(.failure(UnknownNetworkError()))
                 return

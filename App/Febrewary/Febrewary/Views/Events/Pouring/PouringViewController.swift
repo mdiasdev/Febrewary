@@ -63,6 +63,17 @@ class PouringViewController: UIViewController {
         present(alert, animated: true, completion: nil)
     }
     
+    func showCompletedAlert(error: EventCompleted) {
+        let alert = UIAlertController(title: error.title,
+                                      message: error.message,
+                                      preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { _ in
+            self.dismissTapped(self)
+        }))
+        
+        present(alert, animated: true, completion: nil)
+    }
+    
     // MARK: - Networking
     func pourNext(shouldForce: Bool = false) {
         eventService.getBeerToPour(for: event, shouldForce: shouldForce) { [weak self] result in
@@ -73,6 +84,8 @@ class PouringViewController: UIViewController {
                 case .failure(let error):
                     if let warning = error as? PourWarning {
                         self?.showIncompleteAlert(error: warning)
+                    } else if let eventCompleted = error as? EventCompleted {
+                        self?.showCompletedAlert(error: eventCompleted)
                     }
                 }
             }
