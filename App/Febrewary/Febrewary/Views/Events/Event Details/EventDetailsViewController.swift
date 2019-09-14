@@ -101,6 +101,8 @@ class EventDetailsViewController: UIViewController {
             pouringScreen.event = event
         } else if let votingScreen = segue.destination as? VoteViewController {
             votingScreen.event = event
+        } else if let beerDetails = segue.destination as? BeerDetailsViewController, let eventBeer = sender as? EventBeer {
+            beerDetails.beer = eventBeer.beer
         }
     }
 }
@@ -110,6 +112,11 @@ extension EventDetailsViewController: UITableViewDelegate {
         return !event.isOver ? "Attendees" : nil
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard event.isOver, event.eventBeers.count > indexPath.row else { return }
+        
+        performSegue(withIdentifier: "beerDetails", sender: event.eventBeers[indexPath.row])
+    }
 }
 
 extension EventDetailsViewController: UITableViewDataSource {
@@ -134,6 +141,7 @@ extension EventDetailsViewController: UITableViewDataSource {
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "attendeeCell", for: indexPath)
             cell.textLabel?.text = event.attendees[indexPath.row].name
+            cell.selectionStyle = .none
             
             return cell
         }
