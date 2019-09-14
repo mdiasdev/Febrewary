@@ -21,7 +21,7 @@ extension UIToolbar {
         let doneButton = UIBarButtonItem(title: "Select", style: UIBarButtonItem.Style.plain, target: self, action: action)
         let spaceButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: nil, action: nil)
         
-        toolBar.setItems([ spaceButton, doneButton], animated: false)
+        toolBar.setItems([spaceButton, doneButton], animated: false)
         toolBar.isUserInteractionEnabled = true
         
         return toolBar

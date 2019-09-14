@@ -75,6 +75,10 @@ class EventDetailsViewController: UIViewController {
         actionSheet.addAction(UIAlertAction(title: "Beer", style: .default, handler: { _ in self.addBeerTapped() }))
         actionSheet.addAction(UIAlertAction(title: "Cancel", style: .destructive, handler: nil))
         
+        if let popoverController = actionSheet.popoverPresentationController {
+            popoverController.barButtonItem = navigationItem.rightBarButtonItem
+        }
+        
         present(actionSheet, animated: true, completion: nil)
     }
     
