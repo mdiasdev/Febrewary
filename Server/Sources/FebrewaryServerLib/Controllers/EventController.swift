@@ -351,8 +351,7 @@ class EventController {
             let pouredEventBeers = eventBeer.rows().filter { $0.round > 0 }.sorted(by: { $0.round > $1.round})
             
             guard unpouredEventBeers.count > 0, let randomBeer = unpouredEventBeers.randomElement() else {
-                event.isOver = true
-                try event.store()
+                try end(event: event, pouredBeers: pouredEventBeers)
                 
                 response.completed(status: .noContent)
                 return
@@ -518,6 +517,31 @@ class EventController {
             
         } catch {
             response.completed(status: .internalServerError)
+        }
+    }
+    
+    func end(event: Event, pouredBeers: [EventBeer], beer: Beer = Beer()) throws {
+        guard !event.isOver else { return }
+        
+        event.isOver = true
+        try event.store()
+        
+        for eventBeer in pouredBeers {
+            if eventBeer.isBeingPoured {
+                eventBeer.isBeingPoured.toggle()
+                try eventBeer.store()
+            }
+            
+            try beer.find(by: [("id", eventBeer.beerId)])
+            
+            guard beer.id > 0 else {
+                throw StORMError.noRecordFound
+            }
+            
+            beer.totalVotes += eventBeer.votes
+            beer.totalScore += eventBeer.score
+            
+            try beer.store()
         }
     }
 }
