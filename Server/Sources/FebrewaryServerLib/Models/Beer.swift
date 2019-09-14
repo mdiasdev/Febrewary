@@ -18,7 +18,8 @@ class Beer: DAO {
         id = this.data["id"] as? Int ?? 0
         name = this.data["name"] as? String ?? ""
         brewer = this.data["brewer"] as? String ?? ""
-        abv = this.data["abv"] as? Float ?? 0.0
+        let abvStr = this.data["abv"] as? String ?? ""
+        abv = Float(abvStr) ?? 0.0
         totalScore = this.data["totalscore"] as? Int ?? 0
         totalVotes = this.data["totalvotes"] as? Int ?? 0
         addedBy = this.data["addedby"] as? Int ?? 0
