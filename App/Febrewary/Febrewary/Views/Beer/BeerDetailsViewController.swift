@@ -75,6 +75,12 @@ class BeerDetailsViewController: UIViewController {
             }))
         }
         
+        if let popoverController = actionSheet.popoverPresentationController {
+            popoverController.sourceView = addButton
+            popoverController.sourceRect = addButton.bounds
+            popoverController.permittedArrowDirections = .up
+        }
+        
         present(actionSheet, animated: true, completion: nil)
     }
 }
