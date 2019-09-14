@@ -155,7 +155,7 @@ struct EventsService {
         
         let payload = [
             "eventBeerId": eventBeer.id,
-            "score": score
+            "vote": score
         ]
         
         client.post(url: url, payload: payload) { result in

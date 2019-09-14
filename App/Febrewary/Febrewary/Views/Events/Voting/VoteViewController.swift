@@ -79,6 +79,17 @@ class VoteViewController: UIViewController, Spinable {
         containerView.isHidden = false
     }
     
+    func showCompletedAlert(error: EventCompleted) {
+        let alert = UIAlertController(title: error.title,
+                                      message: error.message,
+                                      preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { _ in
+            self.dismissTapped(self)
+        }))
+        
+        present(alert, animated: true, completion: nil)
+    }
+    
     // MARK: - Timer
     func startTimer() {
         guard timer == nil else { return }
@@ -107,7 +118,12 @@ class VoteViewController: UIViewController, Spinable {
                 
                 self?.eventBeer = eventBeer
                 self?.stopTimer()
-            case .failure: break // fail silently
+            case .failure(let error):
+                if let eventCompleted = error as? EventCompleted {
+                    self?.showCompletedAlert(error: eventCompleted)
+                } else {
+                    // fail silently
+                }
             }
         }
     }

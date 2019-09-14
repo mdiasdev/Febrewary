@@ -51,3 +51,13 @@ class PourWarning: LocalError {
         message = "Not all votes are in. Are you sure you want to pour the next beer?"
     }
 }
+
+class EventCompleted: LocalError {
+    override init() {
+        super.init()
+        
+        title = "Event is over"
+        code = 204
+        message = "All votes are in and the event is over"
+    }
+}
