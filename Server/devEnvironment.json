@@ -4,7 +4,8 @@
     "username": "perfect",
     "password": "perfect",
     "dbName": "febrewary",
-    "port": 5432
+    "port": 5432,
+    "apiKey": "bbb8490540b76c789eeebc380a5fed67"
   },
   "security": {
     "salt": "beers"

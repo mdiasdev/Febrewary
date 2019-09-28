@@ -15,6 +15,7 @@ server.addRoutes(AuthRouter().routes)
 server.addRoutes(BeerRouter().routes)
 server.addRoutes(EventRouter().routes)
 server.addRoutes(UserRouter().routes)
+server.addRoutes(PopulateRouter().routes)
 
 do {
     try server.start()

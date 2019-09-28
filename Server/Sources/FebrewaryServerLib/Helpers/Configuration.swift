@@ -45,6 +45,10 @@ struct Configuration {
         return config["database:port"] as! Int
     }
     
+    static var apiKey: String {
+        return config["database:apiKey"] as! String
+    }
+    
     static var salt: String {
         return config["security:salt"] as! String
     }
