@@ -10,7 +10,7 @@ import PerfectHTTP
 
 public class EventRouter: Router {
     override func initRoutes() {
-        routes.add(method: .post, uri: "/event", handler: createEvent)
+        routes.add(method: .post, uri: "/event", handler: auth &&& createEvent)
         routes.add(method: .get, uri: "/event/{id}", handler: getEvent)
         routes.add(method: .get, uri: "/event", handler: getEventForUser)
         routes.add(method: .post, uri: "/event/{id}/beer", handler: addEventBeer)
