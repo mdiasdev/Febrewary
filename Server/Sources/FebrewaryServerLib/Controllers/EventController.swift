@@ -3,16 +3,11 @@ import StORM
 
 class EventController {
     func createEvent(request: HTTPRequest, response: HTTPResponse, user: User = User(), event: Event = Event(), attendee: Attendee = Attendee()) {
-        guard request.hasValidToken() else {
-            response.setBody(string: "Unauthorized")
-                    .completed(status: .unauthorized)
-            return
-        }
         
         guard let email = request.emailFromAuthToken() else {
-            response.setBody(string: "Bad Request")
-                    .completed(status: .badRequest)
-            return
+           response.setBody(string: "Bad Request: missing required property")
+                   .completed(status: .badRequest)
+           return
         }
         
         guard let postBody = try? request.postBodyString?.jsonDecode() as? [String: Any],
@@ -88,7 +83,7 @@ class EventController {
     }
     
     func getEventForUser(request: HTTPRequest, response: HTTPResponse, user: User = User(), events: Event = Event(), attendees: Attendee = Attendee()) {
-        guard request.hasValidToken(), let email = request.emailFromAuthToken() else {
+        guard let email = request.emailFromAuthToken() else {
             response.setBody(string: "Unauthorized")
                     .completed(status: .unauthorized)
             return
@@ -131,7 +126,7 @@ class EventController {
     }
     
     func addEventBeer(request: HTTPRequest, response: HTTPResponse, user: User = User(), event: Event = Event(), eventBeer: EventBeer = EventBeer(), attendee: Attendee = Attendee()) {
-        guard request.hasValidToken(), let email = request.emailFromAuthToken() else {
+        guard let email = request.emailFromAuthToken() else {
             response.setBody(string: "Unauthorized")
                     .completed(status: .unauthorized)
             return
@@ -206,12 +201,7 @@ class EventController {
     }
     
     func addAttendee(request: HTTPRequest, response: HTTPResponse, user: User = User(), event: Event = Event(), attendee: Attendee = Attendee()) {
-        guard request.hasValidToken() else {
-            response.setBody(string: "Unauthorized")
-                    .completed(status: .unauthorized)
-            return
-        }
-        
+
         guard let eventId = Int(request.urlVariables["id"] ?? "0"), eventId > 0 else {
             response.completed(status: .badRequest)
             return
@@ -277,12 +267,6 @@ class EventController {
     }
     
     func pourEventBeer(request: HTTPRequest, response: HTTPResponse, event: Event = Event(), user: User = User(), eventBeer: EventBeer = EventBeer(), attendee: Attendee = Attendee()) {
-        
-        guard request.hasValidToken() else {
-            response.setBody(string: "Unauthorized")
-                    .completed(status: .unauthorized)
-            return
-        }
         
         guard let email = request.emailFromAuthToken() else {
             response.setBody(string: "Bad Request")
@@ -373,11 +357,6 @@ class EventController {
     }
     
     func getCurrentEventBeer(request: HTTPRequest, response: HTTPResponse, event: Event = Event(), eventBeer: EventBeer = EventBeer(), user: User = User()) {
-        guard request.hasValidToken() else {
-            response.setBody(string: "Unauthorized")
-                    .completed(status: .unauthorized)
-            return
-        }
         
         guard let email = request.emailFromAuthToken() else {
             response.setBody(string: "Bad Request")
@@ -427,11 +406,6 @@ class EventController {
     }
     
     func vote(request: HTTPRequest, response: HTTPResponse, event: Event = Event(), vote: Vote = Vote(), user: User = User(), eventBeer: EventBeer = EventBeer(), attendee: Attendee = Attendee()) {
-        guard request.hasValidToken() else {
-            response.setBody(string: "Unauthorized")
-                    .completed(status: .unauthorized)
-            return
-        }
         
         guard let email = request.emailFromAuthToken() else {
             response.setBody(string: "Bad Request")

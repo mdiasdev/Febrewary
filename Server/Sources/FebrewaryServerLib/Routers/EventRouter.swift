@@ -12,12 +12,12 @@ public class EventRouter: Router {
     override func initRoutes() {
         routes.add(method: .post, uri: "/event", handler: auth &&& createEvent)
         routes.add(method: .get, uri: "/event/{id}", handler: getEvent)
-        routes.add(method: .get, uri: "/event", handler: getEventForUser)
-        routes.add(method: .post, uri: "/event/{id}/beer", handler: addEventBeer)
-        routes.add(method: .put, uri: "/event/{id}/attendee", handler: addAttendee)
-        routes.add(method: .get, uri: "/event/{id}/pour", handler: pourEventBeer)
-        routes.add(method: .get, uri: "/event/{id}/currentbeer", handler: getCurrentEventBeer)
-        routes.add(method: .post, uri: "/event/{id}/vote", handler: vote)
+        routes.add(method: .get, uri: "/event", handler: auth &&& getEventForUser)
+        routes.add(method: .post, uri: "/event/{id}/beer", handler: auth &&& addEventBeer)
+        routes.add(method: .put, uri: "/event/{id}/attendee", handler: auth &&& addAttendee)
+        routes.add(method: .get, uri: "/event/{id}/pour", handler: auth &&& pourEventBeer)
+        routes.add(method: .get, uri: "/event/{id}/currentbeer", handler: auth &&& getCurrentEventBeer)
+        routes.add(method: .post, uri: "/event/{id}/vote", handler: auth &&& vote)
     }
     
     func createEvent(request: HTTPRequest, response: HTTPResponse) {
