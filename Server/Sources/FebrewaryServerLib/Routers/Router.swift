@@ -19,13 +19,14 @@ public class Router {
     }
 
     func initRoutes() {
+        assertionFailure("this should be override by subclasses!")
     }
     
     func auth(request: HTTPRequest, response: HTTPResponse) -> Result<(), Error> {
         do {
-            if try validateAuth(request: request) {
-                return Result.success({}())
-            }
+            try validateAuth(request: request)
+            
+            return Result.success({}())
         } catch let error as ServerError {
             let errorCode = HTTPResponseStatus.statusFrom(code: error.code)
             let json = error.asJson()
@@ -41,11 +42,9 @@ public class Router {
             print("unexpected issue with authentication.")
             return Result.failure(UnknownError())
         }
-        
-        return Result.failure(UnknownError())
     }
     
-    func validateAuth(request: HTTPRequest) throws -> Bool {
+    func validateAuth(request: HTTPRequest) throws {
         guard request.hasValidToken() else {
             throw UnauthenticatedError()
         }
@@ -53,8 +52,6 @@ public class Router {
         guard request.emailFromAuthToken() != nil else {
            throw BadTokenError()
         }
-        
-        return true
     }
 
 }

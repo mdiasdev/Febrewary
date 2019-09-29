@@ -9,7 +9,7 @@ import Foundation
 
 typealias ErrorJSON = [String: Any]
 
-protocol ServerError: Error, Codable {
+protocol ServerError: Error, Codable, Equatable {
     var title: String { get }
     var message: String  { get }
     var code: Int { get }

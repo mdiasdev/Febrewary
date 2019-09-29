@@ -65,7 +65,7 @@ class HTTPRequestExtensionTests: XCTestCase {
     }
     
     func test_hasValidToken_returnsFalse_ifAuthTokenIsInvalid() {
-        let fakeToken = try! invalidAuthToken()
+        let fakeToken = try! invalidAuthToken_missingEmail()
         sut.headers = AnyIterator([(HTTPRequestHeader.Name.authorization, fakeToken)].makeIterator())
         
         let isValid = sut.hasValidToken()
@@ -100,7 +100,7 @@ class HTTPRequestExtensionTests: XCTestCase {
     }
     
     func test_emailFromAuthToken_returnsNil_ifAuthTokenIsInvalid() {
-        let fakeToken = try! invalidAuthToken()
+        let fakeToken = try! invalidAuthToken_missingEmail()
         sut.headers = AnyIterator([(HTTPRequestHeader.Name.authorization, fakeToken)].makeIterator())
         
         let email = sut.emailFromAuthToken()
@@ -151,13 +151,7 @@ func validAuthToken() throws -> String {
         "expiration": Date().addingTimeInterval(36000).timeIntervalSince1970
     ]
     
-    guard let jwt = JWTCreator(payload: payload) else {
-        throw PrepareTokenError()
-    }
-    
-    let token = try jwt.sign(alg: .hs256, key: Configuration.salt)
-    
-    return token
+    return try token(from: payload)
 }
 
 func expiredAuthToken() throws -> String {
@@ -168,27 +162,34 @@ func expiredAuthToken() throws -> String {
         "expiration": Date().addingTimeInterval(-36000).timeIntervalSince1970
     ]
     
-    guard let jwt = JWTCreator(payload: payload) else {
-        throw PrepareTokenError()
-    }
-    
-    let token = try jwt.sign(alg: .hs256, key: Configuration.salt)
-    
-    return token
+    return try token(from: payload)
 }
 
-func invalidAuthToken() throws -> String {
+func invalidAuthToken_missingEmail() throws -> String {
     
     let payload: [String : Any] = [
         "issuedAt": Date().timeIntervalSince1970,
         "expiration": Date().addingTimeInterval(36000).timeIntervalSince1970
     ]
     
+    return try token(from: payload)
+}
+
+func invalidAuthToken_emailWrongType() throws -> String {
+    
+    let payload: [String : Any] = [
+        "email": 1,
+        "issuedAt": Date().timeIntervalSince1970,
+        "expiration": Date().addingTimeInterval(36000).timeIntervalSince1970
+    ]
+    
+    return try token(from: payload)
+}
+
+private func token(from payload: [String: Any]) throws -> String {
     guard let jwt = JWTCreator(payload: payload) else {
         throw PrepareTokenError()
     }
     
-    let token = try jwt.sign(alg: .hs256, key: Configuration.salt)
-    
-    return token
+    return try jwt.sign(alg: .hs256, key: Configuration.salt)
 }
