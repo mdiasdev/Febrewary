@@ -15,23 +15,17 @@ class MockUser: UserDAO {
     override func getAll() throws {
         let row1 = StORMRow()
         row1.data = ["id": 1,
-                     "firstName": "Matt",
-                     "lastName": "Dias",
+                     "name": "Matt Dias",
                      "email": "me@matt.com",
                      "password": "abc123",
                      "salt": "in moderation",
-                     "beers": [1],
-                     "events": [1]
         ]
         let row2 = StORMRow()
         row2.data = ["id": 2,
-                     "firstName": "Matt",
-                     "lastName": "Dias",
+                     "name": "Matt Dias",
                      "email": "me2@matt.com",
                      "password": "abc123",
                      "salt": "in moderation",
-                     "beers": [2],
-                     "events": [2]
         ]
         
         self.results.rows = [row1, row2]
@@ -40,20 +34,25 @@ class MockUser: UserDAO {
     override func find(by data: [String : Any]) throws {
         let row1 = StORMRow()
         row1.data = ["id": 1,
-                     "firstName": "Matt",
-                     "lastName": "Dias",
+                     "name": "Matt Dias",
                      "email": "me@matt.com",
                      "password": "abc123",
                      "salt": "in moderation",
-                     "beers": [1],
-                     "events": [1]
         ]
         
         self.results.rows = [row1]
     }
     
     override func find(by data: [(String, Any)]) throws {
-        assertionFailure("still need to make this")
+        let row1 = StORMRow()
+        row1.data = ["id": 1,
+                     "name": "Matt Dias",
+                     "email": "me@matt.com",
+                     "password": "abc123",
+                     "salt": "in moderation",
+        ]
+        
+        self.results.rows = [row1]
     }
     
     override func store(set: (Any) -> Void) throws {
@@ -66,5 +65,19 @@ class MockUser: UserDAO {
     
     override func search(whereClause: String, params: [Any], orderby: [String]) throws {
         assertionFailure("still need to make this")
+    }
+}
+
+class BadUser: MockUser {
+    override func find(by data: [String : Any]) throws {
+        let row1 = StORMRow()
+        row1.data = ["id": -1,
+                     "name": "Matt Dias",
+                     "email": "me@matt.com",
+                     "password": "abc123",
+                     "salt": "in moderation",
+        ]
+        
+        self.results.rows = [row1]
     }
 }
