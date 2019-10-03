@@ -12,12 +12,6 @@ import StORM
 
 class UserController {
     func getCurrentUser(request: HTTPRequest, response: HTTPResponse, user: User = User()) {
-        guard request.hasValidToken() else {
-            response.setBody(string: "Unauthenicated user. Please login and try again.")
-                    .completed(status: .unauthorized)
-            return
-        }
-        
         guard let email = request.emailFromAuthToken() else {
             response.setBody(string: "Bad Header.")
                     .completed(status: .badRequest)
@@ -43,12 +37,6 @@ class UserController {
     }
     
     func getUserById(request: HTTPRequest, response: HTTPResponse, user: User = User()) {
-        guard request.hasValidToken() else {
-            response.setBody(string: "Unauthenicated user. Please login and try again.")
-                    .completed(status: .unauthorized)
-            return
-        }
-        
         guard let idString = request.pathComponents.last, let id = Int(idString) else {
             response.setBody(string: "Missing User Id")
                     .completed(status: .badRequest)
@@ -74,12 +62,6 @@ class UserController {
     }
     
     func getAllUsers(request: HTTPRequest, response: HTTPResponse, users: User = User()) {
-        guard request.hasValidToken() else {
-            response.setBody(string: "Unauthenicated user. Please login and try again.")
-                    .completed(status: .unauthorized)
-            return
-        }
-        
         do {
             try users.getAll()
             

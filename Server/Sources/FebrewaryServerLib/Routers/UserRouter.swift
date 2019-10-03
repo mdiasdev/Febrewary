@@ -10,9 +10,9 @@ import PerfectHTTP
 
 public class UserRouter: Router {
     override func initRoutes() {
-        routes.add(Route(method: .get, uri: "user", handler: getCurrentUser))
-        routes.add(Route(method: .get, uri: "user/{id}", handler: getUserById))
-        routes.add(Route(method: .get, uri: "users", handler: getAllUsers))
+        routes.add(Route(method: .get, uri: "user", handler: auth &&& getCurrentUser))
+        routes.add(Route(method: .get, uri: "user/{id}", handler: auth &&& getUserById))
+        routes.add(Route(method: .get, uri: "users", handler: auth &&& getAllUsers))
     }
     
     func getCurrentUser(request: HTTPRequest, response: HTTPResponse) {
