@@ -11,7 +11,7 @@ import PostgresStORM
 
 @testable import FebrewaryServerLib
 
-class MockUser: User {
+class MockUser: UserDAO {
     override func getAll() throws {
         let row1 = StORMRow()
         row1.data = ["id": 1,

@@ -25,7 +25,7 @@ public struct DatabaseController {
         let round = Vote()
         try? round.setup()
         
-        let user = User()
+        let user = UserDAO()
         try? user.setup()
         
         let attendee = Attendee()

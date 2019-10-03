@@ -11,7 +11,7 @@ import PerfectCrypto
 import StORM
 
 class AuthController {
-    func register(request: HTTPRequest, response: HTTPResponse, user: User = User()) {
+    func register(request: HTTPRequest, response: HTTPResponse, user: UserDAO = UserDAO()) {
         guard let postBody = try? request.postBodyString?.jsonDecode() as? [String: Any], let json = postBody else {
             response.setBody(string: "Bad Request: malformed json")
                     .completed(status: .badRequest)
@@ -49,7 +49,7 @@ class AuthController {
         }
     }
     
-    func login(request: HTTPRequest, response: HTTPResponse, user: User = User()) {
+    func login(request: HTTPRequest, response: HTTPResponse, user: UserDAO = UserDAO()) {
         guard let postBody = try? request.postBodyString?.jsonDecode() as? [String: Any], let json = postBody else {
             response.setBody(string: "Bad Request: malformed json")
                     .completed(status: .badRequest)
@@ -104,7 +104,7 @@ class AuthController {
     
     // MARK: - Helpers
     
-    func register(user: User, from json: [String: Any]) throws -> User {
+    func register(user: UserDAO, from json: [String: Any]) throws -> UserDAO {
         guard let name = json["name"] as? String,
               let email = json["email"] as? String,
               let password = json["password"] as? String else {
@@ -130,7 +130,7 @@ class AuthController {
         return user
     }
     
-    private func prepareToken(user: User) throws -> String {
+    private func prepareToken(user: UserDAO) throws -> String {
         
         let payload: [String : Any] = [
             "email": user.email,

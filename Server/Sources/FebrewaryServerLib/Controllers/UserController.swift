@@ -11,7 +11,7 @@ import PerfectCrypto
 import StORM
 
 class UserController {
-    func getCurrentUser(request: HTTPRequest, response: HTTPResponse, user: User = User()) {
+    func getCurrentUser(request: HTTPRequest, response: HTTPResponse, user: UserDAO = UserDAO()) {
         guard let email = request.emailFromAuthToken() else {
             response.setBody(string: "Bad Header.")
                     .completed(status: .badRequest)
@@ -36,7 +36,7 @@ class UserController {
         }
     }
     
-    func getUserById(request: HTTPRequest, response: HTTPResponse, user: User = User()) {
+    func getUserById(request: HTTPRequest, response: HTTPResponse, user: UserDAO = UserDAO()) {
         guard let idString = request.pathComponents.last, let id = Int(idString) else {
             response.setBody(string: "Missing User Id")
                     .completed(status: .badRequest)
@@ -61,7 +61,7 @@ class UserController {
         }
     }
     
-    func getAllUsers(request: HTTPRequest, response: HTTPResponse, users: User = User()) {
+    func getAllUsers(request: HTTPRequest, response: HTTPResponse, users: UserDAO = UserDAO()) {
         do {
             try users.getAll()
             

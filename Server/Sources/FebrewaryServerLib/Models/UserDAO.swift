@@ -1,5 +1,5 @@
 //
-//  User.swift
+//  UserDAO.swift
 //  Febrewary
 //
 //  Created by Matthew Dias on 5/4/19.
@@ -9,14 +9,12 @@ import Foundation
 import StORM
 import PostgresStORM
 
-class User: DAO {
+class UserDAO: DAO {
     var id: Int = 0
     var name: String = ""
     var email: String = ""
     var password: String = ""
     var salt: String = ""
-    var beers: [Int] = []
-    var events: [Int] = []
     
     override open func table() -> String { return "users" }
     
@@ -26,17 +24,15 @@ class User: DAO {
         email = this.data["email"] as? String ?? ""
         password = this.data["password"] as? String ?? ""
         salt = this.data["salt"] as? String ?? ""
-        beers = this.data["beers"] as? [Int] ?? []
-        events = this.data["events"] as? [Int] ?? []
     }
     
-    func rows() -> [User] {
+    func rows() -> [UserDAO] {
         
         let rows = self.results.rows
-        var users = [User]()
+        var users = [UserDAO]()
         
         for row in rows {
-            let user = User()
+            let user = UserDAO()
             user.to(row)
             users.append(user)
         }
@@ -46,14 +42,12 @@ class User: DAO {
 }
 
 // MARK: - Data Representation
-extension User {
+extension UserDAO {
     func asDictionary() -> [String: Any] {
         return [
             "id": self.id,
             "name": self.name,
             "email": self.email,
-            "events": self.events,
-            "beers": self.beers,
         ]
     }
     

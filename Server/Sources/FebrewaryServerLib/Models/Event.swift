@@ -14,7 +14,7 @@ class Event: DAO {
     var hasStarted: Bool = false
     
     // MARK: embeded properties
-    var _pourer: User = User()
+    var _pourer: UserDAO = UserDAO()
     var _attendees: [[String: Any]] = []
     var _eventBeers: [[String: Any]] = []
     
@@ -53,7 +53,7 @@ class Event: DAO {
 
     // MARK: - Data Representation
 extension Event {
-    func asDictionary(attendees: Attendee = Attendee(), users: User = User(), eventBeers: EventBeer = EventBeer()) -> [String: Any] {
+    func asDictionary(attendees: Attendee = Attendee(), users: UserDAO = UserDAO(), eventBeers: EventBeer = EventBeer()) -> [String: Any] {
         
         var json: [String: Any] = [
             "id": self.id,

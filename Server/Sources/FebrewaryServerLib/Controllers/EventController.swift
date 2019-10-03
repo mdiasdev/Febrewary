@@ -2,7 +2,7 @@ import PerfectHTTP
 import StORM
 
 class EventController {
-    func createEvent(request: HTTPRequest, response: HTTPResponse, user: User = User(), event: Event = Event(), attendee: Attendee = Attendee()) {
+    func createEvent(request: HTTPRequest, response: HTTPResponse, user: UserDAO = UserDAO(), event: Event = Event(), attendee: Attendee = Attendee()) {
         
         guard let email = request.emailFromAuthToken() else {
            response.setBody(string: "Bad Request: missing required property")
@@ -82,7 +82,7 @@ class EventController {
         response.completed(status: .notFound)
     }
     
-    func getEventForUser(request: HTTPRequest, response: HTTPResponse, user: User = User(), events: Event = Event(), attendees: Attendee = Attendee()) {
+    func getEventForUser(request: HTTPRequest, response: HTTPResponse, user: UserDAO = UserDAO(), events: Event = Event(), attendees: Attendee = Attendee()) {
         guard let email = request.emailFromAuthToken() else {
             response.setBody(string: "Unauthorized")
                     .completed(status: .unauthorized)
@@ -125,7 +125,7 @@ class EventController {
         response.completed(status: .internalServerError)
     }
     
-    func addEventBeer(request: HTTPRequest, response: HTTPResponse, user: User = User(), event: Event = Event(), eventBeer: EventBeer = EventBeer(), attendee: Attendee = Attendee()) {
+    func addEventBeer(request: HTTPRequest, response: HTTPResponse, user: UserDAO = UserDAO(), event: Event = Event(), eventBeer: EventBeer = EventBeer(), attendee: Attendee = Attendee()) {
         guard let email = request.emailFromAuthToken() else {
             response.setBody(string: "Unauthorized")
                     .completed(status: .unauthorized)
@@ -200,7 +200,7 @@ class EventController {
         }
     }
     
-    func addAttendee(request: HTTPRequest, response: HTTPResponse, user: User = User(), event: Event = Event(), attendee: Attendee = Attendee()) {
+    func addAttendee(request: HTTPRequest, response: HTTPResponse, user: UserDAO = UserDAO(), event: Event = Event(), attendee: Attendee = Attendee()) {
 
         guard let eventId = Int(request.urlVariables["id"] ?? "0"), eventId > 0 else {
             response.completed(status: .badRequest)
@@ -266,7 +266,7 @@ class EventController {
         }
     }
     
-    func pourEventBeer(request: HTTPRequest, response: HTTPResponse, event: Event = Event(), user: User = User(), eventBeer: EventBeer = EventBeer(), attendee: Attendee = Attendee()) {
+    func pourEventBeer(request: HTTPRequest, response: HTTPResponse, event: Event = Event(), user: UserDAO = UserDAO(), eventBeer: EventBeer = EventBeer(), attendee: Attendee = Attendee()) {
         
         guard let email = request.emailFromAuthToken() else {
             response.setBody(string: "Bad Request")
@@ -356,7 +356,7 @@ class EventController {
         }
     }
     
-    func getCurrentEventBeer(request: HTTPRequest, response: HTTPResponse, event: Event = Event(), eventBeer: EventBeer = EventBeer(), user: User = User()) {
+    func getCurrentEventBeer(request: HTTPRequest, response: HTTPResponse, event: Event = Event(), eventBeer: EventBeer = EventBeer(), user: UserDAO = UserDAO()) {
         
         guard let email = request.emailFromAuthToken() else {
             response.setBody(string: "Bad Request")
@@ -405,7 +405,7 @@ class EventController {
         
     }
     
-    func vote(request: HTTPRequest, response: HTTPResponse, event: Event = Event(), vote: Vote = Vote(), user: User = User(), eventBeer: EventBeer = EventBeer(), attendee: Attendee = Attendee()) {
+    func vote(request: HTTPRequest, response: HTTPResponse, event: Event = Event(), vote: Vote = Vote(), user: UserDAO = UserDAO(), eventBeer: EventBeer = EventBeer(), attendee: Attendee = Attendee()) {
         
         guard let email = request.emailFromAuthToken() else {
             response.setBody(string: "Bad Request")

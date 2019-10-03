@@ -3,7 +3,7 @@ import StORM
 import Foundation
 
 class BeerController {
-    func addBeer(request: HTTPRequest, response: HTTPResponse, user: User = User(), beer: Beer = Beer()) {
+    func addBeer(request: HTTPRequest, response: HTTPResponse, user: UserDAO = UserDAO(), beer: Beer = Beer()) {
         do {
             guard let email = request.emailFromAuthToken() else {
                 response.setBody(string: "Unauthorized")
@@ -62,7 +62,7 @@ class BeerController {
         }
     }
     
-    func beersForCurrentUser(request: HTTPRequest, response: HTTPResponse, user: User = User(), beers: Beer = Beer(), eventBeers: EventBeer = EventBeer()) {
+    func beersForCurrentUser(request: HTTPRequest, response: HTTPResponse, user: UserDAO = UserDAO(), beers: Beer = Beer(), eventBeers: EventBeer = EventBeer()) {
         guard let email = request.emailFromAuthToken() else {
             response.setBody(string: "Unauthorized")
                 .completed(status: .unauthorized)
