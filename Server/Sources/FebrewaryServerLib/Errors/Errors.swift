@@ -38,6 +38,12 @@ public struct MissingPropertyError: ServerError {
     var code: Int = 400
 }
 
+public struct MissingQueryError: ServerError {
+    var title: String = "Missing request query"
+    var message: String = "Search terms needed."
+    var code: Int = 400
+}
+
 public struct PrepareTokenError: ServerError {
     var title: String = "Unauthenticated"
     var message: String = "Failed to create authenticated session."

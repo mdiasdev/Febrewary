@@ -5,7 +5,7 @@ import Foundation
 class BeerController {
     func addBeer(request: HTTPRequest, response: HTTPResponse, user: User = User(), beer: Beer = Beer()) {
         do {
-            guard request.hasValidToken(), let email = request.emailFromAuthToken() else {
+            guard let email = request.emailFromAuthToken() else {
                 response.setBody(string: "Unauthorized")
                         .completed(status: .unauthorized)
                 return
@@ -62,8 +62,8 @@ class BeerController {
         }
     }
     
-    func beersForCurrentUser(request: HTTPRequest, response: HTTPResponse, user: User = User(), beers: Beer = Beer()) {
-        guard request.hasValidToken(), let email = request.emailFromAuthToken() else {
+    func beersForCurrentUser(request: HTTPRequest, response: HTTPResponse, user: User = User(), beers: Beer = Beer(), eventBeers: EventBeer = EventBeer()) {
+        guard let email = request.emailFromAuthToken() else {
             response.setBody(string: "Unauthorized")
                 .completed(status: .unauthorized)
             return
@@ -79,9 +79,19 @@ class BeerController {
             }
             
             try beers.find(by: [("addedBy", user.id)])
+            try eventBeers.find(by: [("userid", user.id)])
+            
+            let beerFromEventBeer = Beer()
+            let eBeers: [Beer] = eventBeers.rows().compactMap {
+                // FIXME: change into a select statement
+                try? beerFromEventBeer.find(by: [("id", $0.beerId)])
+                return beerFromEventBeer.rows().first
+            }
+            
+            let allUserBeers = Set(beers.rows() + eBeers)
             
             var responseJson = [[String: Any]]()
-            for beer in beers.rows() {
+            for beer in allUserBeers {
                 responseJson.append(beer.asDictionary())
             }
             
@@ -92,8 +102,12 @@ class BeerController {
         }
     }
     
-    func searchBeers(request: HTTPRequest, response: HTTPResponse, query: String, beers: Beer = Beer(), brewers: Beer = Beer()) {
+    func searchBeers(request: HTTPRequest, response: HTTPResponse, beers: Beer = Beer(), brewers: Beer = Beer()) {
         do {
+            guard let query = request.queryParamsAsDictionary()["query"] else {
+                try response.setBody(json: MissingQueryError()).completed(status: .badRequest)
+                return
+            }
             var responseJson = [[String: Any]]()
             var uniqueBeers: Set<Beer> = []
             

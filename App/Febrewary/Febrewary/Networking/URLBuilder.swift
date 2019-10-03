@@ -16,6 +16,7 @@ enum Endpoint: String {
     case user = "user"
     case users = "users"
     case beer = "beer"
+    case beerSearch = "beer/search"
 }
 
 struct URLBuilder {
