@@ -29,13 +29,9 @@ public class Router {
             return Result.success({}())
         } catch let error as ServerError {
             let errorCode = HTTPResponseStatus.statusFrom(code: error.code)
-            let json = error.asJson()
-            
-            do {
-                try response.setBody(json: json).completed(status: errorCode)
-            } catch {
-                response.completed(status: .internalServerError)
-            }
+            let json = error.debugDescription
+            response.setBody(string: json)
+                    .completed(status: errorCode)
             
             return Result.failure(error)
         } catch {

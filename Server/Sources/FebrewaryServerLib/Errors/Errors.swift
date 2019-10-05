@@ -7,22 +7,31 @@
 
 import Foundation
 
-typealias ErrorJSON = [String: Any]
-
-protocol ServerError: Error, Codable, Equatable {
+protocol ServerError: Error, Codable, Equatable, CustomDebugStringConvertible {
     var title: String { get }
     var message: String  { get }
     var code: Int { get }
-    func asJson() -> ErrorJSON
+    func asJson() throws -> String
 }
 
 extension ServerError {
-    func asJson() -> ErrorJSON {
-        return [
-            "title": title,
-            "message": message,
-            "code": code
-        ]
+    func asJson() throws -> String {
+        let jsonData = try JSONEncoder().encode(self)
+        guard let jsonString = String(data: jsonData, encoding: .utf8) else {
+            throw UnknownError()
+        }
+        
+        return jsonString
+    }
+    
+    public var debugDescription: String {
+        return """
+                {
+                    title: \(self.title),
+                    message: \(self.message),
+                    code: \(self.code)
+                }
+               """
     }
 }
 
@@ -54,6 +63,12 @@ public struct UserExistsError: ServerError {
     var title: String = "Failed to register"
     var message: String = "This email is already in use."
     var code: Int = 400
+}
+
+public struct UserNotFoundError: ServerError {
+    var title: String = "Failed to find User"
+    var message: String = "This user does not exist."
+    var code: Int = 404
 }
 
 public struct UnauthenticatedError: ServerError {

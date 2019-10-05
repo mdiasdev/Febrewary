@@ -19,6 +19,14 @@ struct User: Codable {
         self.email = userDAO.email
     }
     
+    init(id: Int, userDAO: UserDAO = UserDAO()) throws {
+        try userDAO.find(by: ["id": id])
+        
+        guard userDAO.id > 0 else {
+            throw UserNotFoundError()
+        }
+    }
+    
     init(request: HTTPRequest, userDAO: UserDAO = UserDAO()) throws {
         guard let email = request.emailFromAuthToken() else { throw BadTokenError() }
         
@@ -31,5 +39,19 @@ struct User: Codable {
         } catch {
             throw BadTokenError()
         }
+    }
+}
+
+struct UserDataHandler {
+    
+    func json(from user: User) throws -> String {
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = .prettyPrinted
+        let jsonData = try encoder.encode(user)
+        guard let jsonString = String(data: jsonData, encoding: .utf8) else {
+            throw UnauthenticatedError()
+        }
+        
+        return jsonString
     }
 }

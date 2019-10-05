@@ -4,12 +4,6 @@ import StORM
 class EventController {
     func createEvent(request: HTTPRequest, response: HTTPResponse, user: UserDAO = UserDAO(), event: Event = Event(), attendee: Attendee = Attendee()) {
         
-        guard let email = request.emailFromAuthToken() else {
-           response.setBody(string: "Bad Request: missing required property")
-                   .completed(status: .badRequest)
-           return
-        }
-        
         guard let postBody = try? request.postBodyString?.jsonDecode() as? [String: Any],
               let json = postBody else {
             response.setBody(string: "Bad Request: malformed json")
@@ -27,13 +21,7 @@ class EventController {
         }
         
         do {
-            try user.find(by: ["email": email])
-            
-            guard user.id > 0 else {
-                response.setBody(string: "Could not find current User")
-                        .completed(status: .internalServerError)
-                return
-            }
+            let user = try User(request: request)
             
             event.name = name
             event.date = date
@@ -83,20 +71,9 @@ class EventController {
     }
     
     func getEventForUser(request: HTTPRequest, response: HTTPResponse, user: UserDAO = UserDAO(), events: Event = Event(), attendees: Attendee = Attendee()) {
-        guard let email = request.emailFromAuthToken() else {
-            response.setBody(string: "Unauthorized")
-                    .completed(status: .unauthorized)
-            return
-        }
         
         do {
-            try user.find(by: ["email": email])
-
-            guard user.id != 0 else {
-                response.setBody(string: "Bad Request: could not find User")
-                        .completed(status: .badRequest)
-                return
-            }
+            let user = try User(request: request)
             
             try attendees.find(by: [("userid", user.id)])
             
@@ -126,11 +103,6 @@ class EventController {
     }
     
     func addEventBeer(request: HTTPRequest, response: HTTPResponse, user: UserDAO = UserDAO(), event: Event = Event(), eventBeer: EventBeer = EventBeer(), attendee: Attendee = Attendee()) {
-        guard let email = request.emailFromAuthToken() else {
-            response.setBody(string: "Unauthorized")
-                    .completed(status: .unauthorized)
-            return
-        }
         
         guard let id = Int(request.urlVariables["id"] ?? "0"), id > 0 else {
             response.completed(status: .badRequest)
@@ -151,13 +123,7 @@ class EventController {
         }
         
         do {
-            try user.find(by: ["email": email])
-            
-            guard user.id != 0 else {
-                response.setBody(string: "Bad Request: could not find User")
-                        .completed(status: .badRequest)
-                return
-            }
+            let user = try User(request: request)
             
             try event.find(by: [("id", id)])
             
@@ -222,7 +188,7 @@ class EventController {
         }
         
         do {
-            try user.find(by: [("id", userId)])
+            try user.find(by: [("id", userId)]) // MATT RIGHT HERE
             guard user.id > 0 else {
                 response.setBody(string: "Could not find user")
                         .completed(status: .notFound)
@@ -268,12 +234,6 @@ class EventController {
     
     func pourEventBeer(request: HTTPRequest, response: HTTPResponse, event: Event = Event(), user: UserDAO = UserDAO(), eventBeer: EventBeer = EventBeer(), attendee: Attendee = Attendee()) {
         
-        guard let email = request.emailFromAuthToken() else {
-            response.setBody(string: "Bad Request")
-                    .completed(status: .badRequest)
-            return
-        }
-        
         guard let eventId = Int(request.urlVariables["id"] ?? "0"), eventId > 0 else {
             response.completed(status: .badRequest)
             return
@@ -286,15 +246,16 @@ class EventController {
         }
         
         do {
+            let user = try User(request: request)
             try event.find(by: [("id", eventId)])
+            
             guard event.id > 0 else {
                 response.setBody(string: "Could not find event with id: \(eventId)")
                         .completed(status: .badRequest)
                 return
             }
             
-            try user.find(by: [("email", email)])
-            guard user.id > 0, event.pourerId == user.id else {
+            guard event.pourerId == user.id else {
                 response.setBody(string: "Unauthorized")
                     .completed(status: .unauthorized)
                 return
@@ -358,12 +319,6 @@ class EventController {
     
     func getCurrentEventBeer(request: HTTPRequest, response: HTTPResponse, event: Event = Event(), eventBeer: EventBeer = EventBeer(), user: UserDAO = UserDAO()) {
         
-        guard let email = request.emailFromAuthToken() else {
-            response.setBody(string: "Bad Request")
-                    .completed(status: .badRequest)
-            return
-        }
-        
         guard let eventId = Int(request.urlVariables["id"] ?? "0"), eventId > 0 else {
             response.completed(status: .badRequest)
             return
@@ -379,13 +334,6 @@ class EventController {
             
             guard !event.isOver else {
                 response.completed(status: .noContent)
-                return
-            }
-            
-            try user.find(by: [("email", email)])
-            guard user.id > 0 else {
-                response.setBody(string: "Unauthorized")
-                        .completed(status: .unauthorized)
                 return
             }
             
@@ -407,12 +355,6 @@ class EventController {
     
     func vote(request: HTTPRequest, response: HTTPResponse, event: Event = Event(), vote: Vote = Vote(), user: UserDAO = UserDAO(), eventBeer: EventBeer = EventBeer(), attendee: Attendee = Attendee()) {
         
-        guard let email = request.emailFromAuthToken() else {
-            response.setBody(string: "Bad Request")
-                    .completed(status: .badRequest)
-            return
-        }
-        
         guard let eventId = Int(request.urlVariables["id"] ?? "0"), eventId > 0 else {
             response.completed(status: .badRequest)
             return
@@ -433,17 +375,11 @@ class EventController {
         }
         
         do {
+            let user = try User(request: request)
             try event.find(by: [("id", eventId)])
             guard event.id > 0, event.hasStarted && !event.isOver else {
                 response.setBody(string: "Could not find event with id: \(eventId)")
                         .completed(status: .badRequest)
-                return
-            }
-            
-            try user.find(by: [("email", email)])
-            guard user.id > 0 else {
-                response.setBody(string: "Unauthorized")
-                        .completed(status: .unauthorized)
                 return
             }
             

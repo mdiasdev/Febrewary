@@ -11,32 +11,27 @@ import PerfectCrypto
 import StORM
 
 class UserController {
-    func getCurrentUser(request: HTTPRequest, response: HTTPResponse, user: UserDAO = UserDAO()) {
-        guard let email = request.emailFromAuthToken() else {
-            response.setBody(string: "Bad Header.")
-                    .completed(status: .badRequest)
-            return
-        }
-        
+    func getCurrentUser(request: HTTPRequest, response: HTTPResponse, userDataHandler: UserDataHandler = UserDataHandler()) {
         do {
-            try user.find(by: ["email": email])
+            let user = try User(request: request)
+            let jsonString = try userDataHandler.json(from: user)
             
-            guard user.id > 0 else {
-                response.setBody(string: "User not found!")
-                        .completed(status: .notFound)
-                return
-            }
+            response.setBody(string: jsonString)
+                    .completed(status: .ok)
             
-            try response.setBody(json: user.asDictionary())
-                        .completed(status: .ok)
+        } catch is UnauthenticatedError {
+            let error = UnauthenticatedError()
+            let errorCode = HTTPResponseStatus.statusFrom(code: error.code)
             
+            response.setBody(string: error.debugDescription)
+                    .completed(status: errorCode)
         } catch {
             response.setBody(string: "Database Error")
                     .completed(status: .internalServerError)
         }
     }
     
-    func getUserById(request: HTTPRequest, response: HTTPResponse, user: UserDAO = UserDAO()) {
+    func getUserById(request: HTTPRequest, response: HTTPResponse, userDataHandler: UserDataHandler = UserDataHandler()) {
         guard let idString = request.pathComponents.last, let id = Int(idString) else {
             response.setBody(string: "Missing User Id")
                     .completed(status: .badRequest)
@@ -44,17 +39,18 @@ class UserController {
         }
         
         do {
-            try user.find(by: ["id": id])
+            let user = try User(id: id)
+            let jsonString = try userDataHandler.json(from: user)
             
-            guard user.id > 0 else {
-                response.setBody(string: "User not found!")
-                        .completed(status: .notFound)
-                return
-            }
+            response.setBody(string: jsonString)
+                    .completed(status: .ok)
             
-            try response.setBody(json: user.asDictionary())
-                        .completed(status: .ok)
+        } catch is UserNotFoundError {
+            let error = UserNotFoundError()
+            let errorCode = HTTPResponseStatus.statusFrom(code: error.code)
             
+            response.setBody(string: error.debugDescription)
+                    .completed(status: errorCode)
         } catch {
             response.setBody(string: "Database Error")
                     .completed(status: .internalServerError)
