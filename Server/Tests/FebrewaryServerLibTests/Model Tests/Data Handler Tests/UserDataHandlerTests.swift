@@ -17,6 +17,7 @@ class UserDataHandlerTests: XCTestCase {
         ("test_initializing_withValidRequest_createsUser", test_initializing_withValidRequest_createsUser),
         ("test_initializing_withValidRequest_createsUser", test_initializing_withValidRequest_createsUser),
         ("test_initializing_withInvalidUser_throwsBadToken", test_initializing_withInvalidUser_throwsBadToken),
+        ("test_jsonFromUser_returnsUserAsJSONString", test_jsonFromUser_returnsUserAsJSONString),
     ]
 
     // MARK: Initializer Tests
@@ -29,6 +30,14 @@ class UserDataHandlerTests: XCTestCase {
         let user = User(userDAO: fakeUserDAO)
         
         verifyEqualityBetween(user: user, and: fakeUserDAO)
+    }
+    
+    func test_initializing_withId_createsUser() {
+        let mockDAO = MockUser()
+        
+        let user = try! User(id: 1, userDAO: mockDAO)
+        
+        verifyEqualityBetween(user: user, and: mockDAO)
     }
     
     func test_initializing_withValidRequest_createsUser() {
@@ -63,8 +72,30 @@ class UserDataHandlerTests: XCTestCase {
         }
     }
     
-    // MARK: Test Helpers
+    // MARK: - JSON Builder
+    func test_jsonFromUser_returnsUserAsJSONString() {
+        let testUser = User(id: 1, name: "yo dude", email: "hello@stream.com")
+        let expected = """
+        {
+          "id" : 1,
+          "name" : "yo dude",
+          "email" : "hello@stream.com"
+        }
+        """
+        
+        let actual = try! UserDataHandler().json(from: testUser)
+        
+        XCTAssertEqual(expected, actual)
+    }
+    
+    // MARK: - Test Helpers
     func verifyEqualityBetween(user: User, and userDAO: UserDAO, file: StaticString = #file, line: UInt = #line) {
+        if let userDAO = userDAO.rows().first {
+            XCTAssertEqual(user.id, userDAO.id, file: file, line: line)
+            XCTAssertEqual(user.name, userDAO.name, file: file, line: line)
+            XCTAssertEqual(user.email, userDAO.email, file: file, line: line)
+            return
+        }
         XCTAssertEqual(user.id, userDAO.id, file: file, line: line)
         XCTAssertEqual(user.name, userDAO.name, file: file, line: line)
         XCTAssertEqual(user.email, userDAO.email, file: file, line: line)

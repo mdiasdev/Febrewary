@@ -20,21 +20,15 @@ class UserController {
                     .completed(status: .ok)
             
         } catch is UnauthenticatedError {
-            let error = UnauthenticatedError()
-            let errorCode = HTTPResponseStatus.statusFrom(code: error.code)
-            
-            response.setBody(string: error.debugDescription)
-                    .completed(status: errorCode)
+            response.completed(with: UnauthenticatedError())
         } catch {
-            response.setBody(string: "Database Error")
-                    .completed(status: .internalServerError)
+            response.completed(with: DatabaseError())
         }
     }
     
     func getUserById(request: HTTPRequest, response: HTTPResponse, userDataHandler: UserDataHandler = UserDataHandler()) {
         guard let idString = request.pathComponents.last, let id = Int(idString) else {
-            response.setBody(string: "Missing User Id")
-                    .completed(status: .badRequest)
+            response.completed(with: MalformedRequestError())
             return
         }
         
@@ -46,36 +40,22 @@ class UserController {
                     .completed(status: .ok)
             
         } catch is UserNotFoundError {
-            let error = UserNotFoundError()
-            let errorCode = HTTPResponseStatus.statusFrom(code: error.code)
-            
-            response.setBody(string: error.debugDescription)
-                    .completed(status: errorCode)
+            response.completed(with: UserNotFoundError())
         } catch {
-            response.setBody(string: "Database Error")
-                    .completed(status: .internalServerError)
+            response.completed(with: DatabaseError())
         }
     }
     
-    func getAllUsers(request: HTTPRequest, response: HTTPResponse, users: UserDAO = UserDAO()) {
+    func getAllUsers(request: HTTPRequest, response: HTTPResponse, userDataHandler: UserDataHandler = UserDataHandler()) {
         do {
-            try users.getAll()
+            let users = try userDataHandler.getAllUsers()
+            let json: [String] = users.compactMap { try? userDataHandler.json(from: $0) }
             
-            guard users.rows().count > 0 else {
-                try response.setBody(json: [String: Any]())
-                            .completed(status: .ok)
-                return
-            }
-            
-            let json: [[String: Any]] = users.rows().map { (user) -> [String: Any] in
-                return user.asDictionary()
-            }
-            
-            try response.setBody(json: json).completed(status: .ok)
+            response.setBody(string: "[\(json.toString())]")
+                    .completed(status: .ok)
             
         } catch {
-            response.setBody(string: "Database Error")
-                    .completed(status: .internalServerError)
+            response.completed(with: DatabaseError())
         }
     }
 }

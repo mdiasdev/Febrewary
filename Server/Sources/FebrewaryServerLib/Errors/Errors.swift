@@ -47,6 +47,12 @@ public struct MissingPropertyError: ServerError {
     var code: Int = 400
 }
 
+public struct MalformedRequestError: ServerError {
+    var title: String = "Malformed Request"
+    var message: String = "Missing a required query parameter."
+    var code: Int = 400
+}
+
 public struct MissingQueryError: ServerError {
     var title: String = "Missing request query"
     var message: String = "Search terms needed."
@@ -85,6 +91,12 @@ public struct BadTokenError: ServerError {
 
 public struct UnknownError: ServerError {
     var title: String = "Unknown Error"
+    var message: String = "Something went wrong."
+    var code: Int = 500
+}
+
+public struct DatabaseError: ServerError {
+    var title: String = "Internal Error"
     var message: String = "Something went wrong."
     var code: Int = 500
 }

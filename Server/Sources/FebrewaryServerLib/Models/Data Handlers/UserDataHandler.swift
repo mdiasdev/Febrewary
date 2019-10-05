@@ -13,6 +13,12 @@ struct User: Codable {
     var name: String = ""
     var email: String = ""
     
+    init(id: Int, name: String, email: String) {
+        self.id = id
+        self.name = name
+        self.email = email
+    }
+    
     init(userDAO: UserDAO) {
         self.id = userDAO.id
         self.name = userDAO.name
@@ -22,9 +28,9 @@ struct User: Codable {
     init(id: Int, userDAO: UserDAO = UserDAO()) throws {
         try userDAO.find(by: ["id": id])
         
-        guard userDAO.id > 0 else {
-            throw UserNotFoundError()
-        }
+        guard let dao = userDAO.rows().first, dao.id > 0 else { throw UserNotFoundError() }
+        
+        self = User(userDAO: dao)
     }
     
     init(request: HTTPRequest, userDAO: UserDAO = UserDAO()) throws {
@@ -53,5 +59,11 @@ struct UserDataHandler {
         }
         
         return jsonString
+    }
+    
+    func getAllUsers(userDAO: UserDAO = UserDAO()) throws -> [User] {
+        try userDAO.getAll()
+        
+        return userDAO.rows().map { User(userDAO: $0) }
     }
 }

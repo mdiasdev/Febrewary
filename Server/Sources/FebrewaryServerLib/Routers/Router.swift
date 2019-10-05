@@ -27,11 +27,14 @@ public class Router {
             try validateAuth(request: request)
             
             return Result.success({}())
-        } catch let error as ServerError {
-            let errorCode = HTTPResponseStatus.statusFrom(code: error.code)
-            let json = error.debugDescription
-            response.setBody(string: json)
-                    .completed(status: errorCode)
+        } catch is UnauthenticatedError {
+            let error = UnauthenticatedError()
+            response.completed(with: error)
+            
+            return Result.failure(error)
+        } catch is BadTokenError {
+            let error = BadTokenError()
+            response.completed(with: error)
             
             return Result.failure(error)
         } catch {
