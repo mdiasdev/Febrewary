@@ -19,13 +19,13 @@ struct User: Codable {
         self.email = email
     }
     
-    init(userDAO: UserDAO) {
+    fileprivate init(userDAO: UserDAO) {
         self.id = userDAO.id
         self.name = userDAO.name
         self.email = userDAO.email
     }
     
-    init(id: Int, userDAO: UserDAO = UserDAO()) throws {
+    fileprivate init(id: Int, userDAO: UserDAO = UserDAO()) throws {
         try userDAO.find(by: ["id": id])
         
         guard let dao = userDAO.rows().first, dao.id > 0 else { throw UserNotFoundError() }
@@ -33,7 +33,7 @@ struct User: Codable {
         self = User(userDAO: dao)
     }
     
-    init(request: HTTPRequest, userDAO: UserDAO = UserDAO()) throws {
+    fileprivate init(request: HTTPRequest, userDAO: UserDAO = UserDAO()) throws {
         guard let email = request.emailFromAuthToken() else { throw BadTokenError() }
         
         do {
@@ -48,7 +48,25 @@ struct User: Codable {
     }
 }
 
-struct UserDataHandler {
+class UserDataHandler {
+    
+    func user(from id: Int, userDAO: UserDAO = UserDAO()) throws -> User {
+        return try User(id: id, userDAO: userDAO)
+    }
+    
+    func user(from request: HTTPRequest, userDAO: UserDAO = UserDAO()) throws -> User {
+        return try User(request: request, userDAO: userDAO)
+    }
+    
+    func user(from userDAO: UserDAO) -> User {
+        return User(userDAO: userDAO)
+    }
+    
+    func getAllUsers(userDAO: UserDAO = UserDAO()) throws -> [User] {
+        try userDAO.getAll()
+        
+        return userDAO.rows().map { User(userDAO: $0) }
+    }
     
     func json(from user: User) throws -> String {
         let encoder = JSONEncoder()
@@ -59,11 +77,5 @@ struct UserDataHandler {
         }
         
         return jsonString
-    }
-    
-    func getAllUsers(userDAO: UserDAO = UserDAO()) throws -> [User] {
-        try userDAO.getAll()
-        
-        return userDAO.rows().map { User(userDAO: $0) }
     }
 }

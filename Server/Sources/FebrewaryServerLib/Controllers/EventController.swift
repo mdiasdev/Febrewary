@@ -2,7 +2,7 @@ import PerfectHTTP
 import StORM
 
 class EventController {
-    func createEvent(request: HTTPRequest, response: HTTPResponse, user: UserDAO = UserDAO(), event: Event = Event(), attendee: Attendee = Attendee()) {
+    func createEvent(request: HTTPRequest, response: HTTPResponse, userDataHandler: UserDataHandler = UserDataHandler(), event: Event = Event(), attendee: Attendee = Attendee()) {
         
         guard let postBody = try? request.postBodyString?.jsonDecode() as? [String: Any],
               let json = postBody else {
@@ -21,7 +21,7 @@ class EventController {
         }
         
         do {
-            let user = try User(request: request)
+            let user = try userDataHandler.user(from: request)
             
             event.name = name
             event.date = date
@@ -70,10 +70,10 @@ class EventController {
         response.completed(status: .notFound)
     }
     
-    func getEventForUser(request: HTTPRequest, response: HTTPResponse, user: UserDAO = UserDAO(), events: Event = Event(), attendees: Attendee = Attendee()) {
+    func getEventForUser(request: HTTPRequest, response: HTTPResponse, userDataHandler: UserDataHandler = UserDataHandler(), events: Event = Event(), attendees: Attendee = Attendee()) {
         
         do {
-            let user = try User(request: request)
+            let user = try userDataHandler.user(from: request)
             
             try attendees.find(by: [("userid", user.id)])
             
@@ -102,7 +102,7 @@ class EventController {
         response.completed(status: .internalServerError)
     }
     
-    func addEventBeer(request: HTTPRequest, response: HTTPResponse, user: UserDAO = UserDAO(), event: Event = Event(), eventBeer: EventBeer = EventBeer(), attendee: Attendee = Attendee()) {
+    func addEventBeer(request: HTTPRequest, response: HTTPResponse, userDataHandler: UserDataHandler = UserDataHandler(), event: Event = Event(), eventBeer: EventBeer = EventBeer(), attendee: Attendee = Attendee()) {
         
         guard let id = Int(request.urlVariables["id"] ?? "0"), id > 0 else {
             response.completed(status: .badRequest)
@@ -123,7 +123,7 @@ class EventController {
         }
         
         do {
-            let user = try User(request: request)
+            let user = try userDataHandler.user(from: request)
             
             try event.find(by: [("id", id)])
             
@@ -232,7 +232,7 @@ class EventController {
         }
     }
     
-    func pourEventBeer(request: HTTPRequest, response: HTTPResponse, event: Event = Event(), user: UserDAO = UserDAO(), eventBeer: EventBeer = EventBeer(), attendee: Attendee = Attendee()) {
+    func pourEventBeer(request: HTTPRequest, response: HTTPResponse, event: Event = Event(), userDataHandler: UserDataHandler = UserDataHandler(), eventBeer: EventBeer = EventBeer(), attendee: Attendee = Attendee()) {
         
         guard let eventId = Int(request.urlVariables["id"] ?? "0"), eventId > 0 else {
             response.completed(status: .badRequest)
@@ -246,7 +246,7 @@ class EventController {
         }
         
         do {
-            let user = try User(request: request)
+            let user = try userDataHandler.user(from: request)
             try event.find(by: [("id", eventId)])
             
             guard event.id > 0 else {
@@ -353,7 +353,7 @@ class EventController {
         
     }
     
-    func vote(request: HTTPRequest, response: HTTPResponse, event: Event = Event(), vote: Vote = Vote(), user: UserDAO = UserDAO(), eventBeer: EventBeer = EventBeer(), attendee: Attendee = Attendee()) {
+    func vote(request: HTTPRequest, response: HTTPResponse, event: Event = Event(), vote: Vote = Vote(), userDataHandler: UserDataHandler = UserDataHandler(), eventBeer: EventBeer = EventBeer(), attendee: Attendee = Attendee()) {
         
         guard let eventId = Int(request.urlVariables["id"] ?? "0"), eventId > 0 else {
             response.completed(status: .badRequest)
@@ -375,7 +375,7 @@ class EventController {
         }
         
         do {
-            let user = try User(request: request)
+            let user = try userDataHandler.user(from: request)
             try event.find(by: [("id", eventId)])
             guard event.id > 0, event.hasStarted && !event.isOver else {
                 response.setBody(string: "Could not find event with id: \(eventId)")

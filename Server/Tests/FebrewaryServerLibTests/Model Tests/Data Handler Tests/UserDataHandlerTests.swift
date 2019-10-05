@@ -19,6 +19,14 @@ class UserDataHandlerTests: XCTestCase {
         ("test_initializing_withInvalidUser_throwsBadToken", test_initializing_withInvalidUser_throwsBadToken),
         ("test_jsonFromUser_returnsUserAsJSONString", test_jsonFromUser_returnsUserAsJSONString),
     ]
+    
+    var sut: UserDataHandler!
+    
+    override func setUp() {
+        super.setUp()
+        
+        sut = UserDataHandler()
+    }
 
     // MARK: Initializer Tests
     func test_initializing_withUserDAO_createsUser() {
@@ -27,7 +35,7 @@ class UserDataHandlerTests: XCTestCase {
         fakeUserDAO.name = "Test User"
         fakeUserDAO.email = "something@fake.net"
         
-        let user = User(userDAO: fakeUserDAO)
+        let user = sut.user(from: fakeUserDAO)
         
         verifyEqualityBetween(user: user, and: fakeUserDAO)
     }
@@ -35,7 +43,7 @@ class UserDataHandlerTests: XCTestCase {
     func test_initializing_withId_createsUser() {
         let mockDAO = MockUser()
         
-        let user = try! User(id: 1, userDAO: mockDAO)
+        let user = try! sut.user(from: 1, userDAO: mockDAO)
         
         verifyEqualityBetween(user: user, and: mockDAO)
     }
@@ -45,7 +53,7 @@ class UserDataHandlerTests: XCTestCase {
         let fakeToken = try! validAuthToken()
         fakeRequest.headers = AnyIterator([(HTTPRequestHeader.Name.authorization, fakeToken)].makeIterator())
 
-        XCTAssertNoThrow(try User(request: fakeRequest, userDAO: MockUser()))
+        XCTAssertNoThrow(try sut.user(from: fakeRequest, userDAO: MockUser()))
         
         // FIXME: WHY?!?!
 //        try! dao.find(by: ["it": "doesn't matter"])
@@ -57,7 +65,7 @@ class UserDataHandlerTests: XCTestCase {
         let fakeToken = try! invalidAuthToken_missingEmail()
         fakeRequest.headers = AnyIterator([(HTTPRequestHeader.Name.authorization, fakeToken)].makeIterator())
 
-        XCTAssertThrowsError(try User(request: fakeRequest, userDAO: MockUser())) { error in
+        XCTAssertThrowsError(try sut.user(from: fakeRequest, userDAO: MockUser())) { error in
             XCTAssertTrue(error is BadTokenError)
         }
     }
@@ -67,7 +75,7 @@ class UserDataHandlerTests: XCTestCase {
         let fakeToken = try! invalidAuthToken_missingEmail()
         fakeRequest.headers = AnyIterator([(HTTPRequestHeader.Name.authorization, fakeToken)].makeIterator())
 
-        XCTAssertThrowsError(try User(request: fakeRequest, userDAO: BadUser())) { error in
+        XCTAssertThrowsError(try sut.user(from: fakeRequest, userDAO: BadUser())) { error in
             XCTAssertTrue(error is BadTokenError)
         }
     }

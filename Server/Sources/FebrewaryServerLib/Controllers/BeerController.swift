@@ -3,10 +3,10 @@ import StORM
 import Foundation
 
 class BeerController {
-    func addBeer(request: HTTPRequest, response: HTTPResponse, user: UserDAO = UserDAO(), beer: Beer = Beer()) {
+    func addBeer(request: HTTPRequest, response: HTTPResponse, userDataHandler: UserDataHandler = UserDataHandler(), beer: Beer = Beer()) {
         do {
             
-            let user = try User(request: request)
+            let user = try userDataHandler.user(from: request)
 
             guard let postBody = try? request.postBodyString?.jsonDecode() as? [String: Any], let json = postBody else {
                 response.setBody(string: "Bad Request: malformed json")
@@ -54,10 +54,10 @@ class BeerController {
         }
     }
     
-    func beersForCurrentUser(request: HTTPRequest, response: HTTPResponse, user: UserDAO = UserDAO(), beers: Beer = Beer(), eventBeers: EventBeer = EventBeer()) {
+    func beersForCurrentUser(request: HTTPRequest, response: HTTPResponse, userDataHandler: UserDataHandler = UserDataHandler(), beers: Beer = Beer(), eventBeers: EventBeer = EventBeer()) {
         
         do {
-            let user = try User(request: request)
+            let user = try userDataHandler.user(from: request)
             
             try beers.find(by: [("addedBy", user.id)])
             try eventBeers.find(by: [("userid", user.id)])

@@ -13,7 +13,7 @@ import StORM
 class UserController {
     func getCurrentUser(request: HTTPRequest, response: HTTPResponse, userDataHandler: UserDataHandler = UserDataHandler()) {
         do {
-            let user = try User(request: request)
+            let user = try userDataHandler.user(from: request)
             let jsonString = try userDataHandler.json(from: user)
             
             response.setBody(string: jsonString)
@@ -33,7 +33,7 @@ class UserController {
         }
         
         do {
-            let user = try User(id: id)
+            let user = try userDataHandler.user(from: id)
             let jsonString = try userDataHandler.json(from: user)
             
             response.setBody(string: jsonString)
