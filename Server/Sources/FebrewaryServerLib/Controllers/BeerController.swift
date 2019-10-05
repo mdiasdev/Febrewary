@@ -5,19 +5,8 @@ import Foundation
 class BeerController {
     func addBeer(request: HTTPRequest, response: HTTPResponse, user: UserDAO = UserDAO(), beer: Beer = Beer()) {
         do {
-            guard let email = request.emailFromAuthToken() else {
-                response.setBody(string: "Unauthorized")
-                        .completed(status: .unauthorized)
-                return
-            }
             
-            try user.find(by: ["email": email])
-            
-            guard user.id != 0 else {
-                response.setBody(string: "Unauthorized")
-                        .completed(status: .unauthorized)
-                return
-            }
+            let user = try User(request: request)
 
             guard let postBody = try? request.postBodyString?.jsonDecode() as? [String: Any], let json = postBody else {
                 response.setBody(string: "Bad Request: malformed json")
@@ -57,26 +46,18 @@ class BeerController {
             try response.setBody(json: beer.asDictionary())
                         .completed(status: .created)
 
+        } catch is BadTokenError {
+            let error = BadTokenError()
+            try! response.setBody(json: error).completed(status: HTTPResponseStatus.statusFrom(code: error.code))
         } catch {
             response.completed(status: .internalServerError)
         }
     }
     
     func beersForCurrentUser(request: HTTPRequest, response: HTTPResponse, user: UserDAO = UserDAO(), beers: Beer = Beer(), eventBeers: EventBeer = EventBeer()) {
-        guard let email = request.emailFromAuthToken() else {
-            response.setBody(string: "Unauthorized")
-                .completed(status: .unauthorized)
-            return
-        }
         
         do {
-            try user.find(by: ["email": email])
-            
-            guard user.id != 0 else {
-                response.setBody(string: "Unauthorized")
-                        .completed(status: .unauthorized)
-                return
-            }
+            let user = try User(request: request)
             
             try beers.find(by: [("addedBy", user.id)])
             try eventBeers.find(by: [("userid", user.id)])

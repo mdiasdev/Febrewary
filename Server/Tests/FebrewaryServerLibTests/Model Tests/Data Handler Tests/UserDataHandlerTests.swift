@@ -11,6 +11,13 @@ import PerfectHTTP
 @testable import FebrewaryServerLib
 
 class UserDataHandlerTests: XCTestCase {
+    
+    static var allTests = [
+        ("test_initializing_withUserDAO_createsUser", test_initializing_withUserDAO_createsUser),
+        ("test_initializing_withValidRequest_createsUser", test_initializing_withValidRequest_createsUser),
+        ("test_initializing_withValidRequest_createsUser", test_initializing_withValidRequest_createsUser),
+        ("test_initializing_withInvalidUser_throwsBadToken", test_initializing_withInvalidUser_throwsBadToken),
+    ]
 
     // MARK: Initializer Tests
     func test_initializing_withUserDAO_createsUser() {
