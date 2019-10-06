@@ -19,8 +19,8 @@ class UserController {
             response.setBody(string: jsonString)
                     .completed(status: .ok)
             
-        } catch is UnauthenticatedError {
-            response.completed(with: UnauthenticatedError())
+        } catch is BadTokenError {
+            response.completed(with: BadTokenError())
         } catch {
             response.completed(with: DatabaseError())
         }

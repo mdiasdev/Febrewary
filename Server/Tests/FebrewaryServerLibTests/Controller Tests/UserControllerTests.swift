@@ -7,6 +7,7 @@
 
 import XCTest
 import PerfectHTTP
+import StORM
 
 @testable import FebrewaryServerLib
 
@@ -14,15 +15,46 @@ class UserControllerTests: XCTestCase {
 
     static var allTests = [
         ("test_getCurrentUser_respondsWithUserJson_whenSuccessful", test_getCurrentUser_respondsWithUserJson_whenSuccessful),
+        ("test_getCurrentUser_respondsWithDatabaseError_whenInvalidToken", test_getCurrentUser_respondsWithDatabaseError_whenInvalidToken),
+        ("test_getCurrentUser_respondsWithBadTokenError_whenInvalidToken", test_getCurrentUser_respondsWithBadTokenError_whenInvalidToken),
     ]
     
+    // MARK: - getCurrentUser() Tests
     func test_getCurrentUser_respondsWithUserJson_whenSuccessful() {
-        let fakeRequest = FakeRequest()
-        let fakeToken = try! validAuthToken()
-        fakeRequest.headers = AnyIterator([(HTTPRequestHeader.Name.authorization, fakeToken)].makeIterator())
+        let fakeRequest = FakeRequestBuilder.request(withToken: try! validAuthToken())
         let spyResponse = SpyResponse()
         let mockUserDataHandler = MockSuccessfulUserDataHandler()
         let expectString = "{\n  \"id\" : 1,\n  \"name\" : \"Hello Stream\",\n  \"email\" : \"hello@stream.com\"\n}"
+        
+        UserController().getCurrentUser(request: fakeRequest, response: spyResponse, userDataHandler: mockUserDataHandler)
+        
+        if let string = String(bytes: spyResponse.bodyBytes, encoding: .utf8) {
+            XCTAssertEqual(string, expectString)
+        } else {
+            XCTFail("not a valid UTF-8 sequence")
+        }
+    }
+    
+    func test_getCurrentUser_respondsWithDatabaseError_whenInvalidToken() {
+        let fakeRequest = FakeRequestBuilder.request(withToken: try! validAuthToken())
+        let spyResponse = SpyResponse()
+        let mockUserDataHandler = MockDatabaseErrorUserDataHandler()
+        let expectString = " {\n     title: Internal Error,\n     message: Something went wrong.,\n     code: 500\n }"
+        
+        UserController().getCurrentUser(request: fakeRequest, response: spyResponse, userDataHandler: mockUserDataHandler)
+        
+        if let string = String(bytes: spyResponse.bodyBytes, encoding: .utf8) {
+            XCTAssertEqual(string, expectString)
+        } else {
+            XCTFail("not a valid UTF-8 sequence")
+        }
+    }
+    
+    func test_getCurrentUser_respondsWithBadTokenError_whenInvalidToken() {
+        let fakeRequest = FakeRequestBuilder.request(withToken: try! invalidAuthToken_missingEmail())
+        let spyResponse = SpyResponse()
+        let mockUserDataHandler = MockBadTokenUserDataHandler()
+        let expectString = " {\n     title: Bad Auth Token,\n     message: The auth token used is malformed.,\n     code: 400\n }"
         
         UserController().getCurrentUser(request: fakeRequest, response: spyResponse, userDataHandler: mockUserDataHandler)
         
@@ -38,6 +70,27 @@ class UserControllerTests: XCTestCase {
 class MockSuccessfulUserDataHandler: UserDataHandler {
     override func user(from request: HTTPRequest, userDAO: UserDAO = UserDAO()) throws -> User {
         return User(id: 1, name: "Hello Stream", email: "hello@stream.com")
+    }
+}
+
+class MockBadTokenUserDataHandler: UserDataHandler {
+    override func user(from request: HTTPRequest, userDAO: UserDAO = UserDAO()) throws -> User {
+        throw BadTokenError()
+    }
+}
+
+class MockDatabaseErrorUserDataHandler: UserDataHandler {
+    override func user(from request: HTTPRequest, userDAO: UserDAO = UserDAO()) throws -> User {
+        throw StORMError.database
+    }
+}
+
+struct FakeRequestBuilder {
+    static func request(withToken token: String) -> FakeRequest {
+        let fakeRequest = FakeRequest()
+        fakeRequest.headers = AnyIterator([(HTTPRequestHeader.Name.authorization, token)].makeIterator())
+        
+        return fakeRequest
     }
 }
 

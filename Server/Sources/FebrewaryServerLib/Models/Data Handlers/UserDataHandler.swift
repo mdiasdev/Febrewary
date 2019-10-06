@@ -54,6 +54,12 @@ class UserDataHandler {
         return try User(id: id, userDAO: userDAO)
     }
     
+    
+    /// Get a user, from the database, for a given Perfect Request
+    /// - Parameter request: the request to pull auth token from in order to find a user
+    /// - Parameter userDAO: database access object for dependency inject
+    ///
+    /// - Attention: this can **throw** `BadTokenError`, `StORMError`
     func user(from request: HTTPRequest, userDAO: UserDAO = UserDAO()) throws -> User {
         return try User(request: request, userDAO: userDAO)
     }
