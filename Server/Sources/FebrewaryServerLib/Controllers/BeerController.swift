@@ -63,13 +63,11 @@ class BeerController {
             try eventBeers.find(by: [("userid", user.id)])
             
             let beerFromEventBeer = Beer()
-            let eBeers: [Beer] = eventBeers.rows().compactMap {
-                // FIXME: change into a select statement
-                try? beerFromEventBeer.find(by: [("id", $0.beerId)])
-                return beerFromEventBeer.rows().first
-            }
             
-            let allUserBeers = Set(beers.rows() + eBeers)
+            let query = "id IN (\(eventBeers.rows().compactMap { "\($0.beerId)" }.toString()))"
+            try beerFromEventBeer.search(whereClause: query, params: [], orderby: ["id"])
+            
+            let allUserBeers = Set(beers.rows() + beerFromEventBeer.rows())
             
             var responseJson = [[String: Any]]()
             for beer in allUserBeers {
