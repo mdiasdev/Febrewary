@@ -64,12 +64,138 @@ class UserControllerTests: XCTestCase {
             XCTFail("not a valid UTF-8 sequence")
         }
     }
+    
+    // MARK: - getUserById() Tests
 
+    func test_getUserById_throwsMalformedRequestError_whenNoIdInRequest() {
+        let fakeRequest = FakeRequestBuilder.request(withToken: try! validAuthToken())
+        fakeRequest.pathComponents = ["user"]
+        let spyResponse = SpyResponse()
+        let expectString = " {\n     title: Malformed Request,\n     message: Missing a required query parameter.,\n     code: 400\n }"
+        
+        UserController().getUserById(request: fakeRequest, response: spyResponse)
+        
+        if let string = String(bytes: spyResponse.bodyBytes, encoding: .utf8) {
+            XCTAssertEqual(string, expectString)
+        } else {
+            XCTFail("not a valid UTF-8 sequence")
+        }
+    }
+    
+    func test_getUserById_respondsWithUser_whenUserExistsInDatabase() {
+        let fakeRequest = FakeRequestBuilder.request(withToken: try! validAuthToken())
+        fakeRequest.pathComponents = ["user", "1"]
+        let spyResponse = SpyResponse()
+        let mockUserDataHandler = MockSuccessfulUserDataHandler()
+        let expectString = "{\n  \"id\" : 1,\n  \"name\" : \"Hello Stream\",\n  \"email\" : \"hello@stream.com\"\n}"
+        
+        UserController().getUserById(request: fakeRequest, response: spyResponse, userDataHandler: mockUserDataHandler)
+        
+        if let string = String(bytes: spyResponse.bodyBytes, encoding: .utf8) {
+            XCTAssertEqual(string, expectString)
+        } else {
+            XCTFail("not a valid UTF-8 sequence")
+        }
+    }
+    
+    func test_getUserById_respondsWithUserNotFound_whenUserDoesNotExistInDatabase() {
+        let fakeRequest = FakeRequestBuilder.request(withToken: try! validAuthToken())
+        fakeRequest.pathComponents = ["user", "1"]
+        let spyResponse = SpyResponse()
+        let mockUserDataHandler = MockUserNotFoundUserDataHandler()
+        let expectString = " {\n     title: Failed to find User,\n     message: This user does not exist.,\n     code: 404\n }"
+        
+        UserController().getUserById(request: fakeRequest, response: spyResponse, userDataHandler: mockUserDataHandler)
+        
+        if let string = String(bytes: spyResponse.bodyBytes, encoding: .utf8) {
+            XCTAssertEqual(string, expectString)
+        } else {
+            XCTFail("not a valid UTF-8 sequence")
+        }
+    }
+    
+    func test_getUserById_respondsWithDatabaseError_whenDatabaseHasProblem() {
+        let fakeRequest = FakeRequestBuilder.request(withToken: try! validAuthToken())
+        fakeRequest.pathComponents = ["user", "1"]
+        let spyResponse = SpyResponse()
+        let mockUserDataHandler = MockDatabaseErrorUserDataHandler()
+        let expectString = " {\n     title: Internal Error,\n     message: Something went wrong.,\n     code: 500\n }"
+        
+        UserController().getUserById(request: fakeRequest, response: spyResponse, userDataHandler: mockUserDataHandler)
+        
+        if let string = String(bytes: spyResponse.bodyBytes, encoding: .utf8) {
+            XCTAssertEqual(string, expectString)
+        } else {
+            XCTFail("not a valid UTF-8 sequence")
+        }
+    }
+    
+    // MARK: - getAllUsers Tests
+    func test_getAllUsers_respondsEmpty_whenDatabaseIsEmpty() {
+        let fakeRequest = FakeRequestBuilder.request(withToken: try! validAuthToken())
+        let spyResponse = SpyResponse()
+        let mockUserDataHandler = MockSuccessfulEmptyDatabaseUserDataHandler()
+        let expectString = "[]"
+        
+        UserController().getAllUsers(request: fakeRequest, response: spyResponse, userDataHandler: mockUserDataHandler)
+        
+        if let string = String(bytes: spyResponse.bodyBytes, encoding: .utf8) {
+            XCTAssertEqual(string, expectString)
+        } else {
+            XCTFail("not a valid UTF-8 sequence")
+        }
+    }
+    
+    func test_getAllUsers_respondsWithUsers_whenDatabaseIsNotEmpty() {
+        let fakeRequest = FakeRequestBuilder.request(withToken: try! validAuthToken())
+        let spyResponse = SpyResponse()
+        let mockUserDataHandler = MockSuccessfulUserDataHandler()
+        let expectString = "[{\n  \"id\" : 1,\n  \"name\" : \"Hello Stream\",\n  \"email\" : \"hello@stream.com\"\n}, {\n  \"id\" : 1,\n  \"name\" : \"Hello Stream\",\n  \"email\" : \"hello@stream.com\"\n}]"
+        
+        UserController().getAllUsers(request: fakeRequest, response: spyResponse, userDataHandler: mockUserDataHandler)
+        
+        if let string = String(bytes: spyResponse.bodyBytes, encoding: .utf8) {
+            XCTAssertEqual(string, expectString)
+        } else {
+            XCTFail("not a valid UTF-8 sequence")
+        }
+    }
+    
+    func test_getAllUsers_respondsWithDatabaseError_whenDatabaseHasProblem() {
+        let fakeRequest = FakeRequestBuilder.request(withToken: try! validAuthToken())
+        fakeRequest.pathComponents = ["user", "1"]
+        let spyResponse = SpyResponse()
+        let mockUserDataHandler = MockDatabaseErrorUserDataHandler()
+        let expectString = " {\n     title: Internal Error,\n     message: Something went wrong.,\n     code: 500\n }"
+        
+        UserController().getAllUsers(request: fakeRequest, response: spyResponse, userDataHandler: mockUserDataHandler)
+        
+        if let string = String(bytes: spyResponse.bodyBytes, encoding: .utf8) {
+            XCTAssertEqual(string, expectString)
+        } else {
+            XCTFail("not a valid UTF-8 sequence")
+        }
+    }
 }
 
+// MARK: - Test Doubles
 class MockSuccessfulUserDataHandler: UserDataHandler {
     override func user(from request: HTTPRequest, userDAO: UserDAO = UserDAO()) throws -> User {
         return User(id: 1, name: "Hello Stream", email: "hello@stream.com")
+    }
+    
+    override func user(from id: Int, userDAO: UserDAO = UserDAO()) throws -> User {
+        return User(id: 1, name: "Hello Stream", email: "hello@stream.com")
+    }
+    
+    override func getAllUsers(userDAO: UserDAO = UserDAO()) throws -> [User] {
+        return [User(id: 1, name: "Hello Stream", email: "hello@stream.com"), User(id: 1, name: "Hello Stream", email: "hello@stream.com")]
+    }
+}
+
+class MockSuccessfulEmptyDatabaseUserDataHandler: UserDataHandler {
+    override func getAllUsers(userDAO: UserDAO = UserDAO()) throws -> [User] {
+        return []
     }
 }
 
@@ -82,6 +208,16 @@ class MockBadTokenUserDataHandler: UserDataHandler {
 class MockDatabaseErrorUserDataHandler: UserDataHandler {
     override func user(from request: HTTPRequest, userDAO: UserDAO = UserDAO()) throws -> User {
         throw StORMError.database
+    }
+    
+    override func user(from id: Int, userDAO: UserDAO = UserDAO()) throws -> User {
+        throw StORMError.database
+    }
+}
+
+class MockUserNotFoundUserDataHandler: UserDataHandler {
+    override func user(from id: Int, userDAO: UserDAO = UserDAO()) throws -> User {
+        throw UserNotFoundError()
     }
 }
 
