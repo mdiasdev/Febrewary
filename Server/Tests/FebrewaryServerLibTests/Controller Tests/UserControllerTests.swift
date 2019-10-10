@@ -17,6 +17,13 @@ class UserControllerTests: XCTestCase {
         ("test_getCurrentUser_respondsWithUserJson_whenSuccessful", test_getCurrentUser_respondsWithUserJson_whenSuccessful),
         ("test_getCurrentUser_respondsWithDatabaseError_whenInvalidToken", test_getCurrentUser_respondsWithDatabaseError_whenInvalidToken),
         ("test_getCurrentUser_respondsWithBadTokenError_whenInvalidToken", test_getCurrentUser_respondsWithBadTokenError_whenInvalidToken),
+        ("test_getUserById_throwsMalformedRequestError_whenNoIdInRequest", test_getUserById_throwsMalformedRequestError_whenNoIdInRequest),
+        ("test_getUserById_respondsWithUser_whenUserExistsInDatabase", test_getUserById_respondsWithUser_whenUserExistsInDatabase),
+        ("test_getUserById_respondsWithUserNotFound_whenUserDoesNotExistInDatabase", test_getUserById_respondsWithUserNotFound_whenUserDoesNotExistInDatabase),
+        ("test_getUserById_respondsWithDatabaseError_whenDatabaseHasProblem", test_getUserById_respondsWithDatabaseError_whenDatabaseHasProblem),
+        ("test_getAllUsers_respondsEmpty_whenDatabaseIsEmpty", test_getAllUsers_respondsEmpty_whenDatabaseIsEmpty),
+        ("test_getAllUsers_respondsWithUsers_whenDatabaseIsNotEmpty", test_getAllUsers_respondsWithUsers_whenDatabaseIsNotEmpty),
+        ("test_getAllUsers_respondsWithDatabaseError_whenDatabaseHasProblem", test_getAllUsers_respondsWithDatabaseError_whenDatabaseHasProblem),
     ]
     
     // MARK: - getCurrentUser() Tests

@@ -6,17 +6,15 @@ class EventController {
         
         guard let postBody = try? request.postBodyString?.jsonDecode() as? [String: Any],
               let json = postBody else {
-            response.setBody(string: "Bad Request: malformed json")
-                    .completed(status: .badRequest)
-            return
+                response.completed(with: MalformedJSONError())
+                return
         }
 
         guard let name = json["name"] as? String,
               let date = json["date"] as? String,
               let address = json["address"] as? String,
               let isPourer = json["isPourer"] as? Bool else {
-                response.setBody(string: "Bad Request: missing required property")
-                        .completed(status: .badRequest)
+                response.completed(with: MissingPropertyError())
                 return
         }
         

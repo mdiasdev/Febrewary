@@ -53,6 +53,12 @@ public struct MalformedRequestError: ServerError {
     var code: Int = 400
 }
 
+public struct MalformedJSONError: ServerError {
+    var title: String = "Malformed Request JSON"
+    var message: String = "Unable to parse JSON."
+    var code: Int = 400
+}
+
 public struct MissingQueryError: ServerError {
     var title: String = "Missing request query"
     var message: String = "Search terms needed."
