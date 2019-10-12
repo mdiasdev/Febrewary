@@ -54,4 +54,26 @@ class EventControllerTests: XCTestCase {
         }
         """
     }
+    
+    func getCreateEventPostBodyIsPourer() -> String {
+        return """
+        {
+            "name": "Fun Times",
+            "date": "March 1st",
+            "address": "home",
+            "isPourer": true
+        }
+        """
+    }
+    
+    func getCreateEventPostBodyIsNotPourer() -> String {
+        return """
+        {
+            "name": "Fun Times",
+            "date": "March 1st",
+            "address": "home",
+            "isPourer": false
+        }
+        """
+    }
 }

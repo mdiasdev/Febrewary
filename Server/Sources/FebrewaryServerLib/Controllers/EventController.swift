@@ -2,59 +2,40 @@ import PerfectHTTP
 import StORM
 
 class EventController {
-    func createEvent(request: HTTPRequest, response: HTTPResponse, userDataHandler: UserDataHandler = UserDataHandler(), event: Event = Event(), attendee: Attendee = Attendee()) {
-        
-        guard let postBody = try? request.postBodyString?.jsonDecode() as? [String: Any],
-              let json = postBody else {
-                response.completed(with: MalformedJSONError())
-                return
-        }
-
-        guard let name = json["name"] as? String,
-              let date = json["date"] as? String,
-              let address = json["address"] as? String,
-              let isPourer = json["isPourer"] as? Bool else {
-                response.completed(with: MissingPropertyError())
-                return
-        }
+    func createEvent(request: HTTPRequest, response: HTTPResponse, userDataHandler: UserDataHandler = UserDataHandler(), eventDataHandler: EventDataHandler = EventDataHandler(), attendeeDataHandler: AttendeeDataHandler = AttendeeDataHandler()) {
         
         do {
             let user = try userDataHandler.user(from: request)
+            var event = try eventDataHandler.event(from: request, by: user)
             
-            event.name = name
-            event.date = date
-            event.address = address
-            event.createdBy = user.id
-            
-            if isPourer {
-                event.pourerId = user.id
-            }
-            
-            try event.store { id in
-                event.id = id as! Int
-            }
+            try eventDataHandler.save(event: &event)
             
             if event.id > 0 {
-                attendee.eventId = event.id
-                attendee.userId = user.id
-                try attendee.store { id in
-                    attendee.id = id as! Int
-                }
+                var attendee = try attendeeDataHandler.attendee(fromEventId: event.id, andUserId: user.id)
+                try attendeeDataHandler.save(attendee: &attendee)
+            } else {
+                throw DatabaseError()
             }
             
-            let responseJson = event.asDictionary()
+            let responseJson = try eventDataHandler.json(from: event)
             
-            guard !responseJson.isEmpty else {
-                response.setBody(string: "Internal Server Error: Could not save Event")
-                        .completed(status: .internalServerError)
-                return
-            }
+            response.setBody(string: responseJson)
+                    .completed(status: .created)
             
-            try response.setBody(json: responseJson)
-                        .completed(status: .created)
+        } catch let error as DatabaseError {
+            response.completed(with: error)
+        } catch let error as MalformedJSONError {
+            response.completed(with: error)
+        } catch let error as MissingPropertyError {
+            response.completed(with: error)
+        } catch let error as UnauthenticatedError {
+            response.completed(with: error)
+        } catch let error as BadTokenError {
+            response.completed(with: error)
+        } catch let error as UserNotFoundError {
+            response.completed(with: error)
         } catch {
-            response.setBody(string: "Internal Server Error: Could not save Event")
-                    .completed(status: .internalServerError)
+            response.completed(with: DatabaseError())
         }
     }
     
@@ -68,7 +49,7 @@ class EventController {
         response.completed(status: .notFound)
     }
     
-    func getEventForUser(request: HTTPRequest, response: HTTPResponse, userDataHandler: UserDataHandler = UserDataHandler(), events: Event = Event(), attendees: Attendee = Attendee()) {
+    func getEventForUser(request: HTTPRequest, response: HTTPResponse, userDataHandler: UserDataHandler = UserDataHandler(), events: EventDAO = EventDAO(), attendees: AttendeeDAO = AttendeeDAO()) {
         
         do {
             let user = try userDataHandler.user(from: request)
@@ -100,7 +81,7 @@ class EventController {
         response.completed(status: .internalServerError)
     }
     
-    func addEventBeer(request: HTTPRequest, response: HTTPResponse, userDataHandler: UserDataHandler = UserDataHandler(), event: Event = Event(), eventBeer: EventBeer = EventBeer(), attendee: Attendee = Attendee()) {
+    func addEventBeer(request: HTTPRequest, response: HTTPResponse, userDataHandler: UserDataHandler = UserDataHandler(), event: EventDAO = EventDAO(), eventBeer: EventBeer = EventBeer(), attendee: AttendeeDAO = AttendeeDAO()) {
         
         guard let id = Int(request.urlVariables["id"] ?? "0"), id > 0 else {
             response.completed(status: .badRequest)
@@ -164,7 +145,7 @@ class EventController {
         }
     }
     
-    func addAttendee(request: HTTPRequest, response: HTTPResponse, user: UserDAO = UserDAO(), event: Event = Event(), attendee: Attendee = Attendee()) {
+    func addAttendee(request: HTTPRequest, response: HTTPResponse, user: UserDAO = UserDAO(), event: EventDAO = EventDAO(), attendee: AttendeeDAO = AttendeeDAO()) {
 
         guard let eventId = Int(request.urlVariables["id"] ?? "0"), eventId > 0 else {
             response.completed(status: .badRequest)
@@ -230,7 +211,7 @@ class EventController {
         }
     }
     
-    func pourEventBeer(request: HTTPRequest, response: HTTPResponse, event: Event = Event(), userDataHandler: UserDataHandler = UserDataHandler(), eventBeer: EventBeer = EventBeer(), attendee: Attendee = Attendee()) {
+    func pourEventBeer(request: HTTPRequest, response: HTTPResponse, event: EventDAO = EventDAO(), userDataHandler: UserDataHandler = UserDataHandler(), eventBeer: EventBeer = EventBeer(), attendee: AttendeeDAO = AttendeeDAO()) {
         
         guard let eventId = Int(request.urlVariables["id"] ?? "0"), eventId > 0 else {
             response.completed(status: .badRequest)
@@ -315,7 +296,7 @@ class EventController {
         }
     }
     
-    func getCurrentEventBeer(request: HTTPRequest, response: HTTPResponse, event: Event = Event(), eventBeer: EventBeer = EventBeer(), user: UserDAO = UserDAO()) {
+    func getCurrentEventBeer(request: HTTPRequest, response: HTTPResponse, event: EventDAO = EventDAO(), eventBeer: EventBeer = EventBeer(), user: UserDAO = UserDAO()) {
         
         guard let eventId = Int(request.urlVariables["id"] ?? "0"), eventId > 0 else {
             response.completed(status: .badRequest)
@@ -351,7 +332,7 @@ class EventController {
         
     }
     
-    func vote(request: HTTPRequest, response: HTTPResponse, event: Event = Event(), vote: Vote = Vote(), userDataHandler: UserDataHandler = UserDataHandler(), eventBeer: EventBeer = EventBeer(), attendee: Attendee = Attendee()) {
+    func vote(request: HTTPRequest, response: HTTPResponse, event: EventDAO = EventDAO(), vote: Vote = Vote(), userDataHandler: UserDataHandler = UserDataHandler(), eventBeer: EventBeer = EventBeer(), attendee: AttendeeDAO = AttendeeDAO()) {
         
         guard let eventId = Int(request.urlVariables["id"] ?? "0"), eventId > 0 else {
             response.completed(status: .badRequest)
@@ -428,7 +409,7 @@ class EventController {
         }
     }
     
-    func end(event: Event, pouredBeers: [EventBeer], beer: Beer = Beer()) throws {
+    func end(event: EventDAO, pouredBeers: [EventBeer], beer: Beer = Beer()) throws {
         guard !event.isOver else { return }
         
         event.isOver = true

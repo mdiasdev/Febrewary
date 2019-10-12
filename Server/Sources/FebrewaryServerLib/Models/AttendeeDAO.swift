@@ -9,7 +9,7 @@ import Foundation
 import StORM
 import PostgresStORM
 
-class Attendee: DAO {
+class AttendeeDAO: DAO {
     var id: Int = 0
     var eventId: Int = 0
     var eventBeerId: Int = 0
@@ -24,13 +24,13 @@ class Attendee: DAO {
         userId = this.data["userid"] as? Int ?? 0
     }
     
-    func rows() -> [Attendee] {
+    func rows() -> [AttendeeDAO] {
         
         let rows = self.results.rows
-        var attendees = [Attendee]()
+        var attendees = [AttendeeDAO]()
         
         for row in rows {
-            let attendee = Attendee()
+            let attendee = AttendeeDAO()
             attendee.to(row)
             attendees.append(attendee)
         }

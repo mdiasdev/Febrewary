@@ -16,7 +16,7 @@ public struct DatabaseController {
         let beer = Beer()
         try? beer.setup()
 
-        let event = Event()
+        let event = EventDAO()
         try? event.setup()
 
         let eventBeer = EventBeer()
@@ -28,7 +28,7 @@ public struct DatabaseController {
         let user = UserDAO()
         try? user.setup()
         
-        let attendee = Attendee()
+        let attendee = AttendeeDAO()
         try? attendee.setup()
     }
 }

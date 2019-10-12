@@ -2,7 +2,7 @@ import Foundation
 import StORM
 import PostgresStORM
 
-class Event: DAO {
+class EventDAO: DAO {
     // MARK: - Properties: basic properties
     var id: Int = 0
     var name: String = ""
@@ -33,15 +33,15 @@ class Event: DAO {
         hasStarted = this.data["hasstarted"] as? Bool ?? false
     }
 
-    func rows() -> [Event] {
+    func rows() -> [EventDAO] {
         let rows = self.results.rows
 
         guard !rows.isEmpty else { return [] }
 
-        var events = [Event]()
+        var events = [EventDAO]()
 
         for row in rows {
-            let event = Event()
+            let event = EventDAO()
             event.to(row)
             events.append(event)
         }
@@ -52,8 +52,8 @@ class Event: DAO {
 }
 
     // MARK: - Data Representation
-extension Event {
-    func asDictionary(attendees: Attendee = Attendee(), users: UserDAO = UserDAO(), eventBeers: EventBeer = EventBeer()) -> [String: Any] {
+extension EventDAO {
+    func asDictionary(attendees: AttendeeDAO = AttendeeDAO(), users: UserDAO = UserDAO(), eventBeers: EventBeer = EventBeer()) -> [String: Any] {
         
         var json: [String: Any] = [
             "id": self.id,
