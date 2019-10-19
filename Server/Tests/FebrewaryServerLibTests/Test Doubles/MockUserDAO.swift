@@ -1,6 +1,6 @@
 //
-//  MockUser.swift
-//  FebrewaryServerLib
+//  MockUserDAO.swift
+//  FebrewaryServerLibTests
 //
 //  Created by Matthew Dias on 7/30/19.
 //
@@ -11,7 +11,7 @@ import PostgresStORM
 
 @testable import FebrewaryServerLib
 
-class MockUser: UserDAO {
+class MockUserDAO: UserDAO {
     override func getAll() throws {
         let row1 = StORMRow()
         row1.data = ["id": 1,
@@ -68,7 +68,7 @@ class MockUser: UserDAO {
     }
 }
 
-class BadUser: MockUser {
+class BadUser: MockUserDAO {
     override func find(by data: [String : Any]) throws {
         let row1 = StORMRow()
         row1.data = ["id": -1,

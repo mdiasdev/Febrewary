@@ -41,7 +41,7 @@ class UserDataHandlerTests: XCTestCase {
     }
     
     func test_initializing_withId_createsUser() {
-        let mockDAO = MockUser()
+        let mockDAO = MockUserDAO()
         
         let user = try! sut.user(from: 1, userDAO: mockDAO)
         
@@ -53,7 +53,7 @@ class UserDataHandlerTests: XCTestCase {
         let fakeToken = try! validAuthToken()
         fakeRequest.headers = AnyIterator([(HTTPRequestHeader.Name.authorization, fakeToken)].makeIterator())
 
-        XCTAssertNoThrow(try sut.user(from: fakeRequest, userDAO: MockUser()))
+        XCTAssertNoThrow(try sut.user(from: fakeRequest, userDAO: MockUserDAO()))
         
         // FIXME: WHY?!?!
 //        try! dao.find(by: ["it": "doesn't matter"])
@@ -65,7 +65,7 @@ class UserDataHandlerTests: XCTestCase {
         let fakeToken = try! invalidAuthToken_missingEmail()
         fakeRequest.headers = AnyIterator([(HTTPRequestHeader.Name.authorization, fakeToken)].makeIterator())
 
-        XCTAssertThrowsError(try sut.user(from: fakeRequest, userDAO: MockUser())) { error in
+        XCTAssertThrowsError(try sut.user(from: fakeRequest, userDAO: MockUserDAO())) { error in
             XCTAssertTrue(error is BadTokenError)
         }
     }

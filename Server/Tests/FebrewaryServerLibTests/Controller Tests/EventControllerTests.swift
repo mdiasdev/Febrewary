@@ -78,6 +78,9 @@ class EventControllerTests: XCTestCase {
         XCTAssertFalse(spyAttendeeDataHandler.didCallSave)
     }
     
+    // MARK: - Get Event For Current User
+    
+    
     // MARK: - Test Helpers
     func getCreateEventPostBodyMissingName() -> String {
         return """

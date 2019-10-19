@@ -15,12 +15,12 @@ class UserTests: XCTestCase {
         ("test_rows_returnsArrayOfUsers", test_rows_returnsArrayOfUsers),
     ]
     
-    var sut: MockUser!
+    var sut: MockUserDAO!
 
     override func setUp() {
         super.setUp()
         
-        sut = MockUser()
+        sut = MockUserDAO()
         try! sut.getAll()
     }
 
