@@ -19,7 +19,7 @@ public struct DatabaseController {
         let event = EventDAO()
         try? event.setup()
 
-        let eventBeer = EventBeer()
+        let eventBeer = EventBeerDAO()
         try? eventBeer.setup()
 
         let round = Vote()

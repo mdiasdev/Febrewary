@@ -103,7 +103,7 @@ class EventControllerTests: XCTestCase {
         let fakeUserDataHandler = FakeUserDataHander()
         let fakeAttendeeDataHandler = FakeAttendeeDataHandler()
         let fakeEventDataHandler = FakeEventDataHandler()
-        let expectedString = "[\n  {\n    \"isOver\" : false,\n    \"pourerId\" : 0,\n    \"address\" : \"here\",\n    \"id\" : 0,\n    \"date\" : \"tomorrow\",\n    \"hasStarted\" : false,\n    \"createdBy\" : 1,\n    \"name\" : \"Something fun\"\n  },\n  {\n    \"isOver\" : false,\n    \"pourerId\" : 0,\n    \"address\" : \"there\",\n    \"id\" : 0,\n    \"date\" : \"the next day\",\n    \"hasStarted\" : false,\n    \"createdBy\" : 1,\n    \"name\" : \"Something else fun\"\n  }\n]"
+        let expectedString = "[\n  {\n    \"isOver\" : false,\n    \"pourerId\" : 0,\n    \"address\" : \"here\",\n    \"id\" : 0,\n    \"date\" : \"tomorrow\",\n    \"hasStarted\" : false,\n    \"createdBy\" : 1,\n    \"eventBeers\" : [\n\n    ],\n    \"name\" : \"Something fun\",\n    \"attendees\" : [\n\n    ]\n  },\n  {\n    \"isOver\" : false,\n    \"pourerId\" : 0,\n    \"address\" : \"there\",\n    \"id\" : 0,\n    \"date\" : \"the next day\",\n    \"hasStarted\" : false,\n    \"createdBy\" : 1,\n    \"eventBeers\" : [\n\n    ],\n    \"name\" : \"Something else fun\",\n    \"attendees\" : [\n\n    ]\n  }\n]"
         
         EventController().getEventForUser(request: fakeRequest,
                                           response: spyResponse,

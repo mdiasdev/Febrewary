@@ -54,7 +54,7 @@ class BeerController {
         }
     }
     
-    func beersForCurrentUser(request: HTTPRequest, response: HTTPResponse, userDataHandler: UserDataHandler = UserDataHandler(), beers: Beer = Beer(), eventBeers: EventBeer = EventBeer()) {
+    func beersForCurrentUser(request: HTTPRequest, response: HTTPResponse, userDataHandler: UserDataHandler = UserDataHandler(), beers: Beer = Beer(), eventBeers: EventBeerDAO = EventBeerDAO()) {
         
         do {
             let user = try userDataHandler.user(from: request)

@@ -82,7 +82,7 @@ class EventDataHandlerTests: XCTestCase {
     // MARK: - JSON Builders
     func test_jsonFromEvent_returnsEventAsJSONString() {
         let event = Event(name: "Fun Times", date: "tomorrow", address: "my home", createdBy: 1)
-        let expected = "{\n  \"isOver\" : false,\n  \"pourerId\" : 0,\n  \"address\" : \"my home\",\n  \"id\" : 0,\n  \"date\" : \"tomorrow\",\n  \"hasStarted\" : false,\n  \"createdBy\" : 1,\n  \"name\" : \"Fun Times\"\n}"
+        let expected = "{\n  \"isOver\" : false,\n  \"pourerId\" : 0,\n  \"address\" : \"my home\",\n  \"id\" : 0,\n  \"date\" : \"tomorrow\",\n  \"hasStarted\" : false,\n  \"createdBy\" : 1,\n  \"eventBeers\" : [\n\n  ],\n  \"name\" : \"Fun Times\",\n  \"attendees\" : [\n\n  ]\n}"
         
         let actual = try! EventDataHandler().json(from: event)
         
@@ -94,7 +94,7 @@ class EventDataHandlerTests: XCTestCase {
             Event(name: "Fun Times", date: "tomorrow", address: "my home", createdBy: 1),
             Event(name: "More Fun Times", date: "the day after tomorrow", address: "my home", createdBy: 1)
         ]
-        let expected = "[\n  {\n    \"isOver\" : false,\n    \"pourerId\" : 0,\n    \"address\" : \"my home\",\n    \"id\" : 0,\n    \"date\" : \"tomorrow\",\n    \"hasStarted\" : false,\n    \"createdBy\" : 1,\n    \"name\" : \"Fun Times\"\n  },\n  {\n    \"isOver\" : false,\n    \"pourerId\" : 0,\n    \"address\" : \"my home\",\n    \"id\" : 0,\n    \"date\" : \"the day after tomorrow\",\n    \"hasStarted\" : false,\n    \"createdBy\" : 1,\n    \"name\" : \"More Fun Times\"\n  }\n]"
+        let expected = "[\n  {\n    \"isOver\" : false,\n    \"pourerId\" : 0,\n    \"address\" : \"my home\",\n    \"id\" : 0,\n    \"date\" : \"tomorrow\",\n    \"hasStarted\" : false,\n    \"createdBy\" : 1,\n    \"eventBeers\" : [\n\n    ],\n    \"name\" : \"Fun Times\",\n    \"attendees\" : [\n\n    ]\n  },\n  {\n    \"isOver\" : false,\n    \"pourerId\" : 0,\n    \"address\" : \"my home\",\n    \"id\" : 0,\n    \"date\" : \"the day after tomorrow\",\n    \"hasStarted\" : false,\n    \"createdBy\" : 1,\n    \"eventBeers\" : [\n\n    ],\n    \"name\" : \"More Fun Times\",\n    \"attendees\" : [\n\n    ]\n  }\n]"
         
         let actual = try! EventDataHandler().jsonArray(from: events)
         

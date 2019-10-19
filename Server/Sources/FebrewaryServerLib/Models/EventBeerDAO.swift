@@ -2,7 +2,7 @@ import Foundation
 import StORM
 import PostgresStORM
 
-class EventBeer: DAO {
+class EventBeerDAO: DAO {
     var id: Int = 0
     var userId: Int = 0
     var beerId: Int = 0
@@ -29,15 +29,15 @@ class EventBeer: DAO {
         isBeingPoured = this.data["isbeingpoured"] as? Bool ?? false
     }
 
-    func rows() -> [EventBeer] {
+    func rows() -> [EventBeerDAO] {
         let rows = self.results.rows
 
         guard !rows.isEmpty else { return [] }
 
-        var beers = [EventBeer]()
+        var beers = [EventBeerDAO]()
 
         for row in rows {
-            let beer = EventBeer()
+            let beer = EventBeerDAO()
             beer.to(row)
             beers.append(beer)
         }
@@ -47,7 +47,7 @@ class EventBeer: DAO {
 }
 
 // MARK: - Data Representation
-extension EventBeer {
+extension EventBeerDAO {
     func asDictionary() -> [String: Any] {
 
         let drinker = UserDAO()

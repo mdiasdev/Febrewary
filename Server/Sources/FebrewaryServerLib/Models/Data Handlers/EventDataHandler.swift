@@ -15,8 +15,14 @@ struct Event: Codable {
     var date: String
     var createdBy: Int
     var pourerId: Int = 0
+    
+    // event state
     var isOver: Bool = false
     var hasStarted: Bool = false
+    
+    // embedded sub-objects
+    var attendees: [Attendee] = []
+    var eventBeers: [EventBeer] = []
     
     init(name: String, date: String, address: String, createdBy: Int) {
         self.name = name
@@ -30,7 +36,7 @@ struct Event: Codable {
         self = Event(name: "", date: "", address: "", createdBy: 0)
     }
     
-    fileprivate init(eventDAO: EventDAO) {
+    fileprivate init(eventDAO: EventDAO, attendeeDataHandler: AttendeeDataHandler = AttendeeDataHandler(), eventBeerDataHandler: EventBeerDataHandler = EventBeerDataHandler()) {
         self.id = eventDAO.id
         self.name = eventDAO.name
         self.address = eventDAO.address
@@ -39,6 +45,9 @@ struct Event: Codable {
         self.pourerId = eventDAO.pourerId
         self.isOver = eventDAO.isOver
         self.hasStarted = eventDAO.hasStarted
+        
+        self.attendees = attendeeDataHandler.attendees(fromEventId: eventDAO.id)
+        self.eventBeers = eventBeerDataHandler.eventBeers(fromEventId: eventDAO.id)
     }
     
     fileprivate init(request: HTTPRequest, by user: User) throws {

@@ -61,7 +61,7 @@ class EventController {
         }
     }
     
-    func addEventBeer(request: HTTPRequest, response: HTTPResponse, userDataHandler: UserDataHandler = UserDataHandler(), event: EventDAO = EventDAO(), eventBeer: EventBeer = EventBeer(), attendee: AttendeeDAO = AttendeeDAO()) {
+    func addEventBeer(request: HTTPRequest, response: HTTPResponse, userDataHandler: UserDataHandler = UserDataHandler(), event: EventDAO = EventDAO(), eventBeer: EventBeerDAO = EventBeerDAO(), attendee: AttendeeDAO = AttendeeDAO()) {
         
         guard let id = Int(request.urlVariables["id"] ?? "0"), id > 0 else {
             response.completed(status: .badRequest)
@@ -191,7 +191,7 @@ class EventController {
         }
     }
     
-    func pourEventBeer(request: HTTPRequest, response: HTTPResponse, event: EventDAO = EventDAO(), userDataHandler: UserDataHandler = UserDataHandler(), eventBeer: EventBeer = EventBeer(), attendee: AttendeeDAO = AttendeeDAO()) {
+    func pourEventBeer(request: HTTPRequest, response: HTTPResponse, event: EventDAO = EventDAO(), userDataHandler: UserDataHandler = UserDataHandler(), eventBeer: EventBeerDAO = EventBeerDAO(), attendee: AttendeeDAO = AttendeeDAO()) {
         
         guard let eventId = Int(request.urlVariables["id"] ?? "0"), eventId > 0 else {
             response.completed(status: .badRequest)
@@ -276,7 +276,7 @@ class EventController {
         }
     }
     
-    func getCurrentEventBeer(request: HTTPRequest, response: HTTPResponse, event: EventDAO = EventDAO(), eventBeer: EventBeer = EventBeer(), user: UserDAO = UserDAO()) {
+    func getCurrentEventBeer(request: HTTPRequest, response: HTTPResponse, event: EventDAO = EventDAO(), eventBeer: EventBeerDAO = EventBeerDAO(), user: UserDAO = UserDAO()) {
         
         guard let eventId = Int(request.urlVariables["id"] ?? "0"), eventId > 0 else {
             response.completed(status: .badRequest)
@@ -312,7 +312,7 @@ class EventController {
         
     }
     
-    func vote(request: HTTPRequest, response: HTTPResponse, event: EventDAO = EventDAO(), vote: Vote = Vote(), userDataHandler: UserDataHandler = UserDataHandler(), eventBeer: EventBeer = EventBeer(), attendee: AttendeeDAO = AttendeeDAO()) {
+    func vote(request: HTTPRequest, response: HTTPResponse, event: EventDAO = EventDAO(), vote: Vote = Vote(), userDataHandler: UserDataHandler = UserDataHandler(), eventBeer: EventBeerDAO = EventBeerDAO(), attendee: AttendeeDAO = AttendeeDAO()) {
         
         guard let eventId = Int(request.urlVariables["id"] ?? "0"), eventId > 0 else {
             response.completed(status: .badRequest)
@@ -389,7 +389,7 @@ class EventController {
         }
     }
     
-    func end(event: EventDAO, pouredBeers: [EventBeer], beer: Beer = Beer()) throws {
+    func end(event: EventDAO, pouredBeers: [EventBeerDAO], beer: Beer = Beer()) throws {
         guard !event.isOver else { return }
         
         event.isOver = true

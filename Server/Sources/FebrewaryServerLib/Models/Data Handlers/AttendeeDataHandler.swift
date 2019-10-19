@@ -46,6 +46,14 @@ class AttendeeDataHandler {
         return attendeeDAO.rows().map( { Attendee(attendeeDAO: $0) } )
     }
     
+    func attendees(fromEventId eventId: Int, attendeeDAO: AttendeeDAO = AttendeeDAO()) -> [Attendee] {
+        try? attendeeDAO.find(by: [("eventid", eventId)])
+        
+        guard attendeeDAO.rows().count > 0 else { return [] }
+        
+        return attendeeDAO.rows().map( { Attendee(attendeeDAO: $0) } )
+    }
+    
     func save(attendee: inout Attendee, attendeeDAO: AttendeeDAO = AttendeeDAO()) throws {
         try attendeeDAO.store { id in
             attendeeDAO.id = id as! Int
