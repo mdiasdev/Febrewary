@@ -79,7 +79,24 @@ class EventControllerTests: XCTestCase {
     }
     
     // MARK: - Get Event For Current User
-    
+    func test_getEventForUser_respondsEmpty_whenNoAttendeesFound() {
+        let fakeRequest = FakeRequestBuilder.request(withToken: try! validAuthToken())
+        let spyResponse = SpyResponse()
+        let fakeUserDataHandler = FakeUserDataHander()
+        let fakeAttendeeDataHandler = FakeNoneAttendeeDataHandler()
+        
+        EventController().getEventForUser(request: fakeRequest,
+                                          response: spyResponse,
+                                          userDataHandler: fakeUserDataHandler,
+                                          events: EventDAO(),
+                                          attendeeDataHandler: fakeAttendeeDataHandler)
+        
+        if let string = String(bytes: spyResponse.bodyBytes, encoding: .utf8) {
+            XCTAssertEqual(string, "[]")
+        } else {
+            XCTFail("not a valid UTF-8 sequence")
+        }
+    }
     
     // MARK: - Test Helpers
     func getCreateEventPostBodyMissingName() -> String {
@@ -114,9 +131,13 @@ class EventControllerTests: XCTestCase {
         """
     }
     
+    // MARK: - Test Doubles
     class SpyAttendeeDataHandler: AttendeeDataHandler {
         var didCallSave = false
         
+        override func attendee(fromEventId eventId: Int, andUserId userId: Int, attendeeDAO: AttendeeDAO = AttendeeDAO()) throws -> Attendee {
+            return Attendee(attendeeDAO: MockSingleAttendeeDAO())
+        }
         override func save(attendee: inout Attendee, attendeeDAO: AttendeeDAO = AttendeeDAO()) throws {
             didCallSave = true
         }
@@ -137,6 +158,12 @@ class EventControllerTests: XCTestCase {
         
         override func save(event: inout Event, eventDAO: EventDAO = EventDAO()) throws {
             event.id = id
+        }
+    }
+    
+    class FakeNoneAttendeeDataHandler: AttendeeDataHandler {
+        override func attendees(fromUserId userId: Int, attendeeDAO: AttendeeDAO = AttendeeDAO()) throws -> [Attendee] {
+            return []
         }
     }
 }

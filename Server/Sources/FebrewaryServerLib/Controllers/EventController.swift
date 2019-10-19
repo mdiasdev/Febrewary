@@ -39,30 +39,19 @@ class EventController {
         }
     }
     
-    func getEvent(request: HTTPRequest, response: HTTPResponse) {
-        guard let id = Int(request.urlVariables["id"] ?? "0"), id > 0 else {
-            response.completed(status: .badRequest)
-            return
-        }
-        
-        // FIXME: implement?
-        response.completed(status: .notFound)
-    }
-    
-    func getEventForUser(request: HTTPRequest, response: HTTPResponse, userDataHandler: UserDataHandler = UserDataHandler(), events: EventDAO = EventDAO(), attendees: AttendeeDAO = AttendeeDAO()) {
+    func getEventForUser(request: HTTPRequest, response: HTTPResponse, userDataHandler: UserDataHandler = UserDataHandler(), events: EventDAO = EventDAO(), attendeeDataHandler: AttendeeDataHandler = AttendeeDataHandler()) {
         
         do {
             let user = try userDataHandler.user(from: request)
+            let attendees = try attendeeDataHandler.attendees(fromUserId: user.id)
             
-            try attendees.find(by: [("userid", user.id)])
-            
-            guard attendees.rows().count > 0 else {
+            guard attendees.count > 0 else {
                 try response.setBody(json: [])
                             .completed(status: .ok)
                 return
             }
             
-            let query = "id IN (\(attendees.rows().compactMap { "\($0.eventId)" }.toString()))"
+            let query = "id IN (\(attendees.compactMap { "\($0.eventId)" }.toString()))"
             try? events.search(whereClause: query, params: [], orderby: ["id"])
             
             var responseJson = [[String: Any]]()
@@ -77,8 +66,6 @@ class EventController {
         } catch {
             response.completed(status: .internalServerError)
         }
-        
-        response.completed(status: .internalServerError)
     }
     
     func addEventBeer(request: HTTPRequest, response: HTTPResponse, userDataHandler: UserDataHandler = UserDataHandler(), event: EventDAO = EventDAO(), eventBeer: EventBeer = EventBeer(), attendee: AttendeeDAO = AttendeeDAO()) {
