@@ -88,11 +88,31 @@ class EventControllerTests: XCTestCase {
         EventController().getEventForUser(request: fakeRequest,
                                           response: spyResponse,
                                           userDataHandler: fakeUserDataHandler,
-                                          events: EventDAO(),
                                           attendeeDataHandler: fakeAttendeeDataHandler)
         
         if let string = String(bytes: spyResponse.bodyBytes, encoding: .utf8) {
             XCTAssertEqual(string, "[]")
+        } else {
+            XCTFail("not a valid UTF-8 sequence")
+        }
+    }
+    
+    func test_getEventForUser_respondsWithEventsJson_whenUserHaveEvents() {
+        let fakeRequest = FakeRequestBuilder.request(withToken: try! validAuthToken())
+        let spyResponse = SpyResponse()
+        let fakeUserDataHandler = FakeUserDataHander()
+        let fakeAttendeeDataHandler = FakeAttendeeDataHandler()
+        let fakeEventDataHandler = FakeEventDataHandler()
+        let expectedString = "[\n  {\n    \"isOver\" : false,\n    \"pourerId\" : 0,\n    \"address\" : \"here\",\n    \"id\" : 0,\n    \"date\" : \"tomorrow\",\n    \"hasStarted\" : false,\n    \"createdBy\" : 1,\n    \"name\" : \"Something fun\"\n  },\n  {\n    \"isOver\" : false,\n    \"pourerId\" : 0,\n    \"address\" : \"there\",\n    \"id\" : 0,\n    \"date\" : \"the next day\",\n    \"hasStarted\" : false,\n    \"createdBy\" : 1,\n    \"name\" : \"Something else fun\"\n  }\n]"
+        
+        EventController().getEventForUser(request: fakeRequest,
+                                          response: spyResponse,
+                                          userDataHandler: fakeUserDataHandler,
+                                          eventDataHandler: fakeEventDataHandler,
+                                          attendeeDataHandler: fakeAttendeeDataHandler)
+        
+        if let string = String(bytes: spyResponse.bodyBytes, encoding: .utf8) {
+            XCTAssertEqual(string, expectedString)
         } else {
             XCTFail("not a valid UTF-8 sequence")
         }
@@ -156,6 +176,13 @@ class EventControllerTests: XCTestCase {
             return Event(name: "Fun Times", date: "Tomorrow", address: "my place", createdBy: 1)
         }
         
+        override func events(fromAttendees attendees: [Attendee], eventDAO: EventDAO = EventDAO()) throws -> [Event] {
+            return [
+                Event(name: "Something fun", date: "tomorrow", address: "here", createdBy: 1),
+                Event(name: "Something else fun", date: "the next day", address: "there", createdBy: 1)
+            ]
+        }
+        
         override func save(event: inout Event, eventDAO: EventDAO = EventDAO()) throws {
             event.id = id
         }
@@ -164,6 +191,12 @@ class EventControllerTests: XCTestCase {
     class FakeNoneAttendeeDataHandler: AttendeeDataHandler {
         override func attendees(fromUserId userId: Int, attendeeDAO: AttendeeDAO = AttendeeDAO()) throws -> [Attendee] {
             return []
+        }
+    }
+    
+    class FakeAttendeeDataHandler: AttendeeDataHandler {
+        override func attendees(fromUserId userId: Int, attendeeDAO: AttendeeDAO = AttendeeDAO()) throws -> [Attendee] {
+            return [Attendee(id: 1, eventId: 1, eventBeerId: 1, userId: 1)]
         }
     }
 }

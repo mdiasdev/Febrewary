@@ -39,7 +39,7 @@ class EventController {
         }
     }
     
-    func getEventForUser(request: HTTPRequest, response: HTTPResponse, userDataHandler: UserDataHandler = UserDataHandler(), events: EventDAO = EventDAO(), attendeeDataHandler: AttendeeDataHandler = AttendeeDataHandler()) {
+    func getEventForUser(request: HTTPRequest, response: HTTPResponse, userDataHandler: UserDataHandler = UserDataHandler(), eventDataHandler: EventDataHandler = EventDataHandler(), attendeeDataHandler: AttendeeDataHandler = AttendeeDataHandler()) {
         
         do {
             let user = try userDataHandler.user(from: request)
@@ -51,16 +51,9 @@ class EventController {
                 return
             }
             
-            let query = "id IN (\(attendees.compactMap { "\($0.eventId)" }.toString()))"
-            try? events.search(whereClause: query, params: [], orderby: ["id"])
-            
-            var responseJson = [[String: Any]]()
-            
-            for event in events.rows() {
-                responseJson.append(event.asDictionary())
-            }
-            
-            try response.setBody(json: responseJson)
+            let events = try eventDataHandler.events(fromAttendees: attendees)
+        
+            try response.setBody(string: eventDataHandler.jsonArray(from: events))
                         .completed(status: .ok)
             
         } catch {

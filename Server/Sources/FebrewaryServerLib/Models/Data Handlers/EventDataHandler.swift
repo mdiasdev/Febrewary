@@ -30,6 +30,17 @@ struct Event: Codable {
         self = Event(name: "", date: "", address: "", createdBy: 0)
     }
     
+    fileprivate init(eventDAO: EventDAO) {
+        self.id = eventDAO.id
+        self.name = eventDAO.name
+        self.address = eventDAO.address
+        self.date = eventDAO.date
+        self.createdBy = eventDAO.createdBy
+        self.pourerId = eventDAO.pourerId
+        self.isOver = eventDAO.isOver
+        self.hasStarted = eventDAO.hasStarted
+    }
+    
     fileprivate init(request: HTTPRequest, by user: User) throws {
         guard let postBody = try? request.postBodyString?.jsonDecode() as? [String: Any],
               let json = postBody else {
@@ -60,6 +71,14 @@ class EventDataHandler {
         return try Event(request: request, by: user)
     }
     
+    func events(fromAttendees attendees: [Attendee], eventDAO: EventDAO = EventDAO()) throws -> [Event] {
+        let query = "id IN (\(attendees.compactMap { "\($0.eventId)" }.toString()))"
+        
+        try eventDAO.search(whereClause: query, params: [], orderby: ["id"])
+        
+        return eventDAO.rows().map( { Event(eventDAO: $0) } )
+    }
+    
     func save(event: inout Event, eventDAO: EventDAO = EventDAO()) throws {
         eventDAO.id = event.id
         eventDAO.name = event.name
@@ -80,6 +99,17 @@ class EventDataHandler {
         let encoder = JSONEncoder()
         encoder.outputFormatting = .prettyPrinted
         let jsonData = try encoder.encode(event)
+        guard let jsonString = String(data: jsonData, encoding: .utf8) else {
+            throw DatabaseError()
+        }
+        
+        return jsonString
+    }
+    
+    func jsonArray(from events: [Event]) throws -> String {
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = .prettyPrinted
+        let jsonData = try encoder.encode(events)
         guard let jsonString = String(data: jsonData, encoding: .utf8) else {
             throw DatabaseError()
         }
