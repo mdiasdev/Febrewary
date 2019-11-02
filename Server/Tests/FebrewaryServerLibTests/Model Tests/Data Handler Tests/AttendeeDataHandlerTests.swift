@@ -17,6 +17,14 @@ class AttendeeDataHandlerTests: XCTestCase {
         ("test_attendeeFromEventAndUserIds_throws_whenNoneInTheDatabase", test_attendeeFromEventAndUserIds_throws_whenNoneInTheDatabase),
         ("test_attendeeFromEventAndUserIds_throws_whenManyInTheDatabase", test_attendeeFromEventAndUserIds_throws_whenManyInTheDatabase),
         ("test_attendeeFromUserId_returnsTwoAttendee_whenInDatabase", test_attendeeFromUserId_returnsTwoAttendee_whenInDatabase),
+        ("test_attendeesFromEventId_returnsEmpty_whenNoAttendeesAddedToEvent", test_attendeesFromEventId_returnsEmpty_whenNoAttendeesAddedToEvent),
+        ("test_attendeesFromEventId_returnsAttendees_whenInvitedToEvent", test_attendeesFromEventId_returnsAttendees_whenInvitedToEvent),
+        ("test_attendeeExistsByAttendeeId_returnsFalse_whenNoUserNotInvitedToEvent", test_attendeeExistsByAttendeeId_returnsFalse_whenNoUserNotInvitedToEvent),
+        ("test_attendeeExistsByAttendeeId_returnsFalse_whenManyAttendeeFound", test_attendeeExistsByAttendeeId_returnsFalse_whenManyAttendeeFound),
+        ("test_attendeeExistsByAttendeeId_returnsTrue_whenExactlyOneAttendeeFoundForId", test_attendeeExistsByAttendeeId_returnsTrue_whenExactlyOneAttendeeFoundForId),
+        ("test_attendeeExistsByUserIdAndEventId_returnsFalse_whenNoUserNotInvitedToEvent", test_attendeeExistsByUserIdAndEventId_returnsFalse_whenNoUserNotInvitedToEvent),
+        ("test_attendeeExistsByUserIdAndEventId_returnsFalse_whenManyAttendeeFound", test_attendeeExistsByUserIdAndEventId_returnsFalse_whenManyAttendeeFound),
+        ("test_attendeeExistsByUserIdAndEventId_returnsTrue_whenExactlyOneAttendeeFoundForId", test_attendeeExistsByUserIdAndEventId_returnsTrue_whenExactlyOneAttendeeFoundForId),
         ("test_attendeeFromUserId_throws_whenNoneInTheDatabase", test_attendeeFromUserId_throws_whenNoneInTheDatabase)
     ]
     
@@ -34,7 +42,7 @@ class AttendeeDataHandlerTests: XCTestCase {
         super.tearDown()
     }
 
-    // MARK: attendee from eventId and userId
+    // MARK: - attendee from eventId and userId
     func test_attendeeFromEventAndUserIds_returnsAttendee_whenOneInTheDatabase() {
         let mockAttendeeDAO = MockSingleAttendeeDAO()
         
@@ -71,7 +79,7 @@ class AttendeeDataHandlerTests: XCTestCase {
         }
     }
     
-    // MARK: attendees from userId
+    // MARK: - attendees from userId
     func test_attendeeFromUserId_returnsTwoAttendee_whenInDatabase() {
         let mockAttendeeDAO = MockManyAttendeeDAO()
         
@@ -89,7 +97,61 @@ class AttendeeDataHandlerTests: XCTestCase {
         }
     }
     
-    // MARK: save attendee
+    // MARK: - attendees from eventId
+    func test_attendeesFromEventId_returnsEmpty_whenNoAttendeesAddedToEvent() {
+        let attendees = sut.attendees(fromEventId: 1, attendeeDAO: MockNoAttendeeDAO())
+        
+        XCTAssertEqual(0, attendees.count)
+    }
+    
+    func test_attendeesFromEventId_returnsAttendees_whenInvitedToEvent() {
+        let attendees = sut.attendees(fromEventId: 1, attendeeDAO: MockManyAttendeeDAO())
+        
+        XCTAssertGreaterThan(attendees.count, 0)
+    }
+    
+    // MARK: - attendee existance
+    func test_attendeeExistsByAttendeeId_returnsFalse_whenNoUserNotInvitedToEvent() {
+        let attendeeExists = sut.attendeeExists(withId: 1, attendeeDAO: MockNoAttendeeDAO())
+        
+        XCTAssertFalse(attendeeExists)
+    }
+    
+    func test_attendeeExistsByAttendeeId_returnsFalse_whenManyAttendeeFound() {
+       let attendeeExists = sut.attendeeExists(withId: 1, attendeeDAO: MockManyAttendeeDAO())
+       
+       XCTAssertFalse(attendeeExists)
+        
+    }
+    
+    func test_attendeeExistsByAttendeeId_returnsTrue_whenExactlyOneAttendeeFoundForId() {
+       let attendeeExists = sut.attendeeExists(withId: 1, attendeeDAO: MockSingleAttendeeDAO())
+       
+       XCTAssertTrue(attendeeExists)
+        
+    }
+    
+    func test_attendeeExistsByUserIdAndEventId_returnsFalse_whenNoUserNotInvitedToEvent() {
+        let attendeeExists = sut.attendeeExists(withUserId: 1, inEventId: 1, attendeeDAO: MockNoAttendeeDAO())
+        
+        XCTAssertFalse(attendeeExists)
+    }
+    
+    func test_attendeeExistsByUserIdAndEventId_returnsFalse_whenManyAttendeeFound() {
+       let attendeeExists = sut.attendeeExists(withUserId: 1, inEventId: 1, attendeeDAO: MockManyAttendeeDAO())
+       
+       XCTAssertFalse(attendeeExists)
+        
+    }
+    
+    func test_attendeeExistsByUserIdAndEventId_returnsTrue_whenExactlyOneAttendeeFoundForId() {
+       let attendeeExists = sut.attendeeExists(withUserId: 1, inEventId: 1, attendeeDAO: MockSingleAttendeeDAO())
+       
+       XCTAssertTrue(attendeeExists)
+        
+    }
+    
+    // MARK: - save attendee
     func test_save_setsAttendeeId() {
         let mockAttendeeDAO = MockSingleAttendeeDAO()
         var attendee = Attendee(id: 0, eventId: 1, eventBeerId: 1, userId: 1)

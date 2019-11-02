@@ -55,7 +55,7 @@ class AttendeeDataHandler {
     }
     
     func attendeeExists(withId id: Int, attendeeDAO: AttendeeDAO = AttendeeDAO()) -> Bool {
-        try? attendeeDAO.find(by: ["id": id])
+        try? attendeeDAO.find(by: [("id", id)])
         
         guard attendeeDAO.rows().count == 1, let attendee = attendeeDAO.rows().first else { return false }
         
