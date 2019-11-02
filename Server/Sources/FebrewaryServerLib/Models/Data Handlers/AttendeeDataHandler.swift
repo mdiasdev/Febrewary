@@ -33,7 +33,7 @@ class AttendeeDataHandler {
         
         try attendeeDAO.find(by: [("userid", userId), ("eventid", eventId)])
         
-        guard attendeeDAO.rows().count == 1 else { throw DatabaseError() }
+        guard attendeeDAO.rows().count == 1 else { throw UserNotInvitedError() }
         
         return Attendee(attendeeDAO: attendeeDAO.rows().first!)
     }
@@ -52,6 +52,22 @@ class AttendeeDataHandler {
         guard attendeeDAO.rows().count > 0 else { return [] }
         
         return attendeeDAO.rows().map( { Attendee(attendeeDAO: $0) } )
+    }
+    
+    func attendeeExists(withId id: Int, attendeeDAO: AttendeeDAO = AttendeeDAO()) -> Bool {
+        try? attendeeDAO.find(by: ["id": id])
+        
+        guard attendeeDAO.rows().count == 1, let attendee = attendeeDAO.rows().first else { return false }
+        
+        return attendee.id != 0
+    }
+    
+    func attendeeExists(withUserId userId: Int, inEventId eventId: Int, attendeeDAO: AttendeeDAO = AttendeeDAO()) -> Bool {
+        try? attendeeDAO.find(by: [("userid", userId), ("eventid", eventId)])
+        
+        guard attendeeDAO.rows().count == 1, let attendee = attendeeDAO.rows().first else { return false }
+        
+        return attendee.id != 0
     }
     
     func save(attendee: inout Attendee, attendeeDAO: AttendeeDAO = AttendeeDAO()) throws {

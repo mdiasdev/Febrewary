@@ -57,7 +57,7 @@ class AttendeeDataHandlerTests: XCTestCase {
         XCTAssertThrowsError(try sut.attendee(fromEventId: 1,
                                               andUserId: 1,
                                               attendeeDAO: mockAttendeeDAO)) { error in
-            XCTAssertTrue(error is DatabaseError)
+            XCTAssertTrue(error is UserNotInvitedError)
         }
     }
     
@@ -67,7 +67,7 @@ class AttendeeDataHandlerTests: XCTestCase {
         XCTAssertThrowsError(try sut.attendee(fromEventId: 1,
                                               andUserId: 1,
                                               attendeeDAO: mockAttendeeDAO)) { error in
-            XCTAssertTrue(error is DatabaseError)
+            XCTAssertTrue(error is UserNotInvitedError)
         }
     }
     

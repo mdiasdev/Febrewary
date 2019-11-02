@@ -24,16 +24,33 @@ struct Event: Codable {
     var attendees: [Attendee] = []
     var eventBeers: [EventBeer] = []
     
-    init(name: String, date: String, address: String, createdBy: Int) {
+    init(id: Int = 0, name: String, date: String, address: String, createdBy: Int, pourerId: Int = 0, isOver: Bool = false, hasStarted: Bool = false, attendeeDataHandler: AttendeeDataHandler = AttendeeDataHandler(), eventBeerDataHandler: EventBeerDataHandler = EventBeerDataHandler()) {
+        self.id = id
         self.name = name
         self.address = address
         self.date = date
         self.createdBy = createdBy
+        self.pourerId = pourerId
+        self.isOver = isOver
+        self.hasStarted = hasStarted
+        
+        self.attendees = attendeeDataHandler.attendees(fromEventId: id)
+        self.eventBeers = eventBeerDataHandler.eventBeers(fromEventId: id)
     }
     
     fileprivate init(id: Int, eventDAO: EventDAO) throws {
-        // FIXME: Make this real
-        self = Event(name: "", date: "", address: "", createdBy: 0)
+        try eventDAO.find(by: ["id": id])
+        
+        guard eventDAO.rows().count == 1 else { throw DatabaseError() }
+        
+        self = Event(id: eventDAO.id,
+                     name: eventDAO.name,
+                     date: eventDAO.date,
+                     address: eventDAO.address,
+                     createdBy: eventDAO.createdBy,
+                     pourerId: eventDAO.pourerId,
+                     isOver: eventDAO.isOver,
+                     hasStarted: eventDAO.hasStarted)
     }
     
     fileprivate init(eventDAO: EventDAO, attendeeDataHandler: AttendeeDataHandler = AttendeeDataHandler(), eventBeerDataHandler: EventBeerDataHandler = EventBeerDataHandler()) {
@@ -78,6 +95,16 @@ class EventDataHandler {
     
     func event(from request: HTTPRequest, by user: User) throws -> Event {
         return try Event(request: request, by: user)
+    }
+    
+    func event(from request: HTTPRequest, eventDAO: EventDAO = EventDAO()) throws -> Event {
+        guard let id = Int(request.urlVariables["id"] ?? "0"), id > 0 else { throw MissingQueryError() }
+        
+        try eventDAO.find(by: [("id", id)])
+        
+        guard eventDAO.id > 0 else { throw EventNotFoundError() }
+        
+        return Event(eventDAO: eventDAO)
     }
     
     func events(fromAttendees attendees: [Attendee], eventDAO: EventDAO = EventDAO()) throws -> [Event] {

@@ -106,3 +106,21 @@ public struct DatabaseError: ServerError {
     var message: String = "Something went wrong."
     var code: Int = 500
 }
+
+public struct EventNotFoundError: ServerError {
+    var title: String = "Event Not Found"
+    var message: String = "An Event with this ID could not be found."
+    var code: Int = 404
+}
+
+public struct UserNotInvitedError: ServerError {
+    var title: String = "User Not Invited"
+    var message: String = "This user has not yet been invited to this event."
+    var code: Int = 404
+}
+
+public struct EventBeerExistsError: ServerError {
+    var title: String = "Cannot Add Beer to Event"
+    var message: String = "This User has already added a Beer to this Event."
+    var code: Int = 403
+}
