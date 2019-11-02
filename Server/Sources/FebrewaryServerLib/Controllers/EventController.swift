@@ -61,12 +61,7 @@ class EventController {
         }
     }
     
-    func addEventBeer(request: HTTPRequest, response: HTTPResponse, userDataHandler: UserDataHandler = UserDataHandler(), event: EventDAO = EventDAO(), eventBeer: EventBeerDAO = EventBeerDAO(), attendee: AttendeeDAO = AttendeeDAO()) {
-        
-        guard let id = Int(request.urlVariables["id"] ?? "0"), id > 0 else {
-            response.completed(status: .badRequest)
-            return
-        }
+    func addEventBeer(request: HTTPRequest, response: HTTPResponse, userDataHandler: UserDataHandler = UserDataHandler(), eventDataHandler: EventDataHandler = EventDataHandler(), eventBeerDataHandler: EventBeerDataHandler = EventBeerDataHandler(), attendeeDataHandler: AttendeeDataHandler = AttendeeDataHandler()) {
         
         guard let postBody = try? request.postBodyString?.jsonDecode() as? [String: Any],
               let json = postBody else {
@@ -76,6 +71,7 @@ class EventController {
         }
         
         guard let beerId = json["beerId"] as? Int else {
+            // FIXME: swap out with a real error
             response.setBody(string: "Missing data")
                     .completed(status: .badRequest)
             return
@@ -83,42 +79,16 @@ class EventController {
         
         do {
             let user = try userDataHandler.user(from: request)
+            let event = try eventDataHandler.event(from: request)
             
-            try event.find(by: [("id", id)])
+            guard attendeeDataHandler.attendeeExists(withUserId: user.id, inEventId: event.id) else { throw UserNotInvitedError() }
+            guard !eventBeerDataHandler.eventBeerExists(fromEventId: event.id, andUserId: user.id) else { throw EventBeerExistsError() }
             
-            guard event.id > 0 else {
-                response.setBody(string: "Could not find event with id: \(id).")
-                        .completed(status: .notFound)
-                return
-            }
+            var eventBeer = try EventBeer(userId: user.id, beerId: beerId, eventId: event.id)
+
+            try eventBeerDataHandler.save(eventBeer: &eventBeer)
             
-            try attendee.find(by: [("userid", user.id), ("eventid", event.id)])
-            guard attendee.rows().count > 0 else {
-                response.setBody(string: "User not invited")
-                        .completed(status: .unauthorized)
-                return
-            }
-            
-            try eventBeer.find(by: [
-                ("userId", user.id),
-                ("eventId", event.id)
-                ])
-            
-            guard eventBeer.id == 0 else {
-                response.setBody(string: "User has already added a beer to this event")
-                        .completed(status: .conflict)
-                return
-            }
-            
-            eventBeer.userId = user.id
-            eventBeer.beerId = beerId
-            eventBeer.eventId = event.id
-            
-            try eventBeer.store { id in
-                eventBeer.id = id as! Int
-            }
-            
-            try response.setBody(json: [String: Any]()).completed(status: .created)
+            response.setBody(string: "").completed(status: .created)
             
         } catch {
             response.completed(status: .internalServerError)
