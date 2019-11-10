@@ -26,7 +26,7 @@ struct User: Codable {
     }
     
     fileprivate init(id: Int, userDAO: UserDAO = UserDAO()) throws {
-        try userDAO.find(by: ["id": id])
+        try userDAO.find(by: [("id", id)])
         
         guard let dao = userDAO.rows().first, dao.id > 0 else { throw UserNotFoundError() }
         

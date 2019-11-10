@@ -39,7 +39,7 @@ struct Event: Codable {
     }
     
     fileprivate init(id: Int, eventDAO: EventDAO) throws {
-        try eventDAO.find(by: ["id": id])
+        try eventDAO.find(by: [("id", id)])
         
         guard eventDAO.rows().count == 1 else { throw DatabaseError() }
         
@@ -102,9 +102,9 @@ class EventDataHandler {
         
         try eventDAO.find(by: [("id", id)])
         
-        guard eventDAO.id > 0 else { throw EventNotFoundError() }
+        guard eventDAO.rows().count == 1, let event = eventDAO.rows().first, event.id > 0 else { throw EventNotFoundError() }
         
-        return Event(eventDAO: eventDAO)
+        return Event(eventDAO: event)
     }
     
     func events(fromAttendees attendees: [Attendee], eventDAO: EventDAO = EventDAO()) throws -> [Event] {

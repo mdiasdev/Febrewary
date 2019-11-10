@@ -29,6 +29,14 @@ struct Attendee: Codable {
 }
 
 class AttendeeDataHandler {
+    func createAttendee(fromEventId eventId: Int, andUserId userId: Int, attendeeDAO: AttendeeDAO = AttendeeDAO()) throws -> Attendee {
+        
+        attendeeDAO.userId = userId
+        attendeeDAO.eventId = eventId
+        
+        return Attendee(attendeeDAO: attendeeDAO)
+    }
+    
     func attendee(fromEventId eventId: Int, andUserId userId: Int, attendeeDAO: AttendeeDAO = AttendeeDAO()) throws -> Attendee {
         
         try attendeeDAO.find(by: [("userid", userId), ("eventid", eventId)])
@@ -71,6 +79,9 @@ class AttendeeDataHandler {
     }
     
     func save(attendee: inout Attendee, attendeeDAO: AttendeeDAO = AttendeeDAO()) throws {
+        attendeeDAO.userId = attendee.userId
+        attendeeDAO.eventId = attendee.eventId
+        
         try attendeeDAO.store { id in
             attendeeDAO.id = id as! Int
             attendee.id = id as! Int

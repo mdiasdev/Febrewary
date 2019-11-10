@@ -19,7 +19,6 @@ struct EventBeer: Codable {
     
     // FIXME: add embedded beer object
     var user: User
-    var event: Event
 //    var beer: Beer
     
     init(id: Int = 0, userId: Int, beerId: Int, eventId: Int, round: Int = 0, votes: Int =  0, score: Int = 0, isBeingPoured: Bool = false, userDataHander: UserDataHandler = UserDataHandler(), eventDataHandler: EventDataHandler = EventDataHandler()) throws {
@@ -34,7 +33,6 @@ struct EventBeer: Codable {
         self.isBeingPoured = isBeingPoured
         
         self.user = try userDataHander.user(from: userId)
-        self.event = try eventDataHandler.event(from: eventId)
     }
     
     fileprivate init(eventBeerDAO: EventBeerDAO) throws {

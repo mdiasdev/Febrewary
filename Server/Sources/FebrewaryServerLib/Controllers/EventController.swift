@@ -11,7 +11,7 @@ class EventController {
             try eventDataHandler.save(event: &event)
             
             if event.id > 0 {
-                var attendee = try attendeeDataHandler.attendee(fromEventId: event.id, andUserId: user.id)
+                var attendee = try attendeeDataHandler.createAttendee(fromEventId: event.id, andUserId: user.id)
                 try attendeeDataHandler.save(attendee: &attendee)
             } else {
                 throw DatabaseError()

@@ -15,9 +15,15 @@ class EventDataHandlerTests: XCTestCase {
         ("test_eventFromRequest_returnsEvent_whenAllPropertiesPresent", test_eventFromRequest_returnsEvent_whenAllPropertiesPresent),
         ("test_eventFromRequest_doesNotThrow_whenAllPropertiesPresent", test_eventFromRequest_doesNotThrow_whenAllPropertiesPresent),
         ("test_eventFromRequest_throwsMalformedJSONError_whenNoPostBody", test_eventFromRequest_throwsMalformedJSONError_whenNoPostBody),
-        ("test_jsonFromEvent_returnsEventAsJSONString", test_jsonFromEvent_returnsEventAsJSONString),
+        ("test_eventFromRequest_throwsMissingPropertyError_whenMissingAProperty", test_eventFromRequest_throwsMissingPropertyError_whenMissingAProperty),
+        ("test_eventFromRequest_throwsMissingQueryError_whenEventIdNotInURL", test_eventFromRequest_throwsMissingQueryError_whenEventIdNotInURL),
+        ("test_eventFromRequest_throwsEventNotFoundError_whenEventForIdNotFoundInDatabase", test_eventFromRequest_throwsEventNotFoundError_whenEventForIdNotFoundInDatabase),
+        ("test_eventFromRequest_returnsEvent_whenEventFoundInDatabase", test_eventFromRequest_returnsEvent_whenEventFoundInDatabase),
         ("test_save_setsEventID_afterSaving", test_save_setsEventID_afterSaving),
+        
         ("test_eventsFromAttendees_returnsArrayOfEvents_whenFoundInDatabase", test_eventsFromAttendees_returnsArrayOfEvents_whenFoundInDatabase),
+        
+        ("test_jsonFromEvent_returnsEventAsJSONString", test_jsonFromEvent_returnsEventAsJSONString),
         ("test_jsonArrayFromEvents_returnsEventsAsJSONString", test_jsonArrayFromEvents_returnsEventsAsJSONString)
     ]
 
@@ -61,11 +67,50 @@ class EventDataHandlerTests: XCTestCase {
     // MARK: - events from attendees
     func test_eventsFromAttendees_returnsArrayOfEvents_whenFoundInDatabase() {
         let attendees = [Attendee(id: 1, eventId: 1, eventBeerId: 1, userId: 1)]
-        let mockEventDAO = MockEventDAO()
+        let mockEventDAO = MockManyEventDAO()
         
         let expectedEvents = try! EventDataHandler().events(fromAttendees: attendees, eventDAO: mockEventDAO)
         
         XCTAssertEqual(2, expectedEvents.count)
+    }
+    
+    func test_eventFromRequest_throwsMissingQueryError_whenEventIdNotInURL() {
+        let fakeRequest = FakeRequest()
+        fakeRequest.path = "/event/beer"
+        
+        XCTAssertThrowsError(try EventDataHandler().event(from: fakeRequest)) { error in
+            XCTAssertTrue(error is MissingQueryError)
+        }
+    }
+    
+    func test_eventFromRequest_throwsEventNotFoundError_whenEventForIdNotFoundInDatabase() {
+        let fakeRequest = FakeRequest()
+        fakeRequest.path = "/event/1/beer"
+        fakeRequest.urlVariables = ["id": "1"]
+        let eventDAO = MockNoEventDAO()
+        
+        XCTAssertThrowsError(try EventDataHandler().event(from: fakeRequest, eventDAO: eventDAO)) { error in
+            XCTAssertTrue(error is EventNotFoundError)
+        }
+    }
+    
+    func test_eventFromRequest_returnsEvent_whenEventFoundInDatabase() {
+        let fakeRequest = FakeRequest()
+        fakeRequest.path = "/event/1/beer"
+        fakeRequest.urlVariables = ["id": "1"]
+        let eventDAO = MockSingleEventDAO()
+        
+        XCTAssertNoThrow(try EventDataHandler().event(from: fakeRequest, eventDAO: eventDAO))
+    }
+    
+    func test_eventFromId_throwsDatabaseError_whenEventNotFoundInDatabase() {
+        XCTAssertThrowsError(try EventDataHandler().event(from: 1, eventDAO: MockNoEventDAO())) { error in
+            XCTAssertTrue(error is DatabaseError)
+        }
+    }
+    
+    func test_eventFromId_returnsEvent_whenFoundInDatabase() {
+        XCTAssertNoThrow(try EventDataHandler().event(from: 1, eventDAO: MockSingleEventDAO()))
     }
     
     // MARK: - Save
