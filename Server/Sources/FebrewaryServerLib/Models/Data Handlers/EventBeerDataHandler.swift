@@ -21,7 +21,7 @@ struct EventBeer: Codable {
     var user: User
 //    var beer: Beer
     
-    init(id: Int = 0, userId: Int, beerId: Int, eventId: Int, round: Int = 0, votes: Int =  0, score: Int = 0, isBeingPoured: Bool = false, userDataHander: UserDataHandler = UserDataHandler(), eventDataHandler: EventDataHandler = EventDataHandler()) throws {
+    init(id: Int = 0, userId: Int, beerId: Int, eventId: Int, round: Int = 0, votes: Int =  0, score: Int = 0, isBeingPoured: Bool = false, userDataHandler: UserDataHandler = UserDataHandler()) throws {
         
         self.id = id
         self.userId = userId
@@ -32,10 +32,10 @@ struct EventBeer: Codable {
         self.score = score
         self.isBeingPoured = isBeingPoured
         
-        self.user = try userDataHander.user(from: userId)
+        self.user = try userDataHandler.user(from: userId)
     }
     
-    fileprivate init(eventBeerDAO: EventBeerDAO) throws {
+    fileprivate init(eventBeerDAO: EventBeerDAO, userDataHandler: UserDataHandler = UserDataHandler()) throws {
         self = try EventBeer(id: eventBeerDAO.id,
                              userId: eventBeerDAO.userId,
                              beerId: eventBeerDAO.beerId,
@@ -43,16 +43,18 @@ struct EventBeer: Codable {
                              round: eventBeerDAO.round,
                              votes: eventBeerDAO.votes,
                              score: eventBeerDAO.score,
-                             isBeingPoured: eventBeerDAO.isBeingPoured)
+                             isBeingPoured: eventBeerDAO.isBeingPoured,
+                             userDataHandler: userDataHandler
+        )
     }
 }
 
 class EventBeerDataHandler {
-    func eventBeers(fromEventId eventId: Int, eventBeerDAO: EventBeerDAO = EventBeerDAO()) -> [EventBeer] {
+    func eventBeers(fromEventId eventId: Int, eventBeerDAO: EventBeerDAO = EventBeerDAO(), userDataHandler: UserDataHandler = UserDataHandler()) -> [EventBeer] {
         
         try? eventBeerDAO.find(by: [("eventid", eventId)])
         
-        return eventBeerDAO.rows().compactMap({ try? EventBeer(eventBeerDAO: $0) })
+        return eventBeerDAO.rows().compactMap({ try? EventBeer(eventBeerDAO: $0, userDataHandler: userDataHandler) })
     }
     
     func eventBeerExists(fromEventId eventId: Int, andUserId userId: Int, eventBeerDAO: EventBeerDAO = EventBeerDAO()) -> Bool {
@@ -68,7 +70,7 @@ class EventBeerDataHandler {
     }
     
     func save(eventBeer: inout EventBeer, eventBeerDAO: EventBeerDAO = EventBeerDAO()) throws {
-        try eventBeerDAO.store { id in
+        try eventBeerDAO.save { id in
             eventBeerDAO.id = id as! Int
             eventBeer.id = id as! Int
         }

@@ -59,4 +59,8 @@ class MockSingleEventDAO: EventDAO {
         
         self.results.rows = [row1]
     }
+    
+    override func save(set: (Any) -> Void) throws {
+        set(1)
+    }
 }
