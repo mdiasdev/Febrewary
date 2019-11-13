@@ -97,68 +97,42 @@ class EventController {
         }
     }
     
-    func addAttendee(request: HTTPRequest, response: HTTPResponse, user: UserDAO = UserDAO(), event: EventDAO = EventDAO(), attendee: AttendeeDAO = AttendeeDAO()) {
-
-        guard let eventId = Int(request.urlVariables["id"] ?? "0"), eventId > 0 else {
-            response.completed(status: .badRequest)
-            return
-        }
+    func addAttendee(request: HTTPRequest, response: HTTPResponse, userDataHandler: UserDataHandler = UserDataHandler(), eventDataHandler: EventDataHandler = EventDataHandler(), attendeeDataHandler: AttendeeDataHandler = AttendeeDataHandler()) {
         
         guard let postBody = try? request.postBodyString?.jsonDecode() as? [String: Any],
             let json = postBody else {
-                response.setBody(string: "Bad Request: malformed json")
-                        .completed(status: .badRequest)
+                response.completed(with: MalformedJSONError())
                 return
         }
         
         guard let userId = json["userId"] as? Int,
               let isPourer = json["isPourer"] as? Bool else {
-            response.setBody(string: "Missing data")
-                    .completed(status: .badRequest)
+            response.completed(with: MissingPropertyError())
             return
         }
         
         do {
-            try user.find(by: [("id", userId)]) // MATT RIGHT HERE
-            guard user.id > 0 else {
-                response.setBody(string: "Could not find user")
-                        .completed(status: .notFound)
-                return
-            }
-            
-            try event.find(by: [("id", eventId)])
-            guard event.id > 0 else {
-                response.setBody(string: "Could not find event")
-                        .completed(status: .notFound)
-                return
-            }
-            
-            if isPourer && event.pourerId == 0 {
-                event.pourerId = user.id
-                try event.store()
-            } else if isPourer && event.pourerId > 0 {
-                response.setBody(string: "Event already has a pourer")
-                        .completed(status: .conflict)
-                return
-            }
-            
-            try attendee.find(by: [("userid", user.id), ("eventid", event.id)])
-            guard attendee.id == 0 else {
-                response.setBody(string: "Person already invited")
-                        .completed(status: .notFound)
-                return
-            }
-            
+            let user = try userDataHandler.user(from: userId)
+            var event = try eventDataHandler.event(from: request)
+            var attendee = try attendeeDataHandler.attendee(fromEventId: event.id, andUserId: user.id)
+
             attendee.eventId = event.id
             attendee.userId = user.id
             
-            try attendee.store { id in
-                attendee.id = id as! Int
+            try attendeeDataHandler.save(attendee: &attendee)
+            
+            if isPourer && event.pourerId == 0 {
+                event.pourerId = user.id
+                try eventDataHandler.save(event: &event)
+            } else if isPourer && event.pourerId > 0 {
+                response.completed(with: PourerConflictError())
+                return
             }
             
-            try response.setBody(json: [String: Any]()).completed(status: .created)
+            response.setBody(string: "").completed(status: .created)
             
         } catch {
+            // FIXME: Catch all the errors
             response.completed(status: .internalServerError)
         }
     }
@@ -243,7 +217,7 @@ class EventController {
             try response.setBody(json: payload).completed(status: .ok)
             
         } catch {
-            // FIXME: error handling
+            // FIXME: Catch all the errors
             print("do something in a minute")
         }
     }
@@ -279,6 +253,7 @@ class EventController {
             
             try response.setBody(json: payload).completed(status: .ok)
         } catch {
+            // FIXME: Catch all the errors
             response.completed(status: .internalServerError)
         }
         
@@ -357,6 +332,7 @@ class EventController {
             try currentBeer.store()
             
         } catch {
+            // FIXME: Catch all the errors
             response.completed(status: .internalServerError)
         }
     }

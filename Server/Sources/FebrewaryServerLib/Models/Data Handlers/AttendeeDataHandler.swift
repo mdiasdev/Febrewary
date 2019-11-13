@@ -43,7 +43,9 @@ class AttendeeDataHandler {
         
         guard attendeeDAO.rows().count == 1 else { throw UserNotInvitedError() }
         
-        return Attendee(attendeeDAO: attendeeDAO.rows().first!)
+        guard let attendee = attendeeDAO.rows().first, attendee.id > 0 else { throw InvitationConflictError() }
+        
+        return Attendee(attendeeDAO: attendee)
     }
     
     func attendees(fromUserId userId: Int, attendeeDAO: AttendeeDAO = AttendeeDAO()) throws -> [Attendee] {

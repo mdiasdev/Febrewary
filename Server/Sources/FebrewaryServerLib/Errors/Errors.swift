@@ -124,3 +124,15 @@ public struct EventBeerExistsError: ServerError {
     var message: String = "This User has already added a Beer to this Event."
     var code: Int = 403
 }
+
+public struct PourerConflictError: ServerError {
+    var title: String = "Pourer Conflict"
+    var message: String = "This Event already has a designated Pourer."
+    var code: Int = 409
+}
+
+public struct InvitationConflictError: ServerError {
+    var title: String = "Invitation Conflict"
+    var message: String = "This Useris already invited to the Event."
+    var code: Int = 409
+}
