@@ -137,13 +137,8 @@ class EventController {
         }
     }
     
-    func pourEventBeer(request: HTTPRequest, response: HTTPResponse, event: EventDAO = EventDAO(), userDataHandler: UserDataHandler = UserDataHandler(), eventBeer: EventBeerDAO = EventBeerDAO(), attendee: AttendeeDAO = AttendeeDAO()) {
-        
-        guard let eventId = Int(request.urlVariables["id"] ?? "0"), eventId > 0 else {
-            response.completed(status: .badRequest)
-            return
-        }
-        
+    func pourEventBeer(request: HTTPRequest, response: HTTPResponse, eventDataHandler: EventDataHandler = EventDataHandler(), userDataHandler: UserDataHandler = UserDataHandler(), eventBeerDataHandler: EventBeerDataHandler = EventBeerDataHandler(), attendeeDataHandler: AttendeeDataHandler = AttendeeDataHandler()) {
+
         var shouldForcePour = false
         
         if let isForced = request.queryParamsAsDictionary()["force"] {
@@ -152,55 +147,46 @@ class EventController {
         
         do {
             let user = try userDataHandler.user(from: request)
-            try event.find(by: [("id", eventId)])
+            var event = try eventDataHandler.event(from: request)
             
-            guard event.id > 0 else {
-                response.setBody(string: "Could not find event with id: \(eventId)")
-                        .completed(status: .badRequest)
+            guard event.pourerId == user.id else {
+                response.completed(with: UnauthorizedPourerError())
                 return
             }
             
-            guard event.pourerId == user.id else {
-                response.setBody(string: "Unauthorized")
-                    .completed(status: .unauthorized)
+            let attendees = attendeeDataHandler.attendees(fromEventId: event.id)
+
+            guard attendees.count > 1 else {
+                response.completed(with: NotEnoughAttendeesError())
                 return
             }
             
             if !event.hasStarted {
                 event.hasStarted = true
-                try event.store()
+                try eventDataHandler.save(event: &event)
             }
             
-            try attendee.find(by: [("eventId", eventId)])
-            guard attendee.rows().count > 1 else {
-                response.setBody(string: "Event must have more than one attendee")
-                        .completed(status: .badRequest)
+            let eventBeers = eventBeerDataHandler.eventBeers(fromEventId: event.id)
+            
+            guard eventBeers.count > 0 else {
+                response.completed(with: NoEventBeersError())
                 return
             }
             
-            try eventBeer.find(by: [("eventid", eventId)])
-            
-            guard eventBeer.rows().count > 0 else {
-                response.setBody(string: "No beers added to event \(eventId)")
-                        .completed(status: .notFound)
-                return
-            }
-            
-            if let currentlyPouringEventBeer = eventBeer.rows().first(where: { $0.isBeingPoured }) {
-                if currentlyPouringEventBeer.votes == attendee.rows().count - 1 || shouldForcePour { // -1 is to account for Pourer being an Attendee
+            if var currentlyPouringEventBeer = eventBeers.first(where: { $0.isBeingPoured }) {
+                if currentlyPouringEventBeer.votes == attendees.count - 1 || shouldForcePour { // -1 is to account for Pourer being an Attendee
                     currentlyPouringEventBeer.isBeingPoured = false
-                    try currentlyPouringEventBeer.store()
+                    try eventBeerDataHandler.save(eventBeer: &currentlyPouringEventBeer)
                 } else {
-                    response.setBody(string: "Warning: not all votes are in. Pass force if you still want to proceed.")
-                            .completed(status: .preconditionFailed)
+                    response.completed(with: VotingIncompleteError())
                     return
                 }
             }
             
-            let unpouredEventBeers = eventBeer.rows().filter { $0.round == 0 && $0.votes == 0 && !$0.isBeingPoured }
-            let pouredEventBeers = eventBeer.rows().filter { $0.round > 0 }.sorted(by: { $0.round > $1.round})
+            let unpouredEventBeers = eventBeers.filter { $0.round == 0 && $0.votes == 0 && !$0.isBeingPoured }
+            let pouredEventBeers = eventBeers.filter { $0.round > 0 }.sorted(by: { $0.round > $1.round})
             
-            guard unpouredEventBeers.count > 0, let randomBeer = unpouredEventBeers.randomElement() else {
+            guard unpouredEventBeers.count > 0, var randomBeer = unpouredEventBeers.randomElement() else {
                 try end(event: event, pouredBeers: pouredEventBeers)
                 
                 response.completed(status: .noContent)
@@ -210,11 +196,11 @@ class EventController {
             let lastRound = pouredEventBeers.last?.round ?? 0
             randomBeer.round = lastRound + 1
             randomBeer.isBeingPoured = true
-            try randomBeer.store()
+            try eventBeerDataHandler.save(eventBeer: &randomBeer)
             
-            let payload = randomBeer.asDictionary()
+            let payload = try eventBeerDataHandler.json(from: randomBeer)
             
-            try response.setBody(json: payload).completed(status: .ok)
+            response.setBody(string: payload).completed(status: .ok)
             
         } catch {
             // FIXME: Catch all the errors
@@ -337,28 +323,26 @@ class EventController {
         }
     }
     
-    func end(event: EventDAO, pouredBeers: [EventBeerDAO], beer: Beer = Beer()) throws {
+    func end(event: Event, eventDataHandler: EventDataHandler = EventDataHandler(), pouredBeers: [EventBeer], eventBeerDataHandler: EventBeerDataHandler = EventBeerDataHandler(), beerDataHandler: BeerDataHandler = BeerDataHandler()) throws {
+
         guard !event.isOver else { return }
-        
+
+        var event = event
         event.isOver = true
-        try event.store()
+        try eventDataHandler.save(event: &event)
         
-        for eventBeer in pouredBeers {
+        for var eventBeer in pouredBeers {
             if eventBeer.isBeingPoured {
                 eventBeer.isBeingPoured.toggle()
-                try eventBeer.store()
+                try eventBeerDataHandler.save(eventBeer: &eventBeer)
             }
             
-            try beer.find(by: [("id", eventBeer.beerId)])
-            
-            guard beer.id > 0 else {
-                throw StORMError.noRecordFound
-            }
+            var beer = try beerDataHandler.beer(with: eventBeer.beerId)
             
             beer.totalVotes += eventBeer.votes
             beer.totalScore += eventBeer.score
             
-            try beer.store()
+            try beerDataHandler.save(beer: &beer)
         }
     }
 }

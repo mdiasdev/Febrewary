@@ -75,4 +75,15 @@ class EventBeerDataHandler {
             eventBeer.id = id as! Int
         }
     }
+    
+    func json(from eventBeer: EventBeer) throws -> String {
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = .prettyPrinted
+        let jsonData = try encoder.encode(eventBeer)
+        guard let jsonString = String(data: jsonData, encoding: .utf8) else {
+            throw DatabaseError()
+        }
+        
+        return jsonString
+    }
 }

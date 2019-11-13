@@ -136,3 +136,27 @@ public struct InvitationConflictError: ServerError {
     var message: String = "This Useris already invited to the Event."
     var code: Int = 409
 }
+
+public struct NotEnoughAttendeesError: ServerError {
+    var title: String = "Not Enough Attendees"
+    var message: String = "And Event must have at least two Attendees before it can be started."
+    var code: Int = 400
+}
+
+public struct UnauthorizedPourerError: ServerError {
+    var title: String = "Unauthorized Pourer"
+    var message: String = "You are not allowed to pour beers at this event."
+    var code: Int = 401
+}
+
+public struct NoEventBeersError: ServerError {
+    var title: String = "No Event Beers"
+    var message: String = "There are not Beers added to this Event."
+    var code: Int = 404
+}
+
+public struct VotingIncompleteError: ServerError {
+    var title: String = "Voting Incomplete"
+    var message: String = "Warning: not all votes are in. You can force the roudn to end if you still want to proceed."
+    var code: Int = 412
+}
