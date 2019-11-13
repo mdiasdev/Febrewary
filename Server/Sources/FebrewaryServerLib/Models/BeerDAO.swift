@@ -2,7 +2,7 @@ import Foundation
 import StORM
 import PostgresStORM
 
-class Beer: DAO {
+class BeerDAO: DAO {
 
     var id: Int = 0
     var name: String = ""
@@ -25,15 +25,15 @@ class Beer: DAO {
         addedBy = this.data["addedby"] as? Int ?? 0
     }
 
-    func rows() -> [Beer] {
+    func rows() -> [BeerDAO] {
         let rows = self.results.rows
 
         guard !rows.isEmpty else { return [] }
 
-        var beers = [Beer]()
+        var beers = [BeerDAO]()
 
         for row in rows {
-            let beer = Beer()
+            let beer = BeerDAO()
             beer.to(row)
             beers.append(beer)
         }
@@ -43,7 +43,7 @@ class Beer: DAO {
 }
 
 // MARK: - Data Representation
-extension Beer {
+extension BeerDAO {
     func asDictionary() -> [String: Any] {
         var average = 0
         if totalVotes > 0 && totalScore > 0 {
@@ -64,14 +64,14 @@ extension Beer {
 }
 
 // MARK: - Equatable
-extension Beer: Equatable {
-    static func == (lhs: Beer, rhs: Beer) -> Bool {
+extension BeerDAO: Equatable {
+    static func == (lhs: BeerDAO, rhs: BeerDAO) -> Bool {
         return lhs.id == rhs.id
     }
 }
 
 // MARK: - Hashable
-extension Beer: Hashable {
+extension BeerDAO: Hashable {
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
     }

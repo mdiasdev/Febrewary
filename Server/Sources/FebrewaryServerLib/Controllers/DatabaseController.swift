@@ -13,7 +13,7 @@ public struct DatabaseController {
 
     // TODO: database error if fails to setup
     public static func registerTables() {
-        let beer = Beer()
+        let beer = BeerDAO()
         try? beer.setup()
 
         let event = EventDAO()

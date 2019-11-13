@@ -3,7 +3,7 @@ import StORM
 import Foundation
 
 class BeerController {
-    func addBeer(request: HTTPRequest, response: HTTPResponse, userDataHandler: UserDataHandler = UserDataHandler(), beer: Beer = Beer()) {
+    func addBeer(request: HTTPRequest, response: HTTPResponse, userDataHandler: UserDataHandler = UserDataHandler(), beer: BeerDAO = BeerDAO()) {
         do {
             
             let user = try userDataHandler.user(from: request)
@@ -54,7 +54,7 @@ class BeerController {
         }
     }
     
-    func beersForCurrentUser(request: HTTPRequest, response: HTTPResponse, userDataHandler: UserDataHandler = UserDataHandler(), beers: Beer = Beer(), eventBeers: EventBeerDAO = EventBeerDAO()) {
+    func beersForCurrentUser(request: HTTPRequest, response: HTTPResponse, userDataHandler: UserDataHandler = UserDataHandler(), beers: BeerDAO = BeerDAO(), eventBeers: EventBeerDAO = EventBeerDAO()) {
         
         do {
             let user = try userDataHandler.user(from: request)
@@ -62,7 +62,7 @@ class BeerController {
             try beers.find(by: [("addedBy", user.id)])
             try eventBeers.find(by: [("userid", user.id)])
             
-            let beerFromEventBeer = Beer()
+            let beerFromEventBeer = BeerDAO()
             
             let query = "id IN (\(eventBeers.rows().compactMap { "\($0.beerId)" }.toString()))"
             try beerFromEventBeer.search(whereClause: query, params: [], orderby: ["id"])
@@ -81,14 +81,14 @@ class BeerController {
         }
     }
     
-    func searchBeers(request: HTTPRequest, response: HTTPResponse, beers: Beer = Beer(), brewers: Beer = Beer()) {
+    func searchBeers(request: HTTPRequest, response: HTTPResponse, beers: BeerDAO = BeerDAO(), brewers: BeerDAO = BeerDAO()) {
         do {
             guard let query = request.queryParamsAsDictionary()["query"] else {
                 try response.setBody(json: MissingQueryError()).completed(status: .badRequest)
                 return
             }
             var responseJson = [[String: Any]]()
-            var uniqueBeers: Set<Beer> = []
+            var uniqueBeers: Set<BeerDAO> = []
             
             try beers.search(whereClause: "LOWER(name) ~ LOWER($1)", params: [query], orderby: ["name"])
             for beer in beers.rows() {
@@ -111,7 +111,7 @@ class BeerController {
         }
     }
 
-    func allBeers(request: HTTPRequest, response: HTTPResponse, beers: Beer = Beer()) {
+    func allBeers(request: HTTPRequest, response: HTTPResponse, beers: BeerDAO = BeerDAO()) {
         do {
             try beers.getAll()
             var responseJson: [[String: Any]] = []

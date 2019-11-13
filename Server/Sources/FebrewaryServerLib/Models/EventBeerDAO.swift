@@ -14,7 +14,7 @@ class EventBeerDAO: DAO {
     
     // MARK: embeded properties
     var _user: UserDAO?
-    var _beer: Beer?
+    var _beer: BeerDAO?
 
     override open func table() -> String { return "eventbeer" }
 
@@ -55,7 +55,7 @@ extension EventBeerDAO {
 
         _user = drinker
 
-        let beer = Beer()
+        let beer = BeerDAO()
         try? beer.get(self.beerId)
 
         guard let user = _user, beer.id > 0 else { return [:] }
