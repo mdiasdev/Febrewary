@@ -65,15 +65,12 @@ class EventController {
         
         guard let postBody = try? request.postBodyString?.jsonDecode() as? [String: Any],
               let json = postBody else {
-            response.setBody(string: "Bad Request: malformed json")
-                    .completed(status: .badRequest)
-            return
+                response.completed(with: MalformedJSONError())
+                return
         }
         
         guard let beerId = json["beerId"] as? Int else {
-            // FIXME: swap out with a real error
-            response.setBody(string: "Missing data")
-                    .completed(status: .badRequest)
+            response.completed(with: MissingPropertyError())
             return
         }
         
@@ -84,13 +81,18 @@ class EventController {
             guard attendeeDataHandler.attendeeExists(withUserId: user.id, inEventId: event.id) else { throw UserNotInvitedError() }
             guard !eventBeerDataHandler.eventBeerExists(fromEventId: event.id, andUserId: user.id) else { throw EventBeerExistsError() }
             
-            var eventBeer = try EventBeer(userId: user.id, beerId: beerId, eventId: event.id)
+            var eventBeer = try EventBeer(userId: user.id, beerId: beerId, eventId: event.id, userDataHandler: userDataHandler)
 
             try eventBeerDataHandler.save(eventBeer: &eventBeer)
             
             response.setBody(string: "").completed(status: .created)
             
+        } catch let error as UserNotInvitedError {
+            response.completed(with: error)
+        } catch let error as EventBeerExistsError {
+            response.completed(with: error)
         } catch {
+            // FIXME: Catch all the errors (user, event, eventBeer)
             response.completed(status: .internalServerError)
         }
     }
