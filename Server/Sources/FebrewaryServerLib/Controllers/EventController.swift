@@ -250,7 +250,7 @@ class EventController {
             var eventBeer = try eventBeerDataHandler.eventBeer(withId: voteEventBeerId, inEvent: event.id)
             
             guard attendeeDataHandler.attendeeExists(withUserId: user.id, inEventId: event.id) else { throw UserNotInvitedError() }
-            guard voteDataHandler.voteExists(forEventBeer: eventBeer.id, byUser: user.id, inEvent: event.id) else { throw VoteAlreadyCastError() }
+            guard !voteDataHandler.voteExists(forEventBeer: eventBeer.id, byUser: user.id, inEvent: event.id) else { throw VoteAlreadyCastError() }
             
             var vote = Vote(eventId: event.id, eventBeerId: eventBeer.id, userId: user.id, score: score)
             

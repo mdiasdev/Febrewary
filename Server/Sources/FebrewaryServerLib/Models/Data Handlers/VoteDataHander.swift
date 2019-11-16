@@ -18,8 +18,10 @@ struct Vote: Codable {
 class VoteDataHandler {
     func voteExists(forEventBeer eventBeerId: Int, byUser userId: Int, inEvent eventId: Int, voteDAO: VoteDAO = VoteDAO()) -> Bool {
         try? voteDAO.find(by: [("eventid", eventId), ("eventbeerid", eventBeerId), ("userid", userId)])
+        
+        guard let vote = voteDAO.rows().first else { return false }
 
-        return voteDAO.id > 0
+        return vote.id > 0
     }
     
     func save(vote: inout Vote, voteDAO: VoteDAO = VoteDAO()) throws {
@@ -28,7 +30,7 @@ class VoteDataHandler {
         voteDAO.userId = vote.userId
         voteDAO.score = vote.score
         
-        try voteDAO.store(set: { id in
+        try voteDAO.save(set: { id in
             vote.id = id as! Int
             voteDAO.id = id as! Int
         })
