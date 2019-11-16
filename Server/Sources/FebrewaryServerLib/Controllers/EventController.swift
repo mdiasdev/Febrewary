@@ -230,17 +230,15 @@ class EventController {
         
     }
     
-    func vote(request: HTTPRequest, response: HTTPResponse, eventDataHandler: EventDataHandler = EventDataHandler(), vote: Vote = Vote(), userDataHandler: UserDataHandler = UserDataHandler(), eventBeer: EventBeerDAO = EventBeerDAO(), attendee: AttendeeDAO = AttendeeDAO()) {
+    func vote(request: HTTPRequest, response: HTTPResponse, eventDataHandler: EventDataHandler = EventDataHandler(), voteDataHandler: VoteDataHandler = VoteDataHandler(), userDataHandler: UserDataHandler = UserDataHandler(), eventBeerDataHandler: EventBeerDataHandler = EventBeerDataHandler(), attendeeDataHandler: AttendeeDataHandler = AttendeeDataHandler()) {
         
-        guard let postBody = try? request.postBodyString?.jsonDecode() as? [String: Any],
-            let json = postBody else {
+        guard let postBody = try? request.postBodyString?.jsonDecode() as? [String: Any], let json = postBody else {
                 response.setBody(string: "Bad Request: malformed json")
                         .completed(status: .badRequest)
                 return
         }
         
-        guard let voteEventBeerId = json["eventBeerId"] as? Int,
-              let score = json["vote"] as? Int else {
+        guard let voteEventBeerId = json["eventBeerId"] as? Int, let score = json["vote"] as? Int else {
                 response.setBody(string: "Bad Request: missing required property")
                         .completed(status: .badRequest)
                 return
@@ -249,48 +247,21 @@ class EventController {
         do {
             let user = try userDataHandler.user(from: request)
             let event = try eventDataHandler.event(from: request)
+            var eventBeer = try eventBeerDataHandler.eventBeer(withId: voteEventBeerId, inEvent: event.id)
             
-            try attendee.find(by: [("eventid", event.id), ("userid", user.id)])
-            guard attendee.rows().count == 1 else {
-                response.setBody(string: "User not invited to this Event")
-                        .completed(status: .unauthorized)
-                return
-            }
+            guard attendeeDataHandler.attendeeExists(withUserId: user.id, inEventId: event.id) else { throw UserNotInvitedError() }
+            guard voteDataHandler.voteExists(forEventBeer: eventBeer.id, byUser: user.id, inEvent: event.id) else { throw VoteAlreadyCastError() }
             
-            try eventBeer.find(by: [("eventid", event.id), ("id", voteEventBeerId), ("isbeingpoured", true)])
-            guard eventBeer.rows().count == 1, let currentBeer = eventBeer.rows().first else {
-                response.setBody(string: "No beer in event \(event.id) is currently being poured")
-                    .completed(status: .notFound)
-                return
-            }
+            var vote = Vote(eventId: event.id, eventBeerId: eventBeer.id, userId: user.id, score: score)
             
-            guard currentBeer.id == voteEventBeerId else {
-                response.setBody(string: "Voting for this beer has ended. Please vote for next")
-                        .completed(status: .notFound)
-                return
-            }
-            
-            try vote.find(by: [("eventid", event.id), ("eventbeerid", eventBeer.id), ("userid", user.id)])
-            guard vote.id == 0 else {
-                response.setBody(string: "You have already voted for this beer! Please wait until the next round to vote again")
-                        .completed(status: .badRequest)
-                return
-            }
-            
-            vote.eventId = event.id
-            vote.eventBeerId = eventBeer.id
-            vote.userId = user.id
-            vote.score = score
-            
-            try vote.store(set: { id in
-                vote.id = id as! Int
-            })
+            try voteDataHandler.save(vote: &vote)
             
             response.completed(status: .ok)
             
-            currentBeer.votes += 1
-            currentBeer.score += vote.score
-            try currentBeer.store()
+            eventBeer.votes += 1
+            eventBeer.score += vote.score
+            
+            try eventBeerDataHandler.save(eventBeer: &eventBeer)
             
         } catch {
             // FIXME: Catch all the errors

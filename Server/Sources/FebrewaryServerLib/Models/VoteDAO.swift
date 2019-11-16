@@ -2,7 +2,7 @@ import Foundation
 import StORM
 import PostgresStORM
 
-class Vote: DAO {
+class VoteDAO: DAO {
     var id: Int = 0
     var eventId: Int = 0 // the event the user is at
     var eventBeerId: Int = 0 // beer the user is voting on
@@ -18,14 +18,14 @@ class Vote: DAO {
         score = this.data["score"] as? Int ?? 0
     }
 
-    func rows() -> [Vote] {
-        var votes = [Vote]()
+    func rows() -> [VoteDAO] {
+        var votes = [VoteDAO]()
         let rows = self.results.rows
 
         guard !rows.isEmpty else { return [] }
 
         for row in rows {
-            let round = Vote()
+            let round = VoteDAO()
             round.to(row)
 
             votes.append(round)

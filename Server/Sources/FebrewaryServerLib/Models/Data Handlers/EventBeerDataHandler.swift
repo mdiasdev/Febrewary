@@ -50,14 +50,23 @@ struct EventBeer: Codable {
 }
 
 class EventBeerDataHandler {
-    func eventBeer(fromEventId eventId: Int, isBeingPoured: Bool, eventBeerDAO: EventBeerDAO = EventBeerDAO()) throws -> EventBeer {
+    func eventBeer(fromEventId eventId: Int, isBeingPoured: Bool, eventBeerDAO: EventBeerDAO = EventBeerDAO(), userDataHandler: UserDataHandler = UserDataHandler()) throws -> EventBeer {
         try eventBeerDAO.find(by: [("eventid", eventId), ("isbeingpoured", isBeingPoured)])
         
         guard eventBeerDAO.rows().count == 1, let currentlyPouring = eventBeerDAO.rows().first else {
             throw NoCurrentEventBeerError()
         }
         
-        return try EventBeer(eventBeerDAO: currentlyPouring)
+        return try EventBeer(eventBeerDAO: currentlyPouring, userDataHandler: userDataHandler)
+    }
+    
+    func eventBeer(withId id: Int, inEvent eventId: Int, eventBeerDAO: EventBeerDAO = EventBeerDAO(), userDataHandler: UserDataHandler = UserDataHandler()) throws -> EventBeer {
+        try eventBeerDAO.find(by: [("eventid", eventId), ("id", id)])
+        
+        guard eventBeerDAO.rows().count == 1, let currentBeer = eventBeerDAO.rows().first else { throw EventBeerNotFoundError() }
+        guard currentBeer.isBeingPoured else { throw NoCurrentEventBeerError() }
+        
+        return try EventBeer(eventBeerDAO: currentBeer, userDataHandler: userDataHandler)
     }
     
     func eventBeers(fromEventId eventId: Int, eventBeerDAO: EventBeerDAO = EventBeerDAO(), userDataHandler: UserDataHandler = UserDataHandler()) -> [EventBeer] {

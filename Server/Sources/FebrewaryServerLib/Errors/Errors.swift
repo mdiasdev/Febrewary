@@ -161,8 +161,20 @@ public struct VotingIncompleteError: ServerError {
     var code: Int = 412
 }
 
+public struct EventBeerNotFoundError: ServerError {
+    var title: String = "Beer Not Found"
+    var message: String = "A Beer with this id could not be found in this Event."
+    var code: Int = 404
+}
+
 public struct NoCurrentEventBeerError: ServerError {
     var title: String = "No Current Event Beer"
     var message: String = "No Beers are currently being poured for this Event."
     var code: Int = 404
+}
+
+public struct VoteAlreadyCastError: ServerError {
+    var title: String = "Vote Already Cast"
+    var message: String = "You have already cast a vote for this Beer. You can only cast one vote per Beer in a single Event."
+    var code: Int = 400
 }

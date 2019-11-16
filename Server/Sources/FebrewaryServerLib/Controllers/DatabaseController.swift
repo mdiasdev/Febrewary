@@ -11,7 +11,7 @@ public struct DatabaseController {
         PostgresConnector.port = Configuration.dbPort
     }
 
-    // TODO: database error if fails to setup
+    // TODO: catch database error if fails to setup
     public static func registerTables() {
         let beer = BeerDAO()
         try? beer.setup()
@@ -22,8 +22,8 @@ public struct DatabaseController {
         let eventBeer = EventBeerDAO()
         try? eventBeer.setup()
 
-        let round = Vote()
-        try? round.setup()
+        let vote = VoteDAO()
+        try? vote.setup()
         
         let user = UserDAO()
         try? user.setup()
