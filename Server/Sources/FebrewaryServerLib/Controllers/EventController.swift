@@ -208,36 +208,21 @@ class EventController {
         }
     }
     
-    func getCurrentEventBeer(request: HTTPRequest, response: HTTPResponse, event: EventDAO = EventDAO(), eventBeer: EventBeerDAO = EventBeerDAO(), user: UserDAO = UserDAO()) {
-        
-        guard let eventId = Int(request.urlVariables["id"] ?? "0"), eventId > 0 else {
-            response.completed(status: .badRequest)
-            return
-        }
+    func getCurrentEventBeer(request: HTTPRequest, response: HTTPResponse, eventDataHandler: EventDataHandler = EventDataHandler(), eventBeerDataHandler: EventBeerDataHandler = EventBeerDataHandler()) {
         
         do {
-            try event.find(by: [("id", eventId)])
-            guard event.id > 0 else {
-                response.setBody(string: "Could not find event with id: \(eventId)")
-                        .completed(status: .badRequest)
-                return
-            }
+            let event = try eventDataHandler.event(from: request)
             
             guard !event.isOver else {
                 response.completed(status: .noContent)
                 return
             }
             
-            try eventBeer.find(by: [("eventid", eventId), ("isbeingpoured", true)])
-            guard eventBeer.rows().count == 1, let currentlyPouring = eventBeer.rows().first else {
-                response.setBody(string: "No beer in event \(eventId) is currently being poured")
-                        .completed(status: .notFound)
-                return
-            }
+            let currentlyPouring = try eventBeerDataHandler.eventBeer(fromEventId: event.id, isBeingPoured: true)
             
-            let payload = currentlyPouring.asDictionary()
+            let payload = try eventBeerDataHandler.json(from: currentlyPouring)
             
-            try response.setBody(json: payload).completed(status: .ok)
+            response.setBody(string: payload).completed(status: .ok)
         } catch {
             // FIXME: Catch all the errors
             response.completed(status: .internalServerError)
@@ -245,12 +230,7 @@ class EventController {
         
     }
     
-    func vote(request: HTTPRequest, response: HTTPResponse, event: EventDAO = EventDAO(), vote: Vote = Vote(), userDataHandler: UserDataHandler = UserDataHandler(), eventBeer: EventBeerDAO = EventBeerDAO(), attendee: AttendeeDAO = AttendeeDAO()) {
-        
-        guard let eventId = Int(request.urlVariables["id"] ?? "0"), eventId > 0 else {
-            response.completed(status: .badRequest)
-            return
-        }
+    func vote(request: HTTPRequest, response: HTTPResponse, eventDataHandler: EventDataHandler = EventDataHandler(), vote: Vote = Vote(), userDataHandler: UserDataHandler = UserDataHandler(), eventBeer: EventBeerDAO = EventBeerDAO(), attendee: AttendeeDAO = AttendeeDAO()) {
         
         guard let postBody = try? request.postBodyString?.jsonDecode() as? [String: Any],
             let json = postBody else {
@@ -268,12 +248,7 @@ class EventController {
         
         do {
             let user = try userDataHandler.user(from: request)
-            try event.find(by: [("id", eventId)])
-            guard event.id > 0, event.hasStarted && !event.isOver else {
-                response.setBody(string: "Could not find event with id: \(eventId)")
-                        .completed(status: .badRequest)
-                return
-            }
+            let event = try eventDataHandler.event(from: request)
             
             try attendee.find(by: [("eventid", event.id), ("userid", user.id)])
             guard attendee.rows().count == 1 else {
@@ -282,9 +257,9 @@ class EventController {
                 return
             }
             
-            try eventBeer.find(by: [("eventid", eventId), ("id", voteEventBeerId), ("isbeingpoured", true)])
+            try eventBeer.find(by: [("eventid", event.id), ("id", voteEventBeerId), ("isbeingpoured", true)])
             guard eventBeer.rows().count == 1, let currentBeer = eventBeer.rows().first else {
-                response.setBody(string: "No beer in event \(eventId) is currently being poured")
+                response.setBody(string: "No beer in event \(event.id) is currently being poured")
                     .completed(status: .notFound)
                 return
             }

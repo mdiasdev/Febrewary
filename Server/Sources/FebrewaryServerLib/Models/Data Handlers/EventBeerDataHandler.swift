@@ -50,6 +50,16 @@ struct EventBeer: Codable {
 }
 
 class EventBeerDataHandler {
+    func eventBeer(fromEventId eventId: Int, isBeingPoured: Bool, eventBeerDAO: EventBeerDAO = EventBeerDAO()) throws -> EventBeer {
+        try eventBeerDAO.find(by: [("eventid", eventId), ("isbeingpoured", isBeingPoured)])
+        
+        guard eventBeerDAO.rows().count == 1, let currentlyPouring = eventBeerDAO.rows().first else {
+            throw NoCurrentEventBeerError()
+        }
+        
+        return try EventBeer(eventBeerDAO: currentlyPouring)
+    }
+    
     func eventBeers(fromEventId eventId: Int, eventBeerDAO: EventBeerDAO = EventBeerDAO(), userDataHandler: UserDataHandler = UserDataHandler()) -> [EventBeer] {
         
         try? eventBeerDAO.find(by: [("eventid", eventId)])

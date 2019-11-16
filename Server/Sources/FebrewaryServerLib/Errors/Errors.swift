@@ -160,3 +160,9 @@ public struct VotingIncompleteError: ServerError {
     var message: String = "Warning: not all votes are in. You can force the roudn to end if you still want to proceed."
     var code: Int = 412
 }
+
+public struct NoCurrentEventBeerError: ServerError {
+    var title: String = "No Current Event Beer"
+    var message: String = "No Beers are currently being poured for this Event."
+    var code: Int = 404
+}
