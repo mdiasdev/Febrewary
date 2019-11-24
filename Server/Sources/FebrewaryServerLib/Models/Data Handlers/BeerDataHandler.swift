@@ -18,6 +18,14 @@ struct Beer: Codable {
     var totalScore: Int = 0
     var totalVotes: Int = 0
     
+    init(id: Int, name: String, brewer: String, abv: Float, addedBy: Int) {
+        self.id = id
+        self.name = name
+        self.brewer = brewer
+        self.abv = abv
+        self.addedBy = addedBy
+    }
+    
     init(beerDAO: BeerDAO) {
         self.id = beerDAO.id
         self.name = beerDAO.name

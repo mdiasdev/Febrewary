@@ -36,9 +36,22 @@ class EventControllerTests: XCTestCase {
         ("test_pourEventBeer_respondsVotingIncompleteError_whenNotAllAttendeesHaveVoted", test_pourEventBeer_respondsVotingIncompleteError_whenNotAllAttendeesHaveVoted),
         ("test_pourEventBeer_setsIsBeingPoured_whenAllVotesIn", test_pourEventBeer_setsIsBeingPoured_whenAllVotesIn),
         ("test_pourEventBeer_setsIsBeingPoured_whenPourIsForced", test_pourEventBeer_setsIsBeingPoured_whenPourIsForced),
-        ("test_pourEventBeer_responsedNoContent_whenNoBeersLeftToPour", test_pourEventBeer_responsedNoContent_whenNoBeersLeftToPour)
+        ("test_pourEventBeer_responsedNoContent_whenNoBeersLeftToPour", test_pourEventBeer_responsedNoContent_whenNoBeersLeftToPour),
+        ("test_getCurrentEventBeer_respondNoContent_whenEventIsOver", test_getCurrentEventBeer_respondNoContent_whenEventIsOver),
+        ("test_getCurrentEventBeer_respondsWithEventBeer_whenOneIsBeingPoured", test_getCurrentEventBeer_respondsWithEventBeer_whenOneIsBeingPoured),
+        ("test_vote_respondsWithMissingPropertyError_whenPostBodyMissing", test_vote_respondsWithMissingPropertyError_whenPostBodyMissing),
+        ("test_vote_respondsWithMissingPropertyError_whenPostBodyMissingEventBeerId", test_vote_respondsWithMissingPropertyError_whenPostBodyMissingEventBeerId),
+        ("test_vote_respondsWithMissingPropertyError_whenPostBodyMissingVote", test_vote_respondsWithMissingPropertyError_whenPostBodyMissingVote),
+        ("test_vote_respondsWithUserNotInvitedError_whenCurrentUserIsNotAnAttendee", test_vote_respondsWithUserNotInvitedError_whenCurrentUserIsNotAnAttendee),
+        ("test_vote_respondsWithVoteAlreadyCastError_whenCurrentUserHasAlreadyVoted", test_vote_respondsWithVoteAlreadyCastError_whenCurrentUserHasAlreadyVoted),
+        ("test_vote_respondsWithOK_whenVoteIsSaved", test_vote_respondsWithOK_whenVoteIsSaved),
+        ("test_vote_savesVoteAndUpdatesEventBeer_whenSuccessful", test_vote_savesVoteAndUpdatesEventBeer_whenSuccessful),
+        ("test_end_savesEventAndEventBeersAndBeer", test_end_savesEventAndEventBeersAndBeer)
     ]
 
+    // MARK: -
+    // MARK: - ENDPOINT TESTS
+    // MARK: -
     // MARK: - Create Event
     func test_createEvent_respondsWithMalformedJSONError_whenNoPostBody(){
         let fakeRequest = FakeRequestBuilder.request(withToken: try! validAuthToken())
@@ -533,8 +546,229 @@ class EventControllerTests: XCTestCase {
         }
     }
     
+    // MARK: - Get Current Event Beer
+    
+    func test_getCurrentEventBeer_respondNoContent_whenEventIsOver() {
+        let fakeRequest = FakeRequestBuilder.request(withToken: try! validAuthToken())
+        let spyResponse = SpyResponse()
+        let eventDataHandler = FakeEventDataHandler()
+        eventDataHandler.isOverOverride = true
+        let eventBeerDataHandler = FakeEventBeerDataHandler()
+
+        let expectedString = " {\n     title: Event Is Over,\n     message: There are not current Event Beers because the Event is Over.,\n     code: 204\n }"
+        
+        EventController().getCurrentEventBeer(request: fakeRequest,
+                                              response: spyResponse,
+                                              eventDataHandler: eventDataHandler,
+                                              eventBeerDataHandler: eventBeerDataHandler)
+        
+        if let string = String(bytes: spyResponse.bodyBytes, encoding: .utf8) {
+            XCTAssertEqual(string, expectedString)
+        } else {
+            XCTFail("not a valid UTF-8 sequence")
+        }
+    }
+    
+    func test_getCurrentEventBeer_respondsWithEventBeer_whenOneIsBeingPoured() {
+        let fakeRequest = FakeRequestBuilder.request(withToken: try! validAuthToken())
+        let spyResponse = SpyResponse()
+        let userDataHandler = MockSuccessfulUserDataHandler()
+        let eventDataHandler = FakeEventDataHandler()
+        let eventBeerDataHandler = FakeEventBeerDataHandler()
+        let expectedString = "{\n  \"beerId\" : 1,\n  \"score\" : 1,\n  \"round\" : 1,\n  \"id\" : 1,\n  \"userId\" : 1,\n  \"votes\" : 0,\n  \"eventId\" : 1,\n  \"isBeingPoured\" : true,\n  \"user\" : {\n    \"id\" : 1,\n    \"name\" : \"Hello Stream\",\n    \"email\" : \"hello@stream.com\"\n  }\n}"
+        
+        EventController().getCurrentEventBeer(request: fakeRequest,
+                                              response: spyResponse,
+                                              eventDataHandler: eventDataHandler,
+                                              eventBeerDataHandler: eventBeerDataHandler,
+                                              userDataHandler: userDataHandler)
+        
+        if let string = String(bytes: spyResponse.bodyBytes, encoding: .utf8) {
+            XCTAssertEqual(string, expectedString)
+        } else {
+            XCTFail("not a valid UTF-8 sequence")
+        }
+    }
+    
+    // MARK: - Vote
+    
+    func test_vote_respondsWithMissingPropertyError_whenPostBodyMissing() {
+        let fakeRequest = FakeRequestBuilder.request(withToken: try! validAuthToken())
+        let spyResponse = SpyResponse()
+        let expectedString = " {\n     title: Missing request property,\n     message: One or more properties are missing.,\n     code: 400\n }"
+        
+        EventController().vote(request: fakeRequest, response: spyResponse)
+        
+        if let string = String(bytes: spyResponse.bodyBytes, encoding: .utf8) {
+            XCTAssertEqual(string, expectedString)
+            XCTAssertEqual(spyResponse.status.code, 400)
+        } else {
+            XCTFail("not a valid UTF-8 sequence")
+        }
+    }
+    
+    func test_vote_respondsWithMissingPropertyError_whenPostBodyMissingEventBeerId() {
+        let fakeRequest = FakeRequestBuilder.request(withToken: try! validAuthToken())
+        fakeRequest.postBodyString = "{ \"vote\": 1 }"
+        let spyResponse = SpyResponse()
+        let expectedString = " {\n     title: Missing request property,\n     message: One or more properties are missing.,\n     code: 400\n }"
+        
+        EventController().vote(request: fakeRequest, response: spyResponse)
+        
+        if let string = String(bytes: spyResponse.bodyBytes, encoding: .utf8) {
+            XCTAssertEqual(string, expectedString)
+            XCTAssertEqual(spyResponse.status.code, 400)
+        } else {
+            XCTFail("not a valid UTF-8 sequence")
+        }
+    }
+    
+    func test_vote_respondsWithMissingPropertyError_whenPostBodyMissingVote() {
+        let fakeRequest = FakeRequestBuilder.request(withToken: try! validAuthToken())
+        fakeRequest.postBodyString = "{ \"eventBeerId\": 1,  }"
+        let spyResponse = SpyResponse()
+        let expectedString = " {\n     title: Missing request property,\n     message: One or more properties are missing.,\n     code: 400\n }"
+        
+        EventController().vote(request: fakeRequest, response: spyResponse)
+        
+        if let string = String(bytes: spyResponse.bodyBytes, encoding: .utf8) {
+            XCTAssertEqual(string, expectedString)
+            XCTAssertEqual(spyResponse.status.code, 400)
+        } else {
+            XCTFail("not a valid UTF-8 sequence")
+        }
+    }
+    
+    func test_vote_respondsWithUserNotInvitedError_whenCurrentUserIsNotAnAttendee() {
+        let fakeRequest = FakeRequestBuilder.request(withToken: try! validAuthToken())
+        fakeRequest.postBodyString = "{ \"eventBeerId\": 1, \"vote\": 1 }"
+        let spyResponse = SpyResponse()
+        let userDataHandler = MockSuccessfulUserDataHandler()
+        let eventDataHandler = FakeEventDataHandler()
+        let eventBeerDataHandler = FakeEventBeerDataHandler()
+        let attendeeDataHandler = FakeNoneAttendeeDataHandler()
+        let expectedString = " {\n     title: User Not Invited,\n     message: This user has not yet been invited to this event.,\n     code: 404\n }"
+        
+        EventController().vote(request: fakeRequest,
+                               response: spyResponse,
+                               eventDataHandler: eventDataHandler,
+                               userDataHandler: userDataHandler,
+                               eventBeerDataHandler: eventBeerDataHandler,
+                               attendeeDataHandler: attendeeDataHandler)
+        
+        if let string = String(bytes: spyResponse.bodyBytes, encoding: .utf8) {
+            XCTAssertEqual(string, expectedString)
+            XCTAssertEqual(spyResponse.status.code, 404)
+        } else {
+            XCTFail("not a valid UTF-8 sequence")
+        }
+    }
+    
+    func test_vote_respondsWithVoteAlreadyCastError_whenCurrentUserHasAlreadyVoted() {
+        let fakeRequest = FakeRequestBuilder.request(withToken: try! validAuthToken())
+        fakeRequest.postBodyString = "{ \"eventBeerId\": 1, \"vote\": 1 }"
+        let spyResponse = SpyResponse()
+        let userDataHandler = MockSuccessfulUserDataHandler()
+        let eventDataHandler = FakeEventDataHandler()
+        let eventBeerDataHandler = FakeEventBeerDataHandler()
+        let attendeeDataHandler = FakeAttendeeDataHandler()
+        let voteDataHandler = FakeVoteDataHandler()
+        voteDataHandler.existsOverride = true
+        let expectedString = " {\n     title: Vote Already Cast,\n     message: You have already cast a vote for this Beer. You can only cast one vote per Beer in a single Event.,\n     code: 400\n }"
+        
+        EventController().vote(request: fakeRequest,
+                               response: spyResponse,
+                               eventDataHandler: eventDataHandler,
+                               voteDataHandler: voteDataHandler,
+                               userDataHandler: userDataHandler,
+                               eventBeerDataHandler: eventBeerDataHandler,
+                               attendeeDataHandler: attendeeDataHandler)
+        
+        if let string = String(bytes: spyResponse.bodyBytes, encoding: .utf8) {
+            XCTAssertEqual(string, expectedString)
+            XCTAssertEqual(spyResponse.status.code, 400)
+        } else {
+            XCTFail("not a valid UTF-8 sequence")
+        }
+    }
+    
+    func test_vote_respondsWithOK_whenVoteIsSaved() {
+        let fakeRequest = FakeRequestBuilder.request(withToken: try! validAuthToken())
+        fakeRequest.postBodyString = "{ \"eventBeerId\": 1, \"vote\": 1 }"
+        let spyResponse = SpyResponse()
+        let userDataHandler = MockSuccessfulUserDataHandler()
+        let eventDataHandler = FakeEventDataHandler()
+        let eventBeerDataHandler = FakeEventBeerDataHandler()
+        let attendeeDataHandler = FakeAttendeeDataHandler()
+        let voteDataHandler = FakeVoteDataHandler()
+        let expectedString = ""
+        
+        EventController().vote(request: fakeRequest,
+                               response: spyResponse,
+                               eventDataHandler: eventDataHandler,
+                               voteDataHandler: voteDataHandler,
+                               userDataHandler: userDataHandler,
+                               eventBeerDataHandler: eventBeerDataHandler,
+                               attendeeDataHandler: attendeeDataHandler)
+        
+        if let string = String(bytes: spyResponse.bodyBytes, encoding: .utf8) {
+            XCTAssertEqual(string, expectedString)
+            XCTAssertEqual(spyResponse.status.code, 200)
+        } else {
+            XCTFail("not a valid UTF-8 sequence")
+        }
+    }
+    
+    func test_vote_savesVoteAndUpdatesEventBeer_whenSuccessful() {
+        let fakeRequest = FakeRequestBuilder.request(withToken: try! validAuthToken())
+        fakeRequest.postBodyString = "{ \"eventBeerId\": 1, \"vote\": 1 }"
+        let spyResponse = SpyResponse()
+        let userDataHandler = MockSuccessfulUserDataHandler()
+        let eventDataHandler = FakeEventDataHandler()
+        let eventBeerDataHandler = FakeEventBeerDataHandler()
+        let attendeeDataHandler = FakeAttendeeDataHandler()
+        let voteDataHandler = FakeVoteDataHandler()
+        
+        EventController().vote(request: fakeRequest,
+                               response: spyResponse,
+                               eventDataHandler: eventDataHandler,
+                               voteDataHandler: voteDataHandler,
+                               userDataHandler: userDataHandler,
+                               eventBeerDataHandler: eventBeerDataHandler,
+                               attendeeDataHandler: attendeeDataHandler)
+        
+        XCTAssertTrue(eventBeerDataHandler.didSave)
+        XCTAssertTrue(voteDataHandler.didSave)
+    }
+    
+    // MARK: -
+    // MARK: - HELPER FUNCTION TESTS
+    // MARK: -
+    
+    func test_end_savesEventAndEventBeersAndBeer() {
+        let event = Event(name: "test event", date: "tomorrow", address: "my house", createdBy: 1)
+        let eventDataHandler = FakeEventDataHandler()
+        let pouredBeers = [
+            try! EventBeer(id: 1, userId: 1, beerId: 1, eventId: 1, round: 1, votes: 1, score: 1, isBeingPoured: true, userDataHandler: MockSuccessfulUserDataHandler()),
+            try! EventBeer(id: 2, userId: 2, beerId: 2, eventId: 2, round: 2, votes: 2, score: 2, isBeingPoured: false, userDataHandler: MockSuccessfulUserDataHandler())
+        ]
+        let eventBeerDataHandler = FakeEventBeerDataHandler()
+        let beerDataHandler = FakeBeerDataHandler()
+        
+        try! EventController().end(event: event,
+                                   eventDataHandler: eventDataHandler,
+                                   pouredBeers: pouredBeers,
+                                   eventBeerDataHandler: eventBeerDataHandler,
+                                   beerDataHandler: beerDataHandler)
+        
+        XCTAssertTrue(eventDataHandler.didSave)
+        XCTAssertTrue(eventBeerDataHandler.didSave)
+        XCTAssertTrue(beerDataHandler.didSave)
+    }
+    
     // MARK: -
     // MARK: - Test Helpers
+    // MARK: -
     func getCreateEventPostBodyMissingName() -> String {
         return """
         {
@@ -567,7 +801,9 @@ class EventControllerTests: XCTestCase {
         """
     }
     
+    // MARK: -
     // MARK: - Test Doubles
+    // MARK: -
     class SpyAttendeeDataHandler: AttendeeDataHandler {
         var didCallSave = false
         
@@ -592,6 +828,8 @@ class EventControllerTests: XCTestCase {
     class FakeEventDataHandler: EventDataHandler {
         var id = 1
         var pourerIdOverride = 0
+        var isOverOverride = false
+        
         var didSave = false
         
         override func event(from request: HTTPRequest, by user: User) throws -> Event {
@@ -599,7 +837,7 @@ class EventControllerTests: XCTestCase {
         }
         
         override func event(from request: HTTPRequest, eventDAO: EventDAO = EventDAO()) throws -> Event {
-            return Event(name: "Fun Times", date: "Tomorrow", address: "my place", createdBy: 1, pourerId: pourerIdOverride)
+            return Event(name: "Fun Times", date: "Tomorrow", address: "my place", createdBy: 1, pourerId: pourerIdOverride, isOver: isOverOverride)
         }
         
         override func events(fromAttendees attendees: [Attendee], eventDAO: EventDAO = EventDAO()) throws -> [Event] {
@@ -663,6 +901,14 @@ class EventControllerTests: XCTestCase {
             return true
         }
         
+        override func eventBeer(fromEventId eventId: Int, isBeingPoured: Bool, eventBeerDAO: EventBeerDAO = EventBeerDAO(), userDataHandler: UserDataHandler = UserDataHandler()) throws -> EventBeer {
+            return try! EventBeer(id: 1, userId: 1, beerId: 1, eventId: 1, round: 1, votes: voteCountOverride, score: 1, isBeingPoured: isBeingPouredOverride, userDataHandler: userDataHandler)
+        }
+        
+        override func eventBeer(withId id: Int, inEvent eventId: Int, eventBeerDAO: EventBeerDAO = EventBeerDAO(), userDataHandler: UserDataHandler = UserDataHandler()) throws -> EventBeer {
+            return try! EventBeer(id: 1, userId: 1, beerId: 1, eventId: 1, round: 1, votes: voteCountOverride, score: 1, isBeingPoured: isBeingPouredOverride, userDataHandler: userDataHandler)
+        }
+        
         override func eventBeers(fromEventId eventId: Int, eventBeerDAO: EventBeerDAO = EventBeerDAO(), userDataHandler: UserDataHandler = UserDataHandler()) -> [EventBeer] {
             return [
                 try! EventBeer(id: 1, userId: 1, beerId: 1, eventId: 1, round: 1, votes: voteCountOverride, score: 1, isBeingPoured: isBeingPouredOverride, userDataHandler: FakeUserDataHander()),
@@ -690,6 +936,31 @@ class EventControllerTests: XCTestCase {
         
         override func end(event: Event, eventDataHandler: EventDataHandler = EventDataHandler(), pouredBeers: [EventBeer], eventBeerDataHandler: EventBeerDataHandler = EventBeerDataHandler(), beerDataHandler: BeerDataHandler = BeerDataHandler()) throws {
             didEnd = true
+        }
+    }
+    
+    class FakeVoteDataHandler: VoteDataHandler {
+        var existsOverride = false
+        var didSave = false
+        
+        override func voteExists(forEventBeer eventBeerId: Int, byUser userId: Int, inEvent eventId: Int, voteDAO: VoteDAO = VoteDAO()) -> Bool {
+            return existsOverride
+        }
+        
+        override func save(vote: inout Vote, voteDAO: VoteDAO = VoteDAO()) throws {
+            didSave = true
+        }
+    }
+    
+    class FakeBeerDataHandler: BeerDataHandler {
+        var didSave = false
+        
+        override func beer(with id: Int, beerDAO: BeerDAO = BeerDAO()) throws -> Beer {
+            return Beer(id: 1, name: "Good Beer", brewer: "Best Brewer", abv: 42.0, addedBy: 1)
+        }
+        
+        override func save(beer: inout Beer, beerDAO: BeerDAO = BeerDAO()) throws {
+            didSave = true
         }
     }
 }

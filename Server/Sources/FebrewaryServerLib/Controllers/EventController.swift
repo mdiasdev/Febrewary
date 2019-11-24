@@ -208,17 +208,17 @@ class EventController {
         }
     }
     
-    func getCurrentEventBeer(request: HTTPRequest, response: HTTPResponse, eventDataHandler: EventDataHandler = EventDataHandler(), eventBeerDataHandler: EventBeerDataHandler = EventBeerDataHandler()) {
+    func getCurrentEventBeer(request: HTTPRequest, response: HTTPResponse, eventDataHandler: EventDataHandler = EventDataHandler(), eventBeerDataHandler: EventBeerDataHandler = EventBeerDataHandler(), userDataHandler: UserDataHandler = UserDataHandler()) {
         
         do {
             let event = try eventDataHandler.event(from: request)
             
             guard !event.isOver else {
-                response.completed(status: .noContent)
+                response.completed(with: EventCompletedError())
                 return
             }
             
-            let currentlyPouring = try eventBeerDataHandler.eventBeer(fromEventId: event.id, isBeingPoured: true)
+            let currentlyPouring = try eventBeerDataHandler.eventBeer(fromEventId: event.id, isBeingPoured: true, userDataHandler: userDataHandler)
             
             let payload = try eventBeerDataHandler.json(from: currentlyPouring)
             
@@ -232,22 +232,18 @@ class EventController {
     
     func vote(request: HTTPRequest, response: HTTPResponse, eventDataHandler: EventDataHandler = EventDataHandler(), voteDataHandler: VoteDataHandler = VoteDataHandler(), userDataHandler: UserDataHandler = UserDataHandler(), eventBeerDataHandler: EventBeerDataHandler = EventBeerDataHandler(), attendeeDataHandler: AttendeeDataHandler = AttendeeDataHandler()) {
         
-        guard let postBody = try? request.postBodyString?.jsonDecode() as? [String: Any], let json = postBody else {
-                response.setBody(string: "Bad Request: malformed json")
-                        .completed(status: .badRequest)
-                return
-        }
-        
-        guard let voteEventBeerId = json["eventBeerId"] as? Int, let score = json["vote"] as? Int else {
-                response.setBody(string: "Bad Request: missing required property")
-                        .completed(status: .badRequest)
-                return
-        }
-        
         do {
+            guard let postBody = try? request.postBodyString?.jsonDecode() as? [String: Any], let json = postBody else {
+                    throw MissingPropertyError()
+            }
+            
+            guard let voteEventBeerId = json["eventBeerId"] as? Int, let score = json["vote"] as? Int else {
+                    throw MissingPropertyError()
+            }
+            
             let user = try userDataHandler.user(from: request)
             let event = try eventDataHandler.event(from: request)
-            var eventBeer = try eventBeerDataHandler.eventBeer(withId: voteEventBeerId, inEvent: event.id)
+            var eventBeer = try eventBeerDataHandler.eventBeer(withId: voteEventBeerId, inEvent: event.id, userDataHandler: userDataHandler)
             
             guard attendeeDataHandler.attendeeExists(withUserId: user.id, inEventId: event.id) else { throw UserNotInvitedError() }
             guard !voteDataHandler.voteExists(forEventBeer: eventBeer.id, byUser: user.id, inEvent: event.id) else { throw VoteAlreadyCastError() }
@@ -263,7 +259,13 @@ class EventController {
             
             try eventBeerDataHandler.save(eventBeer: &eventBeer)
             
-        } catch {
+        } catch let error as MissingPropertyError {
+            response.completed(with: error)
+        } catch let error as UserNotInvitedError {
+            response.completed(with: error)
+        } catch let error as VoteAlreadyCastError {
+            response.completed(with: error)
+        }  catch {
             // FIXME: Catch all the errors
             response.completed(status: .internalServerError)
         }

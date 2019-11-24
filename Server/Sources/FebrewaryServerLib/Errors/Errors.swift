@@ -178,3 +178,9 @@ public struct VoteAlreadyCastError: ServerError {
     var message: String = "You have already cast a vote for this Beer. You can only cast one vote per Beer in a single Event."
     var code: Int = 400
 }
+
+public struct EventCompletedError: ServerError {
+    var title: String = "Event Is Over"
+    var message: String = "There are not current Event Beers because the Event is Over."
+    var code: Int = 204
+}
