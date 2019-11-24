@@ -64,7 +64,7 @@ class EventBeerDataHandler {
         try eventBeerDAO.find(by: [("eventid", eventId), ("id", id)])
         
         guard eventBeerDAO.rows().count == 1, let currentBeer = eventBeerDAO.rows().first else { throw EventBeerNotFoundError() }
-        guard currentBeer.isBeingPoured else { throw NoCurrentEventBeerError() }
+        guard currentBeer.isBeingPoured else { throw NoCurrentEventBeerError() } // TODO: move check to EventController
         
         return try EventBeer(eventBeerDAO: currentBeer, userDataHandler: userDataHandler)
     }

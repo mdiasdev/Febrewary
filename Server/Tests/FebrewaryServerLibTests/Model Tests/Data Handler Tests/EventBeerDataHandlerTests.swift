@@ -16,7 +16,9 @@ class EventBeerDataHandlerTests: XCTestCase {
         ("test_eventBeerExists_returnsFalse_whenEventBeerNotFoundInDatabase", test_eventBeerExists_returnsFalse_whenEventBeerNotFoundInDatabase),
         ("test_eventBeerExists_returnsFalse_whenManyEventBeerFoundInDatabase", test_eventBeerExists_returnsFalse_whenManyEventBeerFoundInDatabase),
         ("test_eventBeerExists_returnsTrue_whenEventBeerFoundInDatabase", test_eventBeerExists_returnsTrue_whenEventBeerFoundInDatabase),
-        ("test_saveEventBeer_setsEventBeerId", test_saveEventBeer_setsEventBeerId)
+        ("test_saveEventBeer_setsEventBeerId", test_saveEventBeer_setsEventBeerId),
+        ("test_eventBeerFromEventIdAndIsBeingPoured_throwsNoCurrentEventBeerError_whenNoEventBeerFound", test_eventBeerFromEventIdAndIsBeingPoured_throwsNoCurrentEventBeerError_whenNoEventBeerFound),
+        ("test_eventBeerFromEventIdAndIsBeingPoured_doesNotThrow_whenOneIsFound", test_eventBeerFromEventIdAndIsBeingPoured_doesNotThrow_whenOneIsFound)
     ]
 
     func test_eventBeersFromEventId_returnsEmpty_ifNothingFound() {
@@ -76,6 +78,59 @@ class EventBeerDataHandlerTests: XCTestCase {
         XCTAssertNoThrow(try EventBeerDataHandler().save(eventBeer: &eventBeer, eventBeerDAO: eventBeerDAO))
         XCTAssertEqual(1, eventBeer.id)
         XCTAssertEqual(1, eventBeerDAO.id)
+    }
+    
+    func test_eventBeerFromEventIdAndIsBeingPoured_throwsNoCurrentEventBeerError_whenNoEventBeerFound() {
+        XCTAssertThrowsError(
+            try EventBeerDataHandler().eventBeer(fromEventId: 1,
+                                                 isBeingPoured: true,
+                                                 eventBeerDAO: MockNoEventBeerDAO(),
+                                                 userDataHandler: MockSuccessfulUserDataHandler())
+        ) { error in
+            XCTAssertTrue(error is NoCurrentEventBeerError)
+        }
+    }
+    
+    func test_eventBeerFromEventIdAndIsBeingPoured_doesNotThrow_whenOneIsFound() {
+        XCTAssertNoThrow(
+            try EventBeerDataHandler().eventBeer(fromEventId: 1,
+                                                 isBeingPoured: true,
+                                                 eventBeerDAO: MockSingleEventBeerDAO(),
+                                                 userDataHandler: MockSuccessfulUserDataHandler())
+        )
+    }
+    
+    func test_eventBeerWithIdInEvent_throwsEventBeerNotFoundError_whenNoEventBeerFound() {
+        XCTAssertThrowsError(
+            try EventBeerDataHandler().eventBeer(withId: 1,
+                                                 inEvent: 1,
+                                                 eventBeerDAO: MockNoEventBeerDAO(),
+                                                 userDataHandler: MockSuccessfulUserDataHandler())
+        ) { error in
+            XCTAssertTrue(error is EventBeerNotFoundError)
+        }
+    }
+    
+    func test_eventBeerWithIdInEvent_throwsNoCurrentEventBeerError_whenOneIsNotBeingPoured() {
+        XCTAssertThrowsError(
+            try EventBeerDataHandler().eventBeer(withId: 1,
+                                                 inEvent: 1,
+                                                 eventBeerDAO: MockSingleEventBeerDAO(),
+                                                 userDataHandler: MockSuccessfulUserDataHandler())
+        ) { error in
+            XCTAssertTrue(error is NoCurrentEventBeerError)
+        }
+    }
+    
+    func test_eventBeerWithIdInEvent_doesNotThrow_whenOneIsFound() {
+        let eventBeerDAO = MockSingleEventBeerDAO()
+        eventBeerDAO.pouringOverride = true
+        XCTAssertNoThrow(
+            try EventBeerDataHandler().eventBeer(withId: 1,
+                                                 inEvent: 1,
+                                                 eventBeerDAO: eventBeerDAO,
+                                                 userDataHandler: MockSuccessfulUserDataHandler())
+        )
     }
     
 }

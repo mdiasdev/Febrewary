@@ -243,21 +243,21 @@ class EventController {
             
             let user = try userDataHandler.user(from: request)
             let event = try eventDataHandler.event(from: request)
-            var eventBeer = try eventBeerDataHandler.eventBeer(withId: voteEventBeerId, inEvent: event.id, userDataHandler: userDataHandler)
+            var currentEventBeer = try eventBeerDataHandler.eventBeer(withId: voteEventBeerId, inEvent: event.id, userDataHandler: userDataHandler)
             
             guard attendeeDataHandler.attendeeExists(withUserId: user.id, inEventId: event.id) else { throw UserNotInvitedError() }
-            guard !voteDataHandler.voteExists(forEventBeer: eventBeer.id, byUser: user.id, inEvent: event.id) else { throw VoteAlreadyCastError() }
+            guard !voteDataHandler.voteExists(forEventBeer: currentEventBeer.id, byUser: user.id, inEvent: event.id) else { throw VoteAlreadyCastError() }
             
-            var vote = Vote(eventId: event.id, eventBeerId: eventBeer.id, userId: user.id, score: score)
+            var vote = Vote(eventId: event.id, eventBeerId: currentEventBeer.id, userId: user.id, score: score)
             
             try voteDataHandler.save(vote: &vote)
             
             response.completed(status: .ok)
             
-            eventBeer.votes += 1
-            eventBeer.score += vote.score
+            currentEventBeer.votes += 1
+            currentEventBeer.score += vote.score
             
-            try eventBeerDataHandler.save(eventBeer: &eventBeer)
+            try eventBeerDataHandler.save(eventBeer: &currentEventBeer)
             
         } catch let error as MissingPropertyError {
             response.completed(with: error)

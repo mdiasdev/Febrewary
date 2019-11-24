@@ -38,12 +38,14 @@ class MockManyEventBeerDAO: EventBeerDAO {
 }
 
 class MockSingleEventBeerDAO: EventBeerDAO {
+    var pouringOverride = false
     override func find(by data: [(String, Any)]) throws {
         let row1 = StORMRow()
         row1.data = ["id": 1,
                      "userid": 1,
                      "beerid": 1,
                      "eventid": 1,
+                     "isbeingpoured": pouringOverride,
         ]
         
         self.results.rows = [row1]
