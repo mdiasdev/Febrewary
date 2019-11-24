@@ -18,7 +18,10 @@ class EventBeerDataHandlerTests: XCTestCase {
         ("test_eventBeerExists_returnsTrue_whenEventBeerFoundInDatabase", test_eventBeerExists_returnsTrue_whenEventBeerFoundInDatabase),
         ("test_saveEventBeer_setsEventBeerId", test_saveEventBeer_setsEventBeerId),
         ("test_eventBeerFromEventIdAndIsBeingPoured_throwsNoCurrentEventBeerError_whenNoEventBeerFound", test_eventBeerFromEventIdAndIsBeingPoured_throwsNoCurrentEventBeerError_whenNoEventBeerFound),
-        ("test_eventBeerFromEventIdAndIsBeingPoured_doesNotThrow_whenOneIsFound", test_eventBeerFromEventIdAndIsBeingPoured_doesNotThrow_whenOneIsFound)
+        ("test_eventBeerFromEventIdAndIsBeingPoured_doesNotThrow_whenOneIsFound", test_eventBeerFromEventIdAndIsBeingPoured_doesNotThrow_whenOneIsFound),
+        ("test_eventBeerWithIdInEvent_throwsEventBeerNotFoundError_whenNoEventBeerFound", test_eventBeerWithIdInEvent_throwsEventBeerNotFoundError_whenNoEventBeerFound),
+        ("test_eventBeerWithIdInEvent_throwsNoCurrentEventBeerError_whenOneIsNotBeingPoured", test_eventBeerWithIdInEvent_throwsNoCurrentEventBeerError_whenOneIsNotBeingPoured),
+        ("test_eventBeerWithIdInEvent_doesNotThrow_whenOneIsFound", test_eventBeerWithIdInEvent_doesNotThrow_whenOneIsFound)
     ]
 
     func test_eventBeersFromEventId_returnsEmpty_ifNothingFound() {

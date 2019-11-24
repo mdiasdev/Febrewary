@@ -41,9 +41,9 @@ class BeerDataHandler {
     func beer(with id: Int, beerDAO: BeerDAO = BeerDAO()) throws -> Beer {
         try beerDAO.find(by: [("id", id)])
         
-        guard beerDAO.id > 0 else { throw DatabaseError() }
+        guard beerDAO.rows().count == 1, let beer = beerDAO.rows().first, beer.id > 0 else { throw DatabaseError() }
         
-        return Beer(beerDAO: beerDAO)
+        return Beer(beerDAO: beer)
     }
     
     func save(beer: inout Beer, beerDAO: BeerDAO = BeerDAO()) throws {
