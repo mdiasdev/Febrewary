@@ -76,6 +76,12 @@ class EventBeerDataHandler {
         return eventBeerDAO.rows().compactMap({ try? EventBeer(eventBeerDAO: $0, userDataHandler: userDataHandler) })
     }
     
+    func eventBeers(broughtBy userId: Int, eventBeerDAO: EventBeerDAO = EventBeerDAO(), userDataHandler: UserDataHandler = UserDataHandler()) -> [EventBeer] {
+        try? eventBeerDAO.find(by: [("userid", userId)])
+        
+        return eventBeerDAO.rows().compactMap { try? EventBeer(eventBeerDAO: $0, userDataHandler: userDataHandler) }
+    }
+    
     func eventBeerExists(fromEventId eventId: Int, andUserId userId: Int, eventBeerDAO: EventBeerDAO = EventBeerDAO()) -> Bool {
         
         try? eventBeerDAO.find(by: [

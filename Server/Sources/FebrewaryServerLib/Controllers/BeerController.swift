@@ -3,78 +3,63 @@ import StORM
 import Foundation
 
 class BeerController {
-    func addBeer(request: HTTPRequest, response: HTTPResponse, userDataHandler: UserDataHandler = UserDataHandler(), beer: BeerDAO = BeerDAO()) {
+    func addBeer(request: HTTPRequest, response: HTTPResponse, userDataHandler: UserDataHandler = UserDataHandler(), beerDataHandler: BeerDataHandler = BeerDataHandler()) {
         do {
             
             let user = try userDataHandler.user(from: request)
 
             guard let postBody = try? request.postBodyString?.jsonDecode() as? [String: Any], let json = postBody else {
-                response.setBody(string: "Bad Request: malformed json")
-                        .completed(status: .badRequest)
-                return
+                throw MalformedJSONError()
             }
 
             guard let beerName = json["name"] as? String,
                   let brewerName = json["brewer"] as? String,
                   let abv = json["abv"] as? NSNumber else {
-                response.setBody(string: "Missing data.")
-                        .completed(status: .badRequest)
-                return
+                throw MissingPropertyError()
             }
 
-            try beer.find(
-                by: ["name": beerName,
-                 "brewer": brewerName
-                ]
-            )
-
-            guard beer.id == 0 else {
-                response.setBody(string: "Beer already exists")
-                        .completed(status: .conflict)
-                return
+            guard !beerDataHandler.beerExists(withName: beerName, by: brewerName) else {
+                throw BeerExistsError()
             }
 
-            beer.name = beerName
-            beer.brewer = brewerName
-            beer.abv = abv.floatValue
-            beer.addedBy = user.id
+            var beer = Beer(name: beerName,
+                            brewer: brewerName,
+                            abv: abv.floatValue,
+                            addedBy: user.id)
 
-            try beer.store { id in
-                beer.id = id as! Int
-            }
+            try beerDataHandler.save(beer: &beer)
             
-            try response.setBody(json: beer.asDictionary())
-                        .completed(status: .created)
+            let payload = try beerDataHandler.json(from: beer)
+            
+            response.setBody(string: payload)
+                    .completed(status: .created)
 
-        } catch is BadTokenError {
-            let error = BadTokenError()
-            try! response.setBody(json: error).completed(status: HTTPResponseStatus.statusFrom(code: error.code))
+        } catch let error as BadTokenError {
+            response.completed(with: error)
+        } catch let error as MalformedJSONError {
+            response.completed(with: error)
+        } catch let error as MissingPropertyError {
+            response.completed(with: error)
+        } catch let error as BeerExistsError {
+            response.completed(with: error)
         } catch {
             response.completed(status: .internalServerError)
         }
     }
     
-    func beersForCurrentUser(request: HTTPRequest, response: HTTPResponse, userDataHandler: UserDataHandler = UserDataHandler(), beers: BeerDAO = BeerDAO(), eventBeers: EventBeerDAO = EventBeerDAO()) {
+    func beersForCurrentUser(request: HTTPRequest, response: HTTPResponse, userDataHandler: UserDataHandler = UserDataHandler(), beerDataHandler: BeerDataHandler = BeerDataHandler(), eventBeerDataHandler: EventBeerDataHandler = EventBeerDataHandler()) {
         
         do {
             let user = try userDataHandler.user(from: request)
+            let beers = beerDataHandler.beers(addedBy: user.id)
+            let eventBeers = eventBeerDataHandler.eventBeers(broughtBy: user.id, userDataHandler: userDataHandler)
+            let beersFromEventBeer = beerDataHandler.beers(from: eventBeers)
+            let allUserBeers = Set(beers + beersFromEventBeer)
             
-            try beers.find(by: [("addedBy", user.id)])
-            try eventBeers.find(by: [("userid", user.id)])
+            let payload = try beerDataHandler.jsonArray(from: Array(allUserBeers))
             
-            let beerFromEventBeer = BeerDAO()
-            
-            let query = "id IN (\(eventBeers.rows().compactMap { "\($0.beerId)" }.toString()))"
-            try beerFromEventBeer.search(whereClause: query, params: [], orderby: ["id"])
-            
-            let allUserBeers = Set(beers.rows() + beerFromEventBeer.rows())
-            
-            var responseJson = [[String: Any]]()
-            for beer in allUserBeers {
-                responseJson.append(beer.asDictionary())
-            }
-            
-            try response.setBody(json: responseJson).completed(status: .ok)
+            response.setBody(string: payload)
+                    .completed(status: .ok)
             
         } catch {
             

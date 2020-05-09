@@ -1,6 +1,6 @@
 //
 //  MockVoteDAO.swift
-//  FebrewaryServerLib
+//  FebrewaryServerLibTests
 //
 //  Created by Matthew Dias on 11/16/19.
 //

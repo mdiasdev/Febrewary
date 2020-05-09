@@ -184,3 +184,9 @@ public struct EventCompletedError: ServerError {
     var message: String = "There are not current Event Beers because the Event is Over."
     var code: Int = 204
 }
+
+public struct BeerExistsError: ServerError {
+    var title: String = "Cannot Add Beer"
+    var message: String = "The Beer you're trying to add already exists."
+    var code: Int = 409
+}
